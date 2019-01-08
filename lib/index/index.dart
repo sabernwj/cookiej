@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import '../login/login_page.dart';
-import '../home/home_page.dart';
-import '../components/httpController.dart';
-
+import './main_page.dart';
+import '../utils/localstorageHelper.dart';
+import '../utils/accessController.dart';
 
 class Index extends StatefulWidget{
   @override
@@ -10,69 +11,51 @@ class Index extends StatefulWidget{
 }
 class _IndexState extends State<Index> {
 
-  List<StatefulWidget> _pageList;
-  StatefulWidget _currentPage;
-
-  List<BottomNavigationBarItem> _navigationItems;
-  int _currentIndex=0;
-
+  Widget _acitveIndex;
   @override
   void initState(){
     super.initState();
-    HttpController.init();
   }
-  //加载控件
-  void loadWidget(){
-    _pageList=<StatefulWidget>[
-      new HomePage(),
-      null,
-      null
-    ];
-    _navigationItems=<BottomNavigationBarItem>[
-      new BottomNavigationBarItem(
-        icon: new Icon(Icons.home),
-        title: new Text('主页')
-      ),
-      new BottomNavigationBarItem(
-        icon: new Icon(Icons.search),
-        title: new Text('发现')
-      ),
-      new BottomNavigationBarItem(
-        icon: new Icon(Icons.perm_identity),
-        title: new Text('我的')
-      ),
-    ];
-    _currentPage=_pageList[_currentIndex];
-  }
+
   @override
   Widget build(BuildContext context){
-    final loginPage=new LoginPage();
-    loadWidget();
-    final mainPage=new Scaffold(
-      body: new Center(
-        child: _currentPage,
-      ),
-      bottomNavigationBar: new BottomNavigationBar(
-        items: _navigationItems,
-        currentIndex: _currentIndex,
-        type: BottomNavigationBarType.fixed,
-        onTap: (int index){
+    //登录页
+    var loginPage=new LoginPage();
+    //主页
+    var mainPage= new MainPage();
+    //监听是否获取新token
+    final _flutterWebviewPlugin=new FlutterWebviewPlugin();
+    _flutterWebviewPlugin.onUrlChanged.listen((url){
+      AccessController.setNewOauth2AccessToken(url).then((result){
+        if(result==true){
           setState(() {
-            _currentIndex=index;
-            print(_pageList[_currentIndex]);
-            // _currentPage=_pageList[_currentIndex];
+            _acitveIndex=mainPage;
           });
-        },
-      ),
+        }
+      });
+    });
+    Future storageReady=LocalstorageHelper.checkStorageIsReady();
+    storageReady.then((ready)=>
+      //判断进入登录页或者主页
+      _acitveIndex=AccessController.loadOauth2AccessToken()?mainPage:loginPage
     );
-    return new MaterialApp(
-      title: '饼干酱',
-      theme: ThemeData(
-        primaryColor: Colors.pink[300],
-        indicatorColor: Colors.white
-      ),
-      home: loginPage,
+    return FutureBuilder(
+      future: LocalstorageHelper.checkStorageIsReady(),
+      builder: (BuildContext context,snapshot){
+        if(snapshot.data!=true){
+          _acitveIndex=new Container();
+        }
+        return new MaterialApp(
+          title: '饼干酱',
+          theme: ThemeData(
+            primaryColor: Colors.pink[300],
+            indicatorColor: Colors.white
+          ),
+          home: _acitveIndex
+        );
+      }
     );
+
   }
 }
 

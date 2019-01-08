@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 
-import 'weibo.dart';
-import 'weiboTimeline.dart';
+import '../components/weibo.dart';
+import '../components/weiboTimeline.dart';
 
 class HttpController{
   static final _appKey="1532678245";
@@ -55,8 +55,8 @@ class HttpController{
   }
   
 
-  ///设置accessToken
-  static setOauth2AccessToken(String token){
+  ///为HTTP请求器设置token
+  static setTokenToHttpClient(String token){
     _accessToken=token;
   }
   ///获取accessToken
