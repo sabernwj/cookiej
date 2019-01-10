@@ -10,11 +10,11 @@ class Weibo {
   int hasActionTypeCard;
   int hide_flag;
   int id;
-  int idstr;
+  String idstr;
   int is_show_bulletin;
   int mblog_vip_type;
   int mblogtype;
-  int mid;
+  String mid;
   int mlevel;
   int more_info_type;
   int pending_approval_count;

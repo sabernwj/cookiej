@@ -18,7 +18,8 @@ class HttpController{
       "accessToken":{"type":"post","value":"/oauth2/access_token"}
     },
     "statuses":{
-      "publicTimeline":{"type":"get","value":"/2/statuses/public_timeline.json"}
+      "publicTimeline":{"type":"get","value":"/2/statuses/public_timeline.json"},
+      "homeTimeline":{"type":"get","value":"/2/statuses/home_timeline.json"}
     }
   };
   static Dio _httpClient=new Dio(new Options(
@@ -38,10 +39,7 @@ class HttpController{
     };
   }
 
-  ///获取公共微博
-  static WeiboTimeline getStatusesPublicTimeLine(){
 
-  }
 
   ///获取登录页面地址
   static String getOauth2Authorize(){
@@ -77,6 +75,24 @@ class HttpController{
     return result["access_token"].toString();
     
   }
+
+  ///获取公共微博
+  static Future<WeiboTimeline>  getStatusesPublicTimeline() async{
+
+  }
+
+  ///获取当前登录用户及其所关注（授权）用户的最新微博
+  static Future<Map> getStatusesHomeTimeline() async{
+    try{
+      var url=_apiUrlMap["statuses"]["homeTimeline"]["value"];
+      Response response=await _httpClient.get(url);
+      return (await _httpClient.get(url)).data;
+    }catch(e){
+      print(e.response.data);
+      return null;
+    }
+  }
+
 
   ///格式化url地址和参数
   static String formatUrlParams(String url,Map<String,String> params){

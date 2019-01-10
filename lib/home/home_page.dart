@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'follow.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -11,7 +12,7 @@ class _HomePageState extends State<HomePage>{
   var _tabs=<Tab>[
     new Tab(text: '全部关注',),
     new Tab(text: '好友圈',),
-    new Tab(text: '特别关注',)
+    new Tab(text: '特别关注',),
   ];
 
   @override
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage>{
             tabs: _tabs,
           )
         ),
+        body: new Follow(),
       ),
     );
   }
