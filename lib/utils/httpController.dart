@@ -13,6 +13,9 @@ class HttpController{
 
   static final _apiUrl="https://api.weibo.com";
   static final _apiUrlMap={
+    "emotions":{
+      "emotions":{"type":"get","value":"/2/emotions.json"}
+    },
     "oauth2":{
       "authorize":{"type":"get","value":"/oauth2/authorize"},
       "accessToken":{"type":"post","value":"/oauth2/access_token"}
@@ -85,7 +88,6 @@ class HttpController{
   static Future<Map> getStatusesHomeTimeline() async{
     try{
       var url=_apiUrlMap["statuses"]["homeTimeline"]["value"];
-      Response response=await _httpClient.get(url);
       return (await _httpClient.get(url)).data;
     }catch(e){
       print(e.response.data);
@@ -93,7 +95,10 @@ class HttpController{
     }
   }
 
-
+  static Future<Map> getEmotions() async{
+    var url=_apiUrlMap["emotions"]["emotions"]["value"];
+    return (await _httpClient.get(url)).data;
+  }
   ///格式化url地址和参数
   static String formatUrlParams(String url,Map<String,String> params){
     if(!url.contains("?")){

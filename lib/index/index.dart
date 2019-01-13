@@ -43,15 +43,15 @@ class _IndexState extends State<Index> {
       future: LocalstorageHelper.checkStorageIsReady(),
       builder: (BuildContext context,snapshot){
         if(snapshot.data!=true){
-          _acitveIndex=new Container();
+          _acitveIndex=new Center(
+            child: new CircularProgressIndicator(),
+          );
         }
         return new MaterialApp(
           title: '饼干酱',
-          theme: ThemeData(
-            primaryColor: Colors.pink[300],
-            indicatorColor: Colors.white
-          ),
-          home: _acitveIndex
+          home: new Container(
+            child: _acitveIndex,
+          )
         );
       }
     );
