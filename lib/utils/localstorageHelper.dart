@@ -21,9 +21,9 @@ class LocalstorageHelper{
   static dynamic getFromStorage(String key){
     try{
       var item=_storage.getItem((key));
-      return item;
+      return item??'';
     }catch(e){
-      return null;
+      return '';
     }
   }
 }

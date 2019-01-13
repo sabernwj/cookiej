@@ -12,10 +12,15 @@ class AccessController {
   ///用于加载token，加载失败返回false
   static bool loadOauth2AccessToken(){
     try{
-      var token=LocalstorageHelper.getFromStorage(_accessTokenName);
-      HttpController.setTokenToHttpClient(token);
-      // print('获取到token：'+token);
-      return true;
+      String token=LocalstorageHelper.getFromStorage(_accessTokenName);
+      if(token==null||token.isEmpty){
+        return false;
+      }else{
+        HttpController.setTokenToHttpClient(token);
+        // print('获取到token：'+token);
+        return true;
+      }
+
     }catch(err){
       return false;
     }
