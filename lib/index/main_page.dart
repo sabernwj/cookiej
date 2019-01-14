@@ -7,16 +7,15 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  List<StatefulWidget> _pageList;
-  StatefulWidget _currentPage;
+  List<Widget> _pageList;
   List<BottomNavigationBarItem> _navigationItems;
   int _currentIndex=0;
     //加载控件
   void loadWidget(){
-    _pageList=<StatefulWidget>[
+    _pageList=<Widget>[
       new HomePage(),
-      null,
-      null
+      new Container(),
+      new Container()
     ];
     _navigationItems=<BottomNavigationBarItem>[
       new BottomNavigationBarItem(
@@ -32,14 +31,18 @@ class _MainPageState extends State<MainPage> {
         title: new Text('我的')
       ),
     ];
-    _currentPage=_pageList[_currentIndex];
+  }
+  @override
+  void initState(){
+    loadWidget();
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    loadWidget();
     return new Scaffold(
-      body: new Center(
-        child: _currentPage,
+      body:IndexedStack(
+        children: _pageList,
+        index: _currentIndex,
       ),
       bottomNavigationBar: new BottomNavigationBar(
         items: _navigationItems,
@@ -48,11 +51,10 @@ class _MainPageState extends State<MainPage> {
         onTap: (int index){
           setState(() {
             _currentIndex=index;
-            print(_pageList[_currentIndex]);
-            // _currentPage=_pageList[_currentIndex];
           });
         },
       ),
     );
   }
+
 }

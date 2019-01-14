@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'weibo.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:photo_view/photo_view.dart';
 //单条微博显示的图片部分
 
 
@@ -19,7 +19,7 @@ class WeiboImageWidget extends StatelessWidget {
         photoViewList.add(
           PhotoViewGalleryPageOptions(
             imageProvider: NetworkImage(picUrl.thumbnail_pic.replaceFirst(regex, 'large')),
-            heroTag: "$i"
+            heroTag: "$i",
           )
         );
       }

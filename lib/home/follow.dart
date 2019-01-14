@@ -9,38 +9,39 @@ class Follow extends StatefulWidget {
   _FollowState createState() => _FollowState();
 }
 
-class _FollowState extends State<Follow> {
+class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
   final ScrollController _scrollController = ScrollController();
   WeiboTimeline homeTimeline;
   WeiboTimeline earlyHomeTimeline;
   WeiboTimeline laterHomeTimeline;
   var weiboWidgetlist=<WeiboWidget>[];
+  Future<bool> _isLoadingMoreData;
+  Future<bool> _isStartLoad;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState(){
-    startLoadData().then((result){
+    _isStartLoad=startLoadData();
+    _isStartLoad.then((result){
       if(result==true){
         _scrollController.addListener((){
           ///判断当前滑动位置是不是到达底部，触发加载更多回调
           if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-            loadMoreData();
+            _isLoadingMoreData=loadMoreData();
           }
         });
       }
     });
-
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
     return new FutureBuilder(
-      future:startLoadData(),
+      future:_isStartLoad,
       builder: (BuildContext context,snaphot){
-        if(snaphot.data==false){
-          return new Center(
-            child: new CircularProgressIndicator(),
-          );
-        }else{
+        if(snaphot.data==true){
           return new RefreshIndicator(
             child: SingleChildScrollView(
               child: new Container(
@@ -49,10 +50,13 @@ class _FollowState extends State<Follow> {
                     Column(children: weiboWidgetlist,),
                     //配套拉到底部刷新用的加载小圈
                     FutureBuilder(
-                      future: loadMoreData(),
+                      future: _isLoadingMoreData,
                       builder: (BuildContext context,snaphot){
-                        if(snaphot.data==false){
-                          return CircularProgressIndicator();
+                        if(snaphot.data==true){
+                          return Container(
+                            child: CircularProgressIndicator(),
+                            padding: EdgeInsets.all(10),
+                          );
                         }else{
                           return Container();
                         }
@@ -65,6 +69,10 @@ class _FollowState extends State<Follow> {
               controller: _scrollController,
             ),
             onRefresh: refreshData,
+          );
+        }else{
+          return new Center(
+            child: new CircularProgressIndicator(),
           );
         }
       },
@@ -89,25 +97,28 @@ class _FollowState extends State<Follow> {
 
   Future<bool> loadMoreData ()async{
     var _weiboWidgetlist=<WeiboWidget>[];
-    var reusult=HttpController.getStatusesHomeTimeline(maxId: earlyHomeTimeline.maxId).then((jsonMap){
-      earlyHomeTimeline=WeiboTimeline.fromJson(jsonMap);
-      for(var weibo in earlyHomeTimeline.statuses){
-        _weiboWidgetlist.add(WeiboWidget(weibo));
-      }
-      setState(() {
-        weiboWidgetlist.addAll(_weiboWidgetlist);
+    var result=(()async {
+      HttpController.getStatusesHomeTimeline(maxId: earlyHomeTimeline.maxId??0).then((jsonMap){
+        earlyHomeTimeline=WeiboTimeline.fromJson(jsonMap);
+        for(var weibo in earlyHomeTimeline.statuses){
+          _weiboWidgetlist.add(WeiboWidget(weibo));
+        }
+        setState(() {
+          weiboWidgetlist.addAll(_weiboWidgetlist);
+        });
+        return false;
+      }).catchError((err){
+        return false;
       });
       return true;
-    }).catchError((err){
-      print(err);
-      return false;
-    });
-    return reusult;
+    })();
+
+    return result;
   }
 
   Future<Null> refreshData() async{
     var _weiboWidgetlist=<WeiboWidget>[];
-    HttpController.getStatusesHomeTimeline(sinceId: laterHomeTimeline.sinceId).then((jsonMap){
+    HttpController.getStatusesHomeTimeline(sinceId: laterHomeTimeline.sinceId??0).then((jsonMap){
       laterHomeTimeline=WeiboTimeline.fromJson(jsonMap);
       for(var weibo in laterHomeTimeline.statuses){
         _weiboWidgetlist.add(WeiboWidget(weibo));

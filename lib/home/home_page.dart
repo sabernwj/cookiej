@@ -7,14 +7,30 @@ class HomePage extends StatefulWidget{
 }
 
 
-class _HomePageState extends State<HomePage>{
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
 
-  var _tabs=<Tab>[
-    new Tab(text: '全部关注',),
-    new Tab(text: '好友圈',),
-    new Tab(text: '特别关注',),
-  ];
+  List<Tab> _tabs;
+  List<Widget> _pageList;
+  int _currentIndex=0;
+  Widget _currentPage;
 
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState(){
+    _tabs=<Tab>[
+      new Tab(text: '全部关注',),
+      new Tab(text: '好友圈',),
+      new Tab(text: '特别关注',),
+    ];
+    _pageList=<Widget>[
+      new Follow(),
+      new Container(),
+      new Container()
+    ];
+    super.initState();
+  }
   @override
   Widget build(BuildContext context){
     return new DefaultTabController(
@@ -24,9 +40,11 @@ class _HomePageState extends State<HomePage>{
           title: new Text('饼干酱'),
           bottom: new TabBar(
             tabs: _tabs,
-          )
+          ),
         ),
-        body: new Follow(),
+        body: TabBarView(
+          children: _pageList,
+        )
       ),
     );
   }
