@@ -70,11 +70,15 @@ class HttpController{
       "grant_type":"authorization_code",
       "redirect_uri":_redirectUri,
       "code":code,
-      
     };
-    Response response;
-    response=await _httpClient.post(formatUrlParams(url, params),data: {});
-    var result=response.data;
+    var httpCli=new HttpClient();
+    var uri=new Uri.https('api.weibo.com',url,params);
+    var request=await httpCli.postUrl(uri);
+    var httpResponse=await request.close();
+    var responseBody = await httpResponse.transform(utf8.decoder).join();
+    // Response response;
+    // response=await _httpClient.post(formatUrlParams(url, params),data: {});
+    var result=json.decode(responseBody);
     return result["access_token"].toString();
     
   }
@@ -85,10 +89,14 @@ class HttpController{
   }
 
   ///获取当前登录用户及其所关注（授权）用户的最新微博
-  static Future<Map> getStatusesHomeTimeline() async{
+  static Future<Map> getStatusesHomeTimeline({int sinceId=0,int maxId=0}) async{
     try{
-      var url=_apiUrlMap["statuses"]["homeTimeline"]["value"];
-      return (await _httpClient.get(url)).data;
+      var url=_apiUrl+_apiUrlMap["statuses"]["homeTimeline"]["value"];
+      var params={
+        "since_id":sinceId.toString(),
+        "max_id":maxId.toString()
+      };
+      return (await _httpClient.get(formatUrlParams(url, params))).data;
     }catch(e){
       print(e.response.data);
       return null;

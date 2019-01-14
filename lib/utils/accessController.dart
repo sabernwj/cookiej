@@ -29,18 +29,18 @@ class AccessController {
   ///根据code获取新的accessToken
  static Future<bool> setNewOauth2AccessToken(String url) async{
     var uri=Uri.tryParse(url);
+    var accessToken='';
     try{
       var code= uri.queryParameters["code"];
       if(code.isNotEmpty){
-        // var accessToken=await HttpController.getOauth2AccessToken(code);
-        // HttpController.setTokenToHttpClient(accessToken??"");
+        accessToken=await HttpController.getOauth2AccessToken(code);
       }
     }catch(err){
       return false;
     }
 
     //此处假装我们已经获取到了accessToken
-    var accessToken="2.008bYRVCrcxifB69f5f3813a0BcFLw";
+    // accessToken="2.008bYRVCrcxifB69f5f3813a0BcFLw";
     // print('已将token设置为'+accessToken);
     LocalstorageHelper.setToStorage(_accessTokenName, accessToken);
     // print('已将token设置为'+accessToken);

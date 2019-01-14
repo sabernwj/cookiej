@@ -108,12 +108,18 @@ class _ImagesViewState extends State<ImagesView> {
           children: <Widget>[
             PhotoViewGallery(
               pageOptions: widget.imageList,
+              loadingChild: Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+                decoration: BoxDecoration(color: Colors.black87),
+              ),
               backgroundDecoration: BoxDecoration(color: Colors.black87),
               pageController: widget.pageController,
               onPageChanged: onPageChanged,
             ),
             Container(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(30.0),
               child: Text(
                 "${currentIndex + 1}/${widget.imageList.length}",
                 style: const TextStyle(
