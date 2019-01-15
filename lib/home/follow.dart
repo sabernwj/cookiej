@@ -83,7 +83,6 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
     var result=HttpController.getStatusesHomeTimeline().then((jsonMap){
       homeTimeline=WeiboTimeline.fromJson(jsonMap);
       laterHomeTimeline=homeTimeline;
-      earlyHomeTimeline=homeTimeline;
       for(var weibo in homeTimeline.statuses){
         weiboWidgetlist.add( new WeiboWidget(weibo));
       }
@@ -95,9 +94,16 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
     return result;
   }
 
-  Future<bool> loadMoreData ()async{
+  Future<bool> loadMoreData()async{
     var _weiboWidgetlist=<WeiboWidget>[];
     var result=(()async {
+      if(earlyHomeTimeline!=null){
+        if(earlyHomeTimeline.maxId>=laterHomeTimeline.sinceId){
+          return false;
+        }
+      }else{
+        earlyHomeTimeline=homeTimeline;
+      }
       HttpController.getStatusesHomeTimeline(maxId: earlyHomeTimeline.maxId??0).then((jsonMap){
         earlyHomeTimeline=WeiboTimeline.fromJson(jsonMap);
         for(var weibo in earlyHomeTimeline.statuses){

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import '../global_config.dart';
 
+
+
+final urlRegexStr="(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*\$~@!:/{};']*)";
+final topicRegexStr=r"#[^#]+#";
+final userRegexStr=r"@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}";
+final totalRegex=new RegExp("$urlRegexStr|$topicRegexStr|$userRegexStr");
 class WeiboTextWidget extends StatelessWidget {
-  
   final String text;
   const WeiboTextWidget({
     Key key,
@@ -38,10 +43,7 @@ class WeiboTextWidget extends StatelessWidget {
   }
 }
 
-final urlRegexStr="(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*\$~@!:/{};']*)";
-final topicRegexStr=r"#[^#]+#";
-final userRegexStr=r"@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}";
-final totalRegex=new RegExp("$urlRegexStr|$topicRegexStr|$userRegexStr");
+
 
 
 

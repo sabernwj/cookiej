@@ -7,16 +7,10 @@ import 'weibo_image_widget.dart';
 
 //单条微博的卡片形式
 
-class WeiboWidget extends StatefulWidget {
+class WeiboWidget extends StatelessWidget {
   final Weibo weibo;
   WeiboWidget(this.weibo);
-  @override
-  _WeiboWidgetState createState() => _WeiboWidgetState();
 
-
-}
-
-class _WeiboWidgetState extends State<WeiboWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,15 +22,15 @@ class _WeiboWidgetState extends State<WeiboWidget> {
               children: <Widget>[
                 new Container(
                   child: new CircleAvatar(
-                    backgroundImage: new NetworkImage(widget.weibo.user.avatar_large),
+                    backgroundImage: new NetworkImage(weibo.user.avatar_large),
                     radius: 20,
                   ),
                 ),
                 new Container(
                   child: new Column(
                     children: <Widget>[
-                      new Text(widget.weibo.user.name,),
-                      new Text(Utils.getDistanceFromNow(widget.weibo.created_at),style: GlobalConfig.grayFontStyle)
+                      new Text(weibo.user.name,),
+                      new Text(Utils.getDistanceFromNow(weibo.created_at),style: GlobalConfig.grayFontStyle)
                     ],
                     crossAxisAlignment: CrossAxisAlignment.start,
                   ),
@@ -48,13 +42,13 @@ class _WeiboWidgetState extends State<WeiboWidget> {
           ),
           //微博正文
           new Container(
-            child: WeiboTextWidget(text:widget.weibo.text),
+            child: WeiboTextWidget(text:weibo.text),
             alignment: Alignment.topLeft,
             margin: const EdgeInsets.only(top: 10),
           ),
           //微博正文图片
           new Container(
-            child: WeiboImageWidget(widget.weibo),
+            child: WeiboImageWidget(weibo),
             alignment: Alignment.topLeft,
             margin: EdgeInsets.only(top: 5),
           )
