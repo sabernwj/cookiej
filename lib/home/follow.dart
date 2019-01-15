@@ -46,11 +46,11 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
               children: (){
                 var list=<Widget>[];
                 list.addAll(weiboWidgetlist);
-                if(_isLoadingMoreData==true){
+                if(_isLoadingMoreData==false){
                   list.add(
                     Container(
-                      child: CircularProgressIndicator(),
-                      padding: EdgeInsets.all(10),
+                      child: Center(child:CircularProgressIndicator()),
+                      padding: EdgeInsets.only(bottom: 10),
                     )
                   );
                 }
@@ -89,7 +89,7 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
     if(earlyHomeTimeline==null){
       earlyHomeTimeline=homeTimeline;
     }
-    if(earlyHomeTimeline.maxId==0||earlyHomeTimeline.sinceId>=laterHomeTimeline.sinceId){
+    if(earlyHomeTimeline.maxId==0){
       return;
     }
     setState(() {
