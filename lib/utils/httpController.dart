@@ -22,13 +22,13 @@ class HttpController{
     },
     "statuses":{
       "publicTimeline":{"type":"get","value":"/2/statuses/public_timeline.json"},
-      "homeTimeline":{"type":"get","value":"/2/statuses/home_timeline.json"}
+      "homeTimeline":{"type":"get","value":"/2/statuses/home_timeline.json"},
+      "bilateralTimeline":{"type":"get","value":"2/statuses/bilateral_timeline.json"}
     }
   };
   static Dio _httpClient=new Dio(new Options(
     baseUrl: _apiUrl,
   ));
-  
   //类初始化
   static void init(){
     //发起请求前加入accessToken
@@ -92,6 +92,21 @@ class HttpController{
   static Future<Map> getStatusesHomeTimeline({int sinceId=0,int maxId=0}) async{
     try{
       var url=_apiUrl+_apiUrlMap["statuses"]["homeTimeline"]["value"];
+      var params={
+        "since_id":sinceId.toString(),
+        "max_id":maxId.toString()
+      };
+      return (await _httpClient.get(formatUrlParams(url, params))).data;
+    }catch(e){
+      print(e.response.data);
+      return null;
+    }
+  }
+
+  ///获取双向关注用户的最新微博
+  static Future<Map> getStatusesBilateralTimeline({int sinceId=0,int maxId=0}) async{
+    try{
+      var url=_apiUrl+_apiUrlMap["statuses"]["bilateralTimeline"]["value"];
       var params={
         "since_id":sinceId.toString(),
         "max_id":maxId.toString()

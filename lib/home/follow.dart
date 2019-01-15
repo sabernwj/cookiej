@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../components/weibo_widget.dart';
 import '../components/weiboTimeline.dart';
 import '../utils/httpController.dart';
-import '../global_config.dart';
 
 class Follow extends StatefulWidget {
   @override
@@ -15,7 +14,7 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
   WeiboTimeline earlyHomeTimeline;
   WeiboTimeline laterHomeTimeline;
   var weiboWidgetlist=<WeiboWidget>[];
-  Future<bool> _isLoadingMoreData;
+  bool _isLoadingMoreData=false;
   Future<bool> _isStartLoad;
 
   @override
@@ -29,7 +28,7 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
         _scrollController.addListener((){
           ///判断当前滑动位置是不是到达底部，触发加载更多回调
           if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-            _isLoadingMoreData=loadMoreData();
+            loadMoreData();
           }
         });
       }
@@ -42,30 +41,16 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
       future:_isStartLoad,
       builder: (BuildContext context,snaphot){
         if(snaphot.data==true){
-          return new RefreshIndicator(
-            child: SingleChildScrollView(
-              child: new Container(
-                child: new Column(
-                  children: <Widget>[
-                    Column(children: weiboWidgetlist,),
-                    //配套拉到底部刷新用的加载小圈
-                    FutureBuilder(
-                      future: _isLoadingMoreData,
-                      builder: (BuildContext context,snaphot){
-                        if(snaphot.data==true){
-                          return Container(
-                            child: CircularProgressIndicator(),
-                            padding: EdgeInsets.all(10),
-                          );
-                        }else{
-                          return Container();
-                        }
-                      },
-                    )
-                  ],
-                ),
-                color: GlobalConfig.backGroundColor,
-              ),
+          return RefreshIndicator(
+            child: ListView(
+              children: (){
+                var list=<Widget>[];
+                list.addAll(weiboWidgetlist);
+                if(_isLoadingMoreData==true){
+                  list.add(CircularProgressIndicator());
+                }
+                return list;
+              }(),
               controller: _scrollController,
             ),
             onRefresh: refreshData,
@@ -94,32 +79,28 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
     return result;
   }
 
-  Future<bool> loadMoreData()async{
+  void loadMoreData()async{
     var _weiboWidgetlist=<WeiboWidget>[];
-    var result=(()async {
-      if(earlyHomeTimeline!=null){
-        if(earlyHomeTimeline.maxId>=laterHomeTimeline.sinceId){
-          return false;
-        }
-      }else{
-        earlyHomeTimeline=homeTimeline;
+    if(earlyHomeTimeline==null){
+      earlyHomeTimeline=homeTimeline;
+    }
+    if(earlyHomeTimeline.maxId==0||earlyHomeTimeline.sinceId>=laterHomeTimeline.sinceId){
+      return;
+    }
+    setState(() {
+          _isLoadingMoreData=true;
+    });
+    HttpController.getStatusesHomeTimeline(maxId: earlyHomeTimeline.maxId??0).then((jsonMap){
+      earlyHomeTimeline=WeiboTimeline.fromJson(jsonMap);
+      for(var weibo in earlyHomeTimeline.statuses){
+        _weiboWidgetlist.add(WeiboWidget(weibo));
       }
-      HttpController.getStatusesHomeTimeline(maxId: earlyHomeTimeline.maxId??0).then((jsonMap){
-        earlyHomeTimeline=WeiboTimeline.fromJson(jsonMap);
-        for(var weibo in earlyHomeTimeline.statuses){
-          _weiboWidgetlist.add(WeiboWidget(weibo));
-        }
-        setState(() {
-          weiboWidgetlist.addAll(_weiboWidgetlist);
-        });
-        return false;
-      }).catchError((err){
-        return false;
+      setState(() {
+        _isLoadingMoreData=false;
+        weiboWidgetlist.addAll(_weiboWidgetlist);
       });
-      return true;
-    })();
-
-    return result;
+    }).catchError((err){
+    });
   }
 
   Future<Null> refreshData() async{
