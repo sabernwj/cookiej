@@ -46,7 +46,7 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
               children: (){
                 var list=<Widget>[];
                 list.addAll(weiboWidgetlist);
-                if(_isLoadingMoreData==false){
+                if(_isLoadingMoreData==true){
                   list.add(
                     Container(
                       child: Center(child:CircularProgressIndicator()),
