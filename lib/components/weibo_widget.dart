@@ -59,16 +59,16 @@ class WeiboWidget extends StatelessWidget {
       color: Colors.white,
     );
   }
-  int rowImagesCout(imgCount){
-    var count=imgCount;
-    if(count>=3){
-      return 3;
-    }else if(count==2){
-      return 2;
-    }else if(count==1){
-      return 1;
-    }else{
-      return 1;
-    }
-  }
+  // int rowImagesCout(imgCount){
+  //   var count=imgCount;
+  //   if(count>=3){
+  //     return 3;
+  //   }else if(count==2){
+  //     return 2;
+  //   }else if(count==1){
+  //     return 1;
+  //   }else{
+  //     return 1;
+  //   }
+  // }
 }

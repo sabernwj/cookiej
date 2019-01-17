@@ -42,20 +42,20 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
       builder: (BuildContext context,snaphot){
         if(snaphot.data==true){
           return RefreshIndicator(
-            child: ListView(
-              children: (){
-                var list=<Widget>[];
-                list.addAll(weiboWidgetlist);
-                if(_isLoadingMoreData==true){
-                  list.add(
-                    Container(
-                      child: Center(child:CircularProgressIndicator()),
-                      padding: EdgeInsets.only(bottom: 10),
-                    )
-                  );
+            child: ListView.builder(
+              itemBuilder: (BuildContext context,int index){
+                if(index<weiboWidgetlist.length){
+                  return weiboWidgetlist[index];
                 }
-                return list;
-              }(),
+                return Container(
+                  child: (){
+                    if(_isLoadingMoreData){return Center(child:CircularProgressIndicator());}
+                    else{return Container();}
+                  }(),
+                  padding: EdgeInsets.only(bottom: 10),
+                );
+              },
+              itemCount: weiboWidgetlist.length+1,
               controller: _scrollController,
             ),
             onRefresh: refreshData,
