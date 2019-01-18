@@ -13,7 +13,7 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
   WeiboTimeline homeTimeline;
   WeiboTimeline earlyHomeTimeline;
   WeiboTimeline laterHomeTimeline;
-  var weiboWidgetlist=<WeiboWidget>[];
+  var _weiboWidgetlist=<WeiboWidget>[];
   bool _isLoadingMoreData=false;
   Future<bool> _isStartLoad;
 
@@ -44,8 +44,8 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
           return RefreshIndicator(
             child: ListView.builder(
               itemBuilder: (BuildContext context,int index){
-                if(index<weiboWidgetlist.length){
-                  return weiboWidgetlist[index];
+                if(index<_weiboWidgetlist.length){
+                  return _weiboWidgetlist[index];
                 }
                 return Container(
                   child: (){
@@ -55,7 +55,7 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
                   padding: EdgeInsets.only(bottom: 10),
                 );
               },
-              itemCount: weiboWidgetlist.length+1,
+              itemCount: _weiboWidgetlist.length+1,
               controller: _scrollController,
             ),
             onRefresh: refreshData,
@@ -74,7 +74,7 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
       homeTimeline=WeiboTimeline.fromJson(jsonMap);
       laterHomeTimeline=homeTimeline;
       for(var weibo in homeTimeline.statuses){
-        weiboWidgetlist.add( new WeiboWidget(weibo));
+        _weiboWidgetlist.add( new WeiboWidget(weibo));
       }
       return true;
     }).catchError((err){
@@ -85,7 +85,7 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
   }
 
   void loadMoreData()async{
-    var _weiboWidgetlist=<WeiboWidget>[];
+    var weiboWidgetlist=<WeiboWidget>[];
     if(earlyHomeTimeline==null){
       earlyHomeTimeline=homeTimeline;
     }
@@ -98,25 +98,25 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
     HttpController.getStatusesHomeTimeline(maxId: earlyHomeTimeline.maxId??0).then((jsonMap){
       earlyHomeTimeline=WeiboTimeline.fromJson(jsonMap);
       for(var weibo in earlyHomeTimeline.statuses){
-        _weiboWidgetlist.add(WeiboWidget(weibo));
+        weiboWidgetlist.add(WeiboWidget(weibo));
       }
       setState(() {
         _isLoadingMoreData=false;
-        weiboWidgetlist.addAll(_weiboWidgetlist);
+        _weiboWidgetlist.addAll(weiboWidgetlist);
       });
     }).catchError((err){
     });
   }
 
   Future<Null> refreshData() async{
-    var _weiboWidgetlist=<WeiboWidget>[];
+    var weiboWidgetlist=<WeiboWidget>[];
     HttpController.getStatusesHomeTimeline(sinceId: laterHomeTimeline.sinceId??0).then((jsonMap){
       laterHomeTimeline=WeiboTimeline.fromJson(jsonMap);
       for(var weibo in laterHomeTimeline.statuses){
-        _weiboWidgetlist.add(WeiboWidget(weibo));
+        weiboWidgetlist.add(WeiboWidget(weibo));
       }
       setState(() {
-        weiboWidgetlist.setAll(0, _weiboWidgetlist);
+        _weiboWidgetlist.setAll(0, weiboWidgetlist);
       });
     }).catchError((err){
       print(err);
