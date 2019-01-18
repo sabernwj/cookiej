@@ -27,7 +27,7 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
       if(result==true){
         _scrollController.addListener((){
           ///判断当前滑动位置是不是到达底部，触发加载更多回调
-          if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+          if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent&&_isLoadingMoreData==false) {
             loadMoreData();
           }
         });

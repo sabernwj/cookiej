@@ -1,5 +1,4 @@
 import 'package:intl/intl.dart';
-import 'package:intl/date_time_patterns.dart';
 
 class Utils {
   ///获取输入时间和当前时间的距离
