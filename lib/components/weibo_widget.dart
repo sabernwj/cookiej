@@ -42,7 +42,7 @@ class WeiboWidget extends StatelessWidget {
           ),
           //微博正文
           new Container(
-            child: WeiboTextWidget(text:weibo.text),
+            child: WeiboTextWidget(text: weibo.text),
             alignment: Alignment.topLeft,
             margin: const EdgeInsets.only(top: 10),
           ),
