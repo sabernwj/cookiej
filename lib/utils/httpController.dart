@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'dart:convert';
-
-import '../components/weibo.dart';
+import 'dart:async';
 import '../components/weiboTimeline.dart';
+import '../components/weibo.dart';
 
 class HttpController{
   static final _appKey="1532678245";
@@ -22,8 +22,12 @@ class HttpController{
     },
     "statuses":{
       "publicTimeline":{"type":"get","value":"/2/statuses/public_timeline.json"},
+      //用户所有关注人的微博
       "homeTimeline":{"type":"get","value":"/2/statuses/home_timeline.json"},
-      "bilateralTimeline":{"type":"get","value":"2/statuses/bilateral_timeline.json"}
+      //与用户双向关注人的微博
+      "bilateralTimeline":{"type":"get","value":"/2/statuses/bilateral_timeline.json"},
+      //单条微博的全部内容
+      'show':{"type":"get","value":"/2/statuses/show.json"}
     }
   };
   static Dio _httpClient=new Dio(new Options(
@@ -31,6 +35,7 @@ class HttpController{
   ));
   //类初始化
   static void init(){
+    var httpcount=0;
     //发起请求前加入accessToken
     _httpClient.interceptor.request.onSend=(Options options){
       if(_accessToken.isNotEmpty){
@@ -38,6 +43,8 @@ class HttpController{
         var params= {"access_token":_accessToken};
         options.path=formatUrlParams(url, params);
       }
+      httpcount++;
+      print('Http已发起请求次数'+httpcount.toString());
       return options;
     };
   }
@@ -82,21 +89,36 @@ class HttpController{
     return result["access_token"].toString();
     
   }
+  
+  ///获取微博列表
+  static Future<WeiboTimeline> getTimeLine({int sinceId=0,int maxId=0,String timelineType='status'}){
+    switch (timelineType){
+      case 'public':
+        return getStatusesPublicTimeline();
+      case 'status':
+        return getStatusesHomeTimeline(sinceId: sinceId,maxId: maxId);
+      case 'bilateral':
+        return getStatusesBilateralTimeline(sinceId: sinceId,maxId: maxId);
+      default:
+        return null;
+    }
+  }
 
   ///获取公共微博
   static Future<WeiboTimeline>  getStatusesPublicTimeline() async{
-
+    return null;
   }
 
   ///获取当前登录用户及其所关注（授权）用户的最新微博
-  static Future<Map> getStatusesHomeTimeline({int sinceId=0,int maxId=0}) async{
+  static Future<WeiboTimeline> getStatusesHomeTimeline({int sinceId=0,int maxId=0}) async{
     try{
       var url=_apiUrl+_apiUrlMap["statuses"]["homeTimeline"]["value"];
       var params={
         "since_id":sinceId.toString(),
         "max_id":maxId.toString()
       };
-      return (await _httpClient.get(formatUrlParams(url, params))).data;
+      WeiboTimeline returnTimeline=WeiboTimeline.fromJson((await _httpClient.get(formatUrlParams(url, params))).data);
+      return returnTimeline;
     }catch(e){
       print(e.response.data);
       return null;
@@ -104,23 +126,43 @@ class HttpController{
   }
 
   ///获取双向关注用户的最新微博
-  static Future<Map> getStatusesBilateralTimeline({int sinceId=0,int maxId=0}) async{
+  static Future<WeiboTimeline> getStatusesBilateralTimeline({int sinceId=0,int maxId=0}) async{
     try{
       var url=_apiUrl+_apiUrlMap["statuses"]["bilateralTimeline"]["value"];
       var params={
         "since_id":sinceId.toString(),
         "max_id":maxId.toString()
       };
-      return (await _httpClient.get(formatUrlParams(url, params))).data;
+      WeiboTimeline returnTimeline=WeiboTimeline.fromJson((await _httpClient.get(formatUrlParams(url, params))).data);
+      return returnTimeline;
     }catch(e){
       print(e.response.data);
       return null;
     }
   }
 
-  static Future<Map> getEmotions() async{
-    var url=_apiUrlMap["emotions"]["emotions"]["value"];
-    return (await _httpClient.get(url)).data;
+  static Future<Weibo> getStatusesShow(int id){
+
+  }
+
+//获取表情
+  static Future<List<Map>> getEmotions() async{
+    try{
+      var url=_apiUrl+_apiUrlMap["emotions"]["emotions"]["value"];
+      var result=(await _httpClient.get(url)).data;
+      if(result is List<dynamic>){
+        List<Map> jsonMap=new List<Map>();
+        result.forEach((m){
+          jsonMap.add(m);
+        });
+        return jsonMap;
+      }
+      else return null;
+    }catch(e){
+      print(e.response.data);
+      return null;
+    }
+
   }
   ///格式化url地址和参数
   static String formatUrlParams(String url,Map<String,String> params){

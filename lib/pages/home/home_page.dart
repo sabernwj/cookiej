@@ -25,14 +25,15 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
       new Tab(text: '特别关注',),
     ];
     _pageList=<Widget>[
-      new Follow(),
-      new Container(),
+      new Follow(timelineType: 'status',),
+      new Follow(timelineType: 'bilateral',),
       new Container()
     ];
     super.initState();
   }
   @override
   Widget build(BuildContext context){
+    super.build(context);
     return new DefaultTabController(
       length:_tabs.length,
       child: new Scaffold(

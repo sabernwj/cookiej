@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'weibo.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -28,8 +29,8 @@ List<Widget> buildImagesWidget(context,weibo){
     imgList.add(
       GestureDetector(
         child:LimitedBox(
-          child:Image.network(
-            weibo.pic_urls[0].thumbnail_pic.replaceFirst(RegExp('thumbnail'), 'bmiddle'),
+          child:Image(
+            image:CachedNetworkImageProvider(weibo.pic_urls[0].thumbnail_pic.replaceFirst(RegExp('thumbnail'), 'bmiddle'))
           ),
           maxHeight: 300,
         ),
@@ -45,12 +46,12 @@ List<Widget> buildImagesWidget(context,weibo){
       imgList.add(
         GestureDetector(
           child:SizedBox(
-            child:Image.network(
-              imgUrl,
+            child:Image(
+              image: CachedNetworkImageProvider(imgUrl),
               fit: BoxFit.cover,
             ),
             width: 119,
-            height: 119,
+            height: 119,   
           ),
           onTap: (){
             weiboImageWidgetItemOnTap(context,weibo.pic_urls,index: i);
@@ -68,8 +69,8 @@ weiboImageWidgetItemOnTap(context,List<PicUrl> picUrls,{int index=0}){
     var picUrl=picUrls[i];
     photoViewList.add(
       PhotoViewGalleryPageOptions(
-        imageProvider: NetworkImage(picUrl.thumbnail_pic.replaceFirst(regex, 'large')),
-        heroTag: "$i",
+        imageProvider: CachedNetworkImageProvider(picUrl.thumbnail_pic.replaceFirst(regex, 'large')),
+        // heroTag: "$i",
       )
     );
   }

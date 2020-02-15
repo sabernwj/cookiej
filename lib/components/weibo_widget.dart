@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'weibo.dart';
 import '../utils/utils.dart';
@@ -13,7 +14,7 @@ class WeiboWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    var returnWidget=Container(
       child: new Column(
         children: <Widget>[
           //标题栏
@@ -22,7 +23,7 @@ class WeiboWidget extends StatelessWidget {
               children: <Widget>[
                 new Container(
                   child: new CircleAvatar(
-                    backgroundImage: new NetworkImage(weibo.user.avatar_large),
+                    backgroundImage: CachedNetworkImageProvider(weibo.user.avatar_large),
                     radius: 20,
                   ),
                 ),
@@ -58,6 +59,17 @@ class WeiboWidget extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       color: Colors.white,
     );
+    //判断当前微博是否有转发原微博
+    if(weibo.retweetedWeibo!=null){
+      final sourceUser='@'+weibo.retweetedWeibo.rWeibo.user.name+':';
+      (returnWidget.child as Column).children.add(new Container(
+        child: WeiboTextWidget(text: sourceUser+weibo.retweetedWeibo.rWeibo.text),
+        alignment: Alignment.topLeft,
+        color: Color(0xFFF5F5F5)
+      ));
+    }
+
+    return returnWidget;
   }
   // int rowImagesCout(imgCount){
   //   var count=imgCount;

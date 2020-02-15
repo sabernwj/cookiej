@@ -1,10 +1,11 @@
+import 'package:cookiej/cache/emotionsController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import '../login/login_page.dart';
 import './main_page.dart';
-import '../utils/localstorageHelper.dart';
-import '../utils/accessController.dart';
-
+import '../../utils/localstorageHelper.dart';
+import '../../utils/accessController.dart';
+import 'dart:async';
 class Index extends StatefulWidget{
   @override
   State<Index> createState()=>new _IndexState();
@@ -35,9 +36,16 @@ class _IndexState extends State<Index> {
       });
     });
     Future storageReady=LocalstorageHelper.checkStorageIsReady();
-    storageReady.then((ready)=>
+    storageReady.then((ready){
       //判断进入登录页或者主页
-      _acitveIndex=AccessController.loadOauth2AccessToken()?mainPage:loginPage
+      if(AccessController.loadOauth2AccessToken()){
+        _acitveIndex=mainPage;
+        EmotionsController.loadEmotions();
+      }
+      else{
+        _acitveIndex=loginPage;
+      }
+    }
     );
     return FutureBuilder(
       future: LocalstorageHelper.checkStorageIsReady(),
