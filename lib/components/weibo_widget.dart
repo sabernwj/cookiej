@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'weibo.dart';
 import '../utils/utils.dart';
+import '../pages/public/weibo_page.dart';
 import '../global_config.dart';
 import 'weibo_text_widget.dart';
 import 'weibo_image_widget.dart';
@@ -31,7 +32,7 @@ class WeiboWidget extends StatelessWidget {
                   child: new Column(
                     children: <Widget>[
                       new Text(weibo.user.name,),
-                      new Text(Utils.getDistanceFromNow(weibo.created_at),style: GlobalConfig.grayFontStyle)
+                      new Text(Utils.getDistanceFromNow(weibo.created_at),style: TextStyle(fontSize: 12,color: Colors.black54))
                     ],
                     crossAxisAlignment: CrossAxisAlignment.start,
                   ),
@@ -43,7 +44,7 @@ class WeiboWidget extends StatelessWidget {
           ),
           //微博正文
           new Container(
-            child: WeiboTextWidget(text: weibo.text),
+            child: WeiboTextWidget(text: weibo.longText!=null?weibo.longText.longTextContent:weibo.text),
             alignment: Alignment.topLeft,
             margin: const EdgeInsets.only(top: 10),
           ),
@@ -61,12 +62,31 @@ class WeiboWidget extends StatelessWidget {
     );
     //判断当前微博是否有转发原微博
     if(weibo.retweetedWeibo!=null){
-      final sourceUser='@'+weibo.retweetedWeibo.rWeibo.user.name+':';
-      (returnWidget.child as Column).children.add(new Container(
-        child: WeiboTextWidget(text: sourceUser+weibo.retweetedWeibo.rWeibo.text),
-        alignment: Alignment.topLeft,
-        color: Color(0xFFF5F5F5)
+      final sourceUser='@'+weibo.retweetedWeibo.rWeibo.user.name+'\n';
+      (returnWidget.child as Column).children.add(GestureDetector(
+        child: Container(
+          child: Column(children: <Widget>[
+            WeiboTextWidget(text: sourceUser+weibo.retweetedWeibo.rWeibo.text),
+            Container(
+              child: WeiboImageWidget(weibo.retweetedWeibo.rWeibo),
+              alignment: Alignment.topLeft,
+              margin: EdgeInsets.only(top: 5),
+            )
+          ],),
+          alignment: Alignment.topLeft,
+          color: Color(0xFFF5F5F5),
+          padding: const EdgeInsets.only(left: 10,top: 6,right: 4,bottom: 10),
+        ),
+        onTap:(){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(weibo.retweetedWeibo.rWeibo.id)));
+        },
       ));
+      // (returnWidget.child as Column).children.add(Container(
+      //   child: WeiboImageWidget(weibo.retweetedWeibo.rWeibo),
+      //   alignment: Alignment.topLeft,
+      //   margin: EdgeInsets.only(top:5),
+      //   color: Color(0xFFF5F5F5)
+      // ));
     }
 
     return returnWidget;

@@ -55,6 +55,9 @@ class Weibo {
   ///转发的原微博
   RetweetedWeibo retweetedWeibo;
 
+  //超过140字的微博内容
+  LongText longText;
+
   Weibo.fromParams({this.geo, this.attitudes_count, this.biz_feature, this.comments_count, this.content_auth, this.hasActionTypeCard, this.hide_flag, this.id, this.idstr, this.is_show_bulletin, this.mblog_vip_type, this.mblogtype, this.mid, this.mlevel, this.more_info_type, this.pending_approval_count, this.positive_recom_flag, this.reposts_count, this.reward_exhibition_type, this.show_additional_indication, this.source_allowclick, this.source_type, this.textLength, this.userType, this.can_edit, this.favorited, this.isLongText, this.is_paid, this.truncated, this.bmiddle_pic, this.cardid, this.created_at, this.gif_ids, this.in_reply_to_screen_name, this.in_reply_to_status_id, this.in_reply_to_user_id, this.original_pic, this.reward_scheme, this.rid, this.source, this.text, this.thumbnail_pic, this.annotations, this.darwin_tags, this.hot_weibo_tags, this.pic_urls, this.text_tag_tips, this.comment_manage_info, this.user, this.visible});
 
   factory Weibo(jsonStr) => jsonStr == null ? null : jsonStr is String ? new Weibo.fromJson(json.decode(jsonStr)) : new Weibo.fromJson(jsonStr);
@@ -135,6 +138,9 @@ class Weibo {
     comment_manage_info = jsonRes['comment_manage_info'] == null ? null : new CommentManageInfo.fromJson(jsonRes['comment_manage_info']);
     user = jsonRes['user'] == null ? null : new User.fromJson(jsonRes['user']);
     visible = jsonRes['visible'] == null ? null : new Visible.fromJson(jsonRes['visible']);
+
+    longText=jsonRes['longText'] == null ? null : new LongText.fromJson(jsonRes['longText']);
+
     if(jsonRes['retweeted_status']!=null){
       retweetedWeibo=new RetweetedWeibo();
       retweetedWeibo.rWeibo=Weibo.fromJson(jsonRes['retweeted_status']);
@@ -364,4 +370,16 @@ class Client {
 class RetweetedWeibo{
 
   Weibo rWeibo;
+}
+
+class LongText{
+  String longTextContent;
+  List<Object> urlObjects;
+
+  LongText.fromParams({this.longTextContent,this.urlObjects});
+  LongText.fromJson(jsonRes){
+    longTextContent=jsonRes['longTextContent'];
+    urlObjects=jsonRes['url_objects'];
+  }
+
 }

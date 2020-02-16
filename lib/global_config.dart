@@ -13,7 +13,7 @@ class GlobalConfig{
 }
 
 class _FontSize{
-  static const double small=12;
-  static const double middle=14;
-  static const double large=16;
+  static const double small=13;
+  static const double middle=15;
+  static const double large=17;
 }

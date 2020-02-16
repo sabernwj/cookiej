@@ -54,7 +54,7 @@ class _FollowState extends State<Follow> with AutomaticKeepAliveClientMixin{
                   return new GestureDetector(
                     child: WeiboWidget(_weiboWidgetlist[index]),
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(WeiboWidget(_weiboWidgetlist[index]))));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(_weiboWidgetlist[index].id)));
                     },
                   );
                 }

@@ -1,4 +1,4 @@
-package com.example.cookiej;
+package com.ningwj.cookiej;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

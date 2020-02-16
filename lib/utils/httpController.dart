@@ -27,6 +27,7 @@ class HttpController{
       //与用户双向关注人的微博
       "bilateralTimeline":{"type":"get","value":"/2/statuses/bilateral_timeline.json"},
       //单条微博的全部内容
+      //该死的微博文档里没写要获取全文即超过140字的长微博要加上 isGetLongText=1 
       'show':{"type":"get","value":"/2/statuses/show.json"}
     }
   };
@@ -141,8 +142,20 @@ class HttpController{
     }
   }
 
-  static Future<Weibo> getStatusesShow(int id){
-
+///根据微博ID获取单条微博内容
+  static Future<Weibo> getStatusesShow(int id) async{
+    try{
+      var url=_apiUrl+_apiUrlMap["statuses"]["show"]["value"];
+      var params={
+        'id':id.toString(),
+        'isGetLongText':'1'
+      };
+      Weibo returnWeibo=Weibo.fromJson((await _httpClient.get(formatUrlParams(url, params))).data);
+      return returnWeibo;
+    }catch(e){
+      print(e.response.data);
+      return null;
+    }
   }
 
 //获取表情
