@@ -118,8 +118,8 @@ class HttpController{
         "since_id":sinceId.toString(),
         "max_id":maxId.toString()
       };
-      WeiboTimeline returnTimeline=WeiboTimeline.fromJson((await _httpClient.get(formatUrlParams(url, params))).data);
-      return returnTimeline;
+      final result=(await _httpClient.get(formatUrlParams(url, params))).data;
+      return WeiboTimeline.fromJson(result);
     }catch(e){
       print(e.response.data);
       return null;
@@ -134,8 +134,8 @@ class HttpController{
         "since_id":sinceId.toString(),
         "max_id":maxId.toString()
       };
-      WeiboTimeline returnTimeline=WeiboTimeline.fromJson((await _httpClient.get(formatUrlParams(url, params))).data);
-      return returnTimeline;
+      final result=(await _httpClient.get(formatUrlParams(url, params))).data;
+      return WeiboTimeline.fromJson(result);
     }catch(e){
       print(e.response.data);
       return null;

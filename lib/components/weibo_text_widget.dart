@@ -1,9 +1,11 @@
+import 'package:cookiej/components/public/webview_with_title.dart';
 import 'package:cookiej/global_config.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../cache/emotionsController.dart';
 import '../components/public/weibo_text_emotion_widget.dart';
 
-const urlRegexStr="(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*\$~@!:/{};']*)";
+const urlRegexStr="((ht|f)tp(s?):\\/\\/|www\\.)(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*\$~@!:/{};']*)";
 const topicRegexStr=r"#[^#]+#";
 const userRegexStr=r"@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}";
 const emotionRegexStr=r"(\[[0-9a-zA-Z\u4e00-\u9fa5]+\])";
@@ -38,9 +40,15 @@ class WeiboTextWidget extends StatelessWidget {
         //处理微博中的链接(外部链接以及全文链接，甚至还有高级API的奇怪链接)
         else if(text.contains(new RegExp(urlRegexStr))){
           if(text.contains(new RegExp('http://m.weibo.cn/'))){
-            list.add(TextSpan(text: '☞查看',style: TextStyle(color: Theme.of(context).primaryColor,fontSize: GlobalConfig.weiboFontSize)));
+            list.add(TextSpan(text: '查看',style: TextStyle(color: Theme.of(context).primaryColor,fontSize: GlobalConfig.weiboFontSize)));
           }
-          
+          else{
+            list.add(TextSpan(text: '网页链接',style: TextStyle(color: Theme.of(context).primaryColor,fontSize: GlobalConfig.weiboFontSize),
+            recognizer:new TapGestureRecognizer()
+            ..onTap=(){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>WebviewWithTitle(matchs[i].group(0))));
+            }));
+          }
         }
         else{
           list.add(TextSpan(text: matchs[i].group(0),style: TextStyle(color: Theme.of(context).primaryColor,fontSize: GlobalConfig.weiboFontSize)));
@@ -57,6 +65,7 @@ class WeiboTextWidget extends StatelessWidget {
           children: returnFormatResult(text)
         ),
       ),
+      alignment: Alignment.topLeft,
     );
   }
 }

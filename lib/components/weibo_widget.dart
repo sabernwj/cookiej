@@ -48,18 +48,21 @@ class WeiboWidget extends StatelessWidget {
             alignment: Alignment.topLeft,
             margin: const EdgeInsets.only(top: 10),
           ),
-          //微博正文图片
-          new Container(
-            child: WeiboImageWidget(weibo),
-            alignment: Alignment.topLeft,
-            margin: EdgeInsets.only(top: 5),
-          )
         ],
       ),
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.only(bottom: 10),
       color: Colors.white,
     );
+    //微博正文图片
+    if(weibo.pic_urls.length>0){
+      (returnWidget.child as Column).children.add(Container(
+          child: WeiboImageWidget(weibo),
+          alignment: Alignment.topLeft,
+          margin: EdgeInsets.only(top: 5),
+        )
+      );
+    }
     //判断当前微博是否有转发原微博
     if(weibo.retweetedWeibo!=null){
       final sourceUser='@'+weibo.retweetedWeibo.rWeibo.user.name+'\n';
@@ -67,14 +70,15 @@ class WeiboWidget extends StatelessWidget {
         child: Container(
           child: Column(children: <Widget>[
             WeiboTextWidget(text: sourceUser+weibo.retweetedWeibo.rWeibo.text),
-            Container(
+            weibo.retweetedWeibo.rWeibo.pic_urls.length>0?Container(
               child: WeiboImageWidget(weibo.retweetedWeibo.rWeibo),
               alignment: Alignment.topLeft,
               margin: EdgeInsets.only(top: 5),
-            )
-          ],),
+            ):Container(),
+          ]),
           alignment: Alignment.topLeft,
           color: Color(0xFFF5F5F5),
+          margin: EdgeInsets.only(top:4),
           padding: const EdgeInsets.only(left: 10,top: 6,right: 4,bottom: 10),
         ),
         onTap:(){

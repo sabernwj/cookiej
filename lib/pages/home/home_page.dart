@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'follow.dart';
+import 'timeline.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -25,8 +25,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
       new Tab(text: '特别关注',),
     ];
     _pageList=<Widget>[
-      new Follow(timelineType: 'status',),
-      new Follow(timelineType: 'bilateral',),
+      new Timeline(timelineType: 'status',),
+      new Timeline(timelineType: 'bilateral',),
       new Container()
     ];
     super.initState();

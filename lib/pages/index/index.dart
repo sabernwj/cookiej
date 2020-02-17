@@ -5,6 +5,7 @@ import '../login/login_page.dart';
 import './main_page.dart';
 import '../../utils/localstorageHelper.dart';
 import '../../utils/accessController.dart';
+
 import 'dart:async';
 class Index extends StatefulWidget{
   @override
@@ -29,8 +30,13 @@ class _IndexState extends State<Index> {
     _flutterWebviewPlugin.onUrlChanged.listen((url){
       AccessController.setNewOauth2AccessToken(url).then((result){
         if(result==true){
+          //存储登录成功后的cookie
+          _flutterWebviewPlugin.getCookies().then((cookie){
+            LocalstorageHelper.setToStorage('cookie', cookie);
+          });
           setState(() {
             _acitveIndex=mainPage;
+            _flutterWebviewPlugin.dispose();
           });
         }
       });

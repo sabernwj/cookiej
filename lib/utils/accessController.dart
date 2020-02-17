@@ -41,10 +41,7 @@ class AccessController {
     }
 
     //此处假装我们已经获取到了accessToken
-    // accessToken="2.008bYRVCrcxifB69f5f3813a0BcFLw";
-    // print('已将token设置为'+accessToken);
     LocalstorageHelper.setToStorage(_accessTokenName, accessToken);
-    // print('已将token设置为'+accessToken);
     loadOauth2AccessToken();
     return true;
   }

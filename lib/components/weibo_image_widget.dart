@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
@@ -29,18 +28,21 @@ List<Widget> buildImagesWidget(context,weibo){
   var imgList=<Widget>[];
   if(weibo.pic_urls.length==1){
     final imgProvider=CachedNetworkImageProvider(weibo.pic_urls[0].thumbnail_pic.replaceFirst(RegExp('thumbnail'), 'bmiddle'));
+
     double imgWidth,imgHeight;
     imgProvider.resolve(ImageConfiguration()).addListener(ImageStreamListener((ImageInfo info,bool _){
       imgWidth=info.image.width.toDouble();
       imgHeight=info.image.height.toDouble();
+      var image;
+      if((imgWidth/imgHeight)<0.42){
+        image=Image(image:imgProvider,fit: BoxFit.cover,width: 200,);
+      }else{
+        image=Image(image:imgProvider,fit: BoxFit.cover);
+      }
       imgList.add(
         GestureDetector(
           child:LimitedBox(
-            child:Image(
-              image:imgProvider,
-              fit: BoxFit.cover,
-              width: (imgWidth/imgHeight)<0.42?200:imgWidth,
-            ),
+            child:image,
             maxHeight: 300,
           ),
           onTap: (){
