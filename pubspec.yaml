@@ -27,6 +27,7 @@ dependencies:
   photo_view: ^0.9.1
   cached_network_image: ^2.0.0
   pull_to_refresh: ^1.5.8
+  font_awesome_flutter: ^8.5.0
   # extended_text: ^0.7.1
 
 dev_dependencies:
