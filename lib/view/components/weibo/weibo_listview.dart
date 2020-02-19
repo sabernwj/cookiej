@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import './weibo_widget.dart';
-import '../../../model/Weibos.dart';
-import '../../../controller/httpController.dart';
+import '../../../model/weibos.dart';
+import '../../../controller/apiController.dart';
 import '../../../model/weibo.dart';
 import '../../public/weibo_page.dart';
 import '../../../config/type.dart';
@@ -84,7 +84,7 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
   ///开始获取微博
   ///(目前从网络获取，可添加从本地缓存中读取)
   Future<bool> startLoadData() async{
-    var result=HttpController.getTimeLine(timelineType: widget.timelineType).then((timeline){
+    var result=ApiController.getTimeLine(timelineType: widget.timelineType).then((timeline){
       homeTimeline=timeline;
       laterHomeTimeline=homeTimeline;
       for(var weibo in homeTimeline.statuses){
@@ -107,7 +107,7 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
       _refreshController.loadNoData();
       return;
     }
-    HttpController.getTimeLine(maxId: earlyHomeTimeline.maxId??0,timelineType: widget.timelineType).then((timeline){
+    ApiController.getTimeLine(maxId: earlyHomeTimeline.maxId??0,timelineType: widget.timelineType).then((timeline){
       earlyHomeTimeline=timeline;
       if(earlyHomeTimeline!=null){
         setState(() {
@@ -126,14 +126,14 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
   ///刷新微博
   void refreshData() async{
     var weiboList=<Weibo>[];
-    HttpController.getTimeLine(sinceId: laterHomeTimeline.sinceId??0,timelineType: widget.timelineType).then((timeline){
+    ApiController.getTimeLine(sinceId: laterHomeTimeline.sinceId??0,timelineType: widget.timelineType).then((timeline){
       laterHomeTimeline=timeline;
       if(laterHomeTimeline!=null){
         for(var weibo in laterHomeTimeline.statuses){
           weiboList.add(weibo);
         }
         setState(() {
-          _weiboList.setAll(0, weiboList);
+          _weiboList.insertAll(0, weiboList);
         });
       }
       _refreshController.refreshCompleted();

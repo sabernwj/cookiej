@@ -1,6 +1,5 @@
 import 'package:cookiej/config/global_config.dart';
-import 'package:cookiej/controller/httpController.dart';
-import 'package:cookiej/model/comment.dart';
+import 'package:cookiej/controller/apiController.dart';
 import 'package:cookiej/model/comments.dart';
 import 'package:cookiej/view/components/comments/comment_widget.dart';
 import 'package:flutter/material.dart';
@@ -27,15 +26,13 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
   @override
   void initState() {
     //_isStartLoad=startLoadData();
-    _commentStatusController=TabController(length: 3,vsync: this);
-    commentsTask=HttpController.getCommentsShow(widget.id).then((comments){
+    commentsTask=ApiController.getCommentsShow(widget.id).then((comments){
       initialComments=comments;
       laterComments=initialComments;
-      // for(var comment in initialComments.comments){
-      //   _comments.add(comment);
-      // }
       return comments;
     });
+    _commentStatusController=TabController(initialIndex: 1,length: 3,vsync: this);
+    _commentStatusController.addListener(()=>_commentStatusController.indexIsChanging?setState((){}):(){});
     super.initState();
   }
 
@@ -70,6 +67,20 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                   height: 42,
                   color: Colors.white,
                 ),
+                Container(
+                  child: [
+                    Text('转发'),
+                    ListView.builder(
+                      itemBuilder: (context,index){
+                        return CommentWidget(initialComments.comments[index]);
+                      },
+                      itemCount: initialComments.comments.length,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                    ),
+                    Text('点赞')
+                  ][_commentStatusController.index],
+                )
               ]),
               margin: EdgeInsets.only(top:10),
             );

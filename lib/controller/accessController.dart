@@ -1,4 +1,4 @@
-import 'httpController.dart';
+import 'apiController.dart';
 import '../ultis/localstorageHelper.dart';
 import 'dart:async';
 
@@ -17,7 +17,7 @@ class AccessController {
       if(token==null||token.isEmpty){
         return false;
       }else{
-        HttpController.setTokenToHttpClient(token);
+        ApiController.setTokenToHttpClient(token);
         // print('获取到token：'+token);
         return true;
       }
@@ -34,7 +34,7 @@ class AccessController {
     try{
       var code= uri.queryParameters["code"];
       if(code.isNotEmpty){
-        accessToken=await HttpController.getOauth2AccessToken(code);
+        accessToken=await ApiController.getOauth2AccessToken(code);
       }
     }catch(err){
       return false;

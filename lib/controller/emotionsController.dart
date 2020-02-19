@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 
-import './httpController.dart';
+import './apiController.dart';
 
 class EmotionsController{
   static Map<String,Emotion> emotionsMap=new Map();
 
   static Future<List<Map>> downloadEmotions() async{
-    return await HttpController.getEmotions();
+    return await ApiController.getEmotions();
   }
 
   static void loadEmotions() async{

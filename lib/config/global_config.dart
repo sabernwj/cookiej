@@ -10,6 +10,8 @@ class GlobalConfig{
 
   static double weiboFontSize=_FontSize.middle;
 
+  static double commentFontSize=_FontSize.small;
+
 }
 
 class _FontSize{

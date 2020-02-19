@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import '../../../controller/httpController.dart';
+import '../../../controller/apiController.dart';
 
 class LoginPage extends StatefulWidget{
   @override
@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage>{
       appBar: new AppBar(
         title: new Text("登录"),
       ),
-      url: HttpController.getOauth2Authorize(),
+      url: ApiController.getOauth2Authorize(),
     );
   }
 }

@@ -1,5 +1,5 @@
 import '../components/comments/comment_listview.dart';
-import '../../controller/httpController.dart';
+import '../../controller/apiController.dart';
 import 'package:flutter/material.dart';
 import '../components/weibo/weibo_widget.dart';
 import '../../model/weibo.dart';
@@ -16,7 +16,7 @@ class _WeiboPageState extends State<WeiboPage>{
   Future<Weibo> weiboTask;
   @override
   void initState() {
-    weiboTask =HttpController.getStatusesShow(widget.weiboId);
+    weiboTask =ApiController.getStatusesShow(widget.weiboId);
     super.initState();
   }
 

@@ -40,7 +40,7 @@ class WeiboWidget extends StatelessWidget {
           ),
           //微博正文
           Container(
-            child: ShowTextWidget(text: weibo.longText!=null?weibo.longText.longTextContent:weibo.text),
+            child: ShowTextWidget(text: weibo.longText!=null?weibo.longText.longTextContent:weibo.text,fontSize: GlobalConfig.weiboFontSize,),
             alignment: Alignment.topLeft,
             margin: const EdgeInsets.only(top: 10),
           ),
@@ -65,7 +65,7 @@ class WeiboWidget extends StatelessWidget {
       (returnWidget.child as Column).children.add(GestureDetector(
         child: Container(
           child: Column(children: <Widget>[
-            ShowTextWidget(text: sourceUser+weibo.retweetedWeibo.rWeibo.text),
+            ShowTextWidget(text: sourceUser+weibo.retweetedWeibo.rWeibo.text,fontSize: GlobalConfig.weiboFontSize,),
             weibo.retweetedWeibo.rWeibo.picUrls.length>0?Container(
               child: WeiboImageWidget(weibo.retweetedWeibo.rWeibo),
               alignment: Alignment.topLeft,
@@ -86,7 +86,7 @@ class WeiboWidget extends StatelessWidget {
     (returnWidget.child as Column).children.add(Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        Expanded(child: Text(weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(color:Colors.grey,fontSize: 12))),
+        Expanded(child: Text(weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(color:Colors.grey,fontSize: 11))),
         FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.shareSquare,size: GlobalConfig.weiboFontSize,), label: Text(weibo.repostsCount.toString()),textColor: Colors.grey,),
         FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.comments,size: GlobalConfig.weiboFontSize,), label: Text(weibo.commentsCount.toString()),textColor: Colors.grey,),
         FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.heart,size: GlobalConfig.weiboFontSize,), label: Text(weibo.attitudesCount.toString()),textColor: Colors.grey,)
