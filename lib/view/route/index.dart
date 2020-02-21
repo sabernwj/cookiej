@@ -65,7 +65,7 @@ class _IndexState extends State<Index> {
           title: '饼干酱',
           home: new Container(
             child: _acitveIndex,
-          )
+          ),
         );
       }
     );

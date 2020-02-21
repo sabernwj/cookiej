@@ -47,24 +47,26 @@ class ShowTextWidget extends StatelessWidget {
             list.add(TextSpan(text: '查看',style: TextStyle(color: Theme.of(context).primaryColor,fontSize: fontSize)));
           }
           else{
-            //ApiController.getUrlsInfo([matchs[i].group(0)]);
+            //处理短链接，没有annotations说明为普通网页链接而非特殊微博应用链接
+            var urlInfo=CacheController.urlInfoCache[matchs[i].group(0)];
+            var displayLink='\u{f0c1}网页链接';
+            if(urlInfo.annotations.length!=0){
+              switch(urlInfo.annotations[0].objectType){
+                case 'place':
+                  displayLink='\u{f124}'+urlInfo.annotations[0].object.displayName;
+                  break;
+                case 'video':
+                  displayLink='\u{f03d}'+urlInfo.annotations[0].object.displayName;
+                  break;
+                case 'collection':
+                  displayLink=urlInfo.annotations[0].object.displayName;
+                  break;
+                default:
+                  displayLink='\u{f0c1}未知微博应用';
+              }
+            }
             list.add(TextSpan(
-              text:((){
-                var urlInfo=CacheController.urlInfoCache[matchs[i].group(0)];
-                if(urlInfo.annotations!=null){
-                  if(urlInfo.annotations.length!=0){
-                    switch(urlInfo.annotations[0].objectType){
-                      case 'place':
-                        return '\u{f124}'+urlInfo.annotations[0].object.displayName;
-                      case 'video':
-                        return '\u{f03d}'+urlInfo.annotations[0].object.displayName;
-                      default:
-                        return '\u{f0c1}网页链接';
-                    }
-                  }
-                }
-                return '\u{f0c1}网页链接';
-              }()),
+              text:(displayLink),
               style: TextStyle(color: Theme.of(context).primaryColor,fontSize: fontSize,fontFamily: 'fontawesome'),
               recognizer:new TapGestureRecognizer()
               ..onTap=(){

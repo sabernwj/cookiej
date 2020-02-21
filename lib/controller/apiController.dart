@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:cookiej/ultis/utils.dart';
+import 'dart:math';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -7,6 +7,7 @@ import '../model/weibos.dart';
 import '../model/weibo.dart';
 import '../model/comments.dart';
 import '../model/urlInfo.dart';
+import '../model/extraAPI.dart';
 import '../config/type.dart';
 import 'cacheController.dart';
 
@@ -46,23 +47,25 @@ class ApiController{
       'info':{"type":"get","value":"/2/short_url/info.json"}
     }
   };
-  static Dio _httpClient=new Dio(new Options(
-    baseUrl: _apiUrl,
-  ));
+  static Dio _httpClient=Dio();
   //类初始化
   static void init(){
     var httpcount=0;
+    _httpClient.options.baseUrl=_apiUrl;
     //发起请求前加入accessToken
-    _httpClient.interceptor.request.onSend=(Options options){
+    _httpClient.interceptors.add(InterceptorsWrapper(onRequest: (options){
       if(_accessToken.isNotEmpty){
         var url=options.path;
         var params= {"access_token":_accessToken};
         options.path=formatUrlParams(url, params);
+        httpcount++;
+        print('Http已发起请求次数'+httpcount.toString()+':'+url);
+        //加载cookie
+        
       }
-      httpcount++;
-      print('Http已发起请求次数'+httpcount.toString());
+
       return options;
-    };
+    }));
   }
 
 
@@ -123,27 +126,12 @@ class ApiController{
       default:
         returnTimeline = null;
     }
-    //缓存文本中url的实际内容
+    //获取微博后，缓存文本中url的实际内容
      return returnTimeline.then((weibos) async{
       if(weibos.statuses.length==0){
         return returnTimeline;
       }
-      var shortUrlList=<String>[];
-      var reg=new RegExp(Utils.urlRegexStr);
-      weibos.statuses.forEach((weibo){
-        String text=weibo.longText==null?weibo.text:weibo.longText.longTextContent;
-        var regList = reg.allMatches(text).toList();
-        regList.forEach(
-          (r){
-            if(r.group(0).contains('//t.cn/')){
-              shortUrlList.add(r.group(0)); 
-            }
-          });
-      });
-      if(shortUrlList.length<=20){
-        var urlInfoList =await getUrlsInfo(shortUrlList);
-        urlInfoList.forEach((urlInfo)=>CacheController.urlInfoCache[urlInfo.urlShort]=urlInfo);
-      }
+      await CacheController.cacheUrlInfoToRAM(weibos.statuses);
       return returnTimeline;
     });
     
@@ -195,6 +183,7 @@ class ApiController{
         'isGetLongText':'1'
       };
       Weibo returnWeibo=Weibo.fromJson((await _httpClient.get(formatUrlParams(url, params))).data);
+      await CacheController.cacheUrlInfoToRAM([returnWeibo]);
       return returnWeibo;
     }catch(e){
       print(e.response.data);
@@ -213,13 +202,14 @@ class ApiController{
       };
       var comments=(await _httpClient.get(formatUrlParams(url, params))).data;
       Comments returnComments=Comments.fromJson(comments);
+      await CacheController.cacheUrlInfoToRAM(returnComments.comments);
       return returnComments;
     }catch(e){
       print(e.response.data);
       return null;
     }
   }
-
+  ///获取url短链接所包含的丰富信息
   static Future<List<UrlInfo>> getUrlsInfo(List<String> shortUrls) async{
     try{
       var url=_apiUrl+_apiUrlMap["short_url"]["info"]["value"];
@@ -256,6 +246,17 @@ class ApiController{
       return null;
     }
 
+  }
+
+  ///根据图片id取地址
+  static List<String> getImgUrlFromId(List<String> imgId,{String imgSize=ImgSize.thumbnail}){
+    //从地址池里随机取一个地址
+    var urlList=<String>[];
+    var baseUrl=ExtraAPI.imgBaseUrlPool[Random.secure().nextInt(ExtraAPI.imgBaseUrlPool.length)];
+    imgId.forEach((id){
+      urlList.add(baseUrl+imgSize+'/'+id+'.jpg');
+    });
+    return urlList;
   }
   ///格式化url地址和参数
   static String formatUrlParams(String url,Map<String,String> params){

@@ -1,12 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cookiej/view/components/content_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../model/weibo.dart';
 import '../../../ultis/utils.dart';
 import '../../public/weibo_page.dart';
 import '../../../config/global_config.dart';
-import '../show_text_widget.dart';
-import '../weibo/weibo_image_widget.dart';
 
 //单条微博的卡片形式
 
@@ -39,39 +38,18 @@ class WeiboWidget extends StatelessWidget {
             ),
           ),
           //微博正文
-          Container(
-            child: ShowTextWidget(text: weibo.longText!=null?weibo.longText.longTextContent:weibo.text,fontSize: GlobalConfig.weiboFontSize,),
-            alignment: Alignment.topLeft,
-            margin: const EdgeInsets.only(top: 10),
-          ),
+          ConetntWidget(weibo)
         ],
       ),
       padding: const EdgeInsets.only(left: 12,right: 12,top: 12),
       margin: const EdgeInsets.only(bottom: 10),
       color: Colors.white,
     );
-    //微博正文图片
-    if(weibo.picUrls.length>0){
-      (returnWidget.child as Column).children.add(Container(
-          child: WeiboImageWidget(weibo),
-          alignment: Alignment.topLeft,
-          margin: EdgeInsets.only(top: 5),
-        )
-      );
-    }
     //判断当前微博是否有转发原微博
     if(weibo.retweetedWeibo!=null){
-      final sourceUser='@'+weibo.retweetedWeibo.rWeibo.user.name+'\n';
       (returnWidget.child as Column).children.add(GestureDetector(
         child: Container(
-          child: Column(children: <Widget>[
-            ShowTextWidget(text: sourceUser+weibo.retweetedWeibo.rWeibo.text,fontSize: GlobalConfig.weiboFontSize,),
-            weibo.retweetedWeibo.rWeibo.picUrls.length>0?Container(
-              child: WeiboImageWidget(weibo.retweetedWeibo.rWeibo),
-              alignment: Alignment.topLeft,
-              margin: EdgeInsets.only(top: 5),
-            ):Container(),
-          ]),
+          child: ConetntWidget(weibo.retweetedWeibo.rWeibo),
           alignment: Alignment.topLeft,
           color: Color(0xFFF5F5F5),
           margin: EdgeInsets.only(top:4),
@@ -89,7 +67,7 @@ class WeiboWidget extends StatelessWidget {
         Expanded(child: Text(weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(color:Colors.grey,fontSize: 11))),
         FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.shareSquare,size: GlobalConfig.weiboFontSize,), label: Text(weibo.repostsCount.toString()),textColor: Colors.grey,),
         FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.comments,size: GlobalConfig.weiboFontSize,), label: Text(weibo.commentsCount.toString()),textColor: Colors.grey,),
-        FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.heart,size: GlobalConfig.weiboFontSize,), label: Text(weibo.attitudesCount.toString()),textColor: Colors.grey,)
+        FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.thumbsUp,size: GlobalConfig.weiboFontSize,), label: Text(weibo.attitudesCount.toString()),textColor: Colors.grey,)
       ],
     ));
     return returnWidget;

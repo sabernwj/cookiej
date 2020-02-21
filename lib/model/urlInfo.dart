@@ -104,8 +104,8 @@ class Annotations {
               return Place.fromJson(json['object']);
             case 'collection':
               return Collection.fromJson(json['object']);
-            // case 'video':
-            //   return Video.fromJson(json['object']);
+            case 'video':
+              return Video.fromJson(json['object']);
             default:
               return Object.fromJson(json['object']);
           }
@@ -189,17 +189,17 @@ class Biz {
     return data;
   }
 }
-class Image {
+class UImage {
   String width;
   String url;
   String height;
 
-  Image({this.width, this.url, this.height});
+  UImage({this.width, this.url, this.height});
 
-  Image.fromJson(Map<String, dynamic> json) {
-    width = json['width'];
+  UImage.fromJson(Map<String, dynamic> json) {
+    width = json['width'].toString();
     url = json['url'];
-    height = json['height'];
+    height = json['height'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -385,7 +385,7 @@ class Collection extends Object{
 
 class Place extends Object{
   String summary;
-  Image image;
+  UImage image;
   Address address;
   Mobile mobile;
   String checkinNum;
@@ -397,7 +397,7 @@ class Place extends Object{
     position=json['position'];
     keyword=json['keyword'];
     summary = json['summary'];
-    image = json['image'] != null ? new Image.fromJson(json['image']) : null;
+    image = json['image'] != null ? new UImage.fromJson(json['image']) : null;
     address = json['address'] != null ? new Address.fromJson(json['address']) : null;
     mobile = json['mobile'] != null ? new Mobile.fromJson(json['mobile']) : null;
   }
@@ -417,12 +417,11 @@ class Video extends Object{
   String storageType;
   String videoCover;
   int copyright;
-  Extension extension;
+  Extensions extensions;
   String targetUrl;
   InputTags inputTags;
   String videoOrientation;
   String createdAt;
-  List<String> logos;
   Screenshots screenshots;
   double duration;
   RawFileMeta rawFileMeta;
@@ -437,11 +436,11 @@ class Video extends Object{
   String definition;
   String clientIp;
   String id;
-  bool coverImage;
+  bool coverUImage;
   String authorMid;
   String summary;
   String embedCode;
-  Image image;
+  UImage image;
   String objectType;
   Author author;
   String bizType;
@@ -464,12 +463,11 @@ class Video extends Object{
       this.storageType,
       this.videoCover,
       this.copyright,
-      this.extension,
+      this.extensions,
       this.targetUrl,
       this.inputTags,
       this.videoOrientation,
       this.createdAt,
-      this.logos,
       this.screenshots,
       this.duration,
       this.rawFileMeta,
@@ -484,7 +482,7 @@ class Video extends Object{
       this.definition,
       this.clientIp,
       this.id,
-      this.coverImage,
+      this.coverUImage,
       this.authorMid,
       this.summary,
       this.embedCode,
@@ -511,8 +509,8 @@ class Video extends Object{
     storageType = json['storage_type'];
     videoCover = json['video_cover'];
     copyright = json['copyright'];
-    extension = json['extension'] != null
-        ? new Extension.fromJson(json['extension'])
+    extensions = json['extension'] != null
+        ? new Extensions.fromJson(json['extension'])
         : null;
     targetUrl = json['target_url'];
     inputTags = json['input_tags'] != null
@@ -520,7 +518,6 @@ class Video extends Object{
         : null;
     videoOrientation = json['video_orientation'];
     createdAt = json['created_at'];
-    logos = json['logos'].cast<String>();
     screenshots = json['screenshots'] != null
         ? new Screenshots.fromJson(json['screenshots'])
         : null;
@@ -540,11 +537,11 @@ class Video extends Object{
     definition = json['definition'];
     clientIp = json['client_ip'];
     id = json['id'];
-    coverImage = json['cover_image'];
+    coverUImage = json['cover_image'];
     authorMid = json['author_mid'];
     summary = json['summary'];
     embedCode = json['embed_code'];
-    image = json['image'] != null ? new Image.fromJson(json['image']) : null;
+    image = json['image'] != null ? new UImage.fromJson(json['image']) : null;
     objectType = json['object_type'];
     author =
         json['author'] != null ? new Author.fromJson(json['author']) : null;
@@ -576,8 +573,8 @@ class Video extends Object{
     data['storage_type'] = this.storageType;
     data['video_cover'] = this.videoCover;
     data['copyright'] = this.copyright;
-    if (this.extension != null) {
-      data['extension'] = this.extension.toJson();
+    if (this.extensions != null) {
+      data['extension'] = this.extensions.toJson();
     }
     data['target_url'] = this.targetUrl;
     if (this.inputTags != null) {
@@ -585,7 +582,6 @@ class Video extends Object{
     }
     data['video_orientation'] = this.videoOrientation;
     data['created_at'] = this.createdAt;
-    data['logos'] = this.logos;
     if (this.screenshots != null) {
       data['screenshots'] = this.screenshots.toJson();
     }
@@ -612,7 +608,7 @@ class Video extends Object{
     data['definition'] = this.definition;
     data['client_ip'] = this.clientIp;
     data['id'] = this.id;
-    data['cover_image'] = this.coverImage;
+    data['cover_image'] = this.coverUImage;
     data['author_mid'] = this.authorMid;
     data['summary'] = this.summary;
     data['embed_code'] = this.embedCode;
@@ -647,12 +643,12 @@ class Video extends Object{
   }
 }
 
-class Extension {
+class Extensions {
   List<Covers> covers;
 
-  Extension({this.covers});
+  Extensions({this.covers});
 
-  Extension.fromJson(Map<String, dynamic> json) {
+  Extensions.fromJson(Map<String, dynamic> json) {
     if (json['covers'] != null) {
       covers = new List<Covers>();
       json['covers'].forEach((v) {

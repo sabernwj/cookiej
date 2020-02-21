@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 import '../../../model/weibo.dart';
-import 'package:photo_view/photo_view_gallery.dart';
 import '../show_image_view.dart';
 //单条微博显示的图片部分
 
@@ -74,22 +72,21 @@ List<Widget> buildImagesWidget(context,weibo){
   return imgList;
 }
 weiboImageWidgetItemOnTap(context,List<PicUrls> picUrls,{int index=0}){
-  var photoViewList=<PhotoViewGalleryPageOptions>[];
-  var regex=RegExp('thumbnail');
+  // var photoViewList=<PhotoViewGalleryPageOptions>[];
+  // var regex=RegExp('thumbnail');
+  var urls=<String>[];
   for(var i=0;i<picUrls.length;i++){
     var picUrl=picUrls[i];
-    var _scaleStateController=PhotoViewScaleStateController();
-    _scaleStateController.scaleState=PhotoViewScaleState.covering;
-    photoViewList.add(
-      PhotoViewGalleryPageOptions(
-        imageProvider: CachedNetworkImageProvider(picUrl.thumbnailPic.replaceFirst(regex, 'large')),
-        // scaleStateController: _scaleStateController,
-        // basePosition: Alignment.topLeft
-        // heroTag: "$i",
-      )
-    );
+    // var _scaleStateController=PhotoViewScaleStateController();
+    // _scaleStateController.scaleState=PhotoViewScaleState.covering;
+    // photoViewList.add(
+    //   PhotoViewGalleryPageOptions(
+    //     imageProvider: CachedNetworkImageProvider(picUrl.thumbnailPic.replaceFirst(regex, 'large')),
+    //   )
+    // );
+    urls.add(picUrl.thumbnailPic);
   }
-  Navigator.push(context,MaterialPageRoute(builder:(context)=>ShowImagesView(photoViewList,currentIndex: index,)));
+  Navigator.push(context,MaterialPageRoute(builder:(context)=>ShowImagesView(urls,currentIndex: index,)));
 }
 
 

@@ -2,10 +2,11 @@ import 'package:intl/intl.dart';
 
 class Utils {
 
-  static String urlRegexStr="((ht|f)tp(s?):\\/\\/|www\\.)(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*\$~@!:/{};']*)";
-  static String topicRegexStr=r"#[^#]+#";
-  static String userRegexStr=r"@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}";
-  static String emotionRegexStr=r"(\[[0-9a-zA-Z\u4e00-\u9fa5]+\])";
+  static const String urlRegexStr="((ht|f)tp(s?):\\/\\/|www\\.)(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*\$~@!:/{};']*)";
+  static const String topicRegexStr=r"#[^#]+#";
+  static const String userRegexStr=r"@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}";
+  static const String emotionRegexStr=r"(\[[0-9a-zA-Z\u4e00-\u9fa5]+\])";
+  static const String imgSizeStrFromUrl=r"(?<=sinaimg.cn\/)\w+";
   ///获取输入时间和当前时间的距离
   static String getDistanceFromNow(String inputTime){
     inputTime=inputTime.substring(0,inputTime.indexOf('+'))+inputTime.substring(inputTime.indexOf('+')+5,inputTime.length);

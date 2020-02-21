@@ -1,5 +1,6 @@
 import 'package:cookiej/config/global_config.dart';
 import 'package:cookiej/controller/apiController.dart';
+import 'package:cookiej/model/comment.dart';
 import 'package:cookiej/model/comments.dart';
 import 'package:cookiej/view/components/comments/comment_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,9 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
   Comments laterComments;
   Future<Comments> commentsTask;
   TabController _commentStatusController;
+
+  // @override
+  // bool get wantKeepAlive => true;
   @override
   void initState() {
     //_isStartLoad=startLoadData();
@@ -38,6 +42,7 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
+    
     return FutureBuilder(
       future: commentsTask, 
       builder: (context, snapshot) {
@@ -89,5 +94,9 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
         }
       },
     );
+  }
+
+  List<Comment> formatCommentList(Comments comments){
+    
   }
 }

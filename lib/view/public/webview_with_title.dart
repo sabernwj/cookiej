@@ -13,11 +13,12 @@ class WebviewWithTitle extends StatefulWidget{
 }
 
 class _WebviewWithTitleState extends State<WebviewWithTitle> {
+
+  final _flutterWebviewPlugin=new FlutterWebviewPlugin();
   @override
   void initState(){
     super.initState();
-    final _flutterWebviewPlugin=new FlutterWebviewPlugin();
-    _flutterWebviewPlugin.onStateChanged.listen((state){
+    _flutterWebviewPlugin.onStateChanged.listen((state) async{
       if(state.type==WebViewState.finishLoad){
         //暂时注释掉，用于给Webview设置cookie
         // final cookie=(LocalstorageHelper.getFromStorage('cookie') as Map<String,String>);
@@ -26,6 +27,8 @@ class _WebviewWithTitleState extends State<WebviewWithTitle> {
         //   value=value.replaceAll(RegExp('\"'), '').replaceAll(RegExp(' '), '');
         //   _flutterWebviewPlugin.evalJavascript('document.cookie=\'$key=$value\'');
         // });
+        // final cookie=(LocalstorageHelper.getFromStorage('cookie'));
+        // final _usedCookie=await _flutterWebviewPlugin.getCookies();
         //切换appbar的标题为当前网页标题
         _flutterWebviewPlugin.evalJavascript('document.title').then((reuslt)=>setState(()=>_textWidget=Text(reuslt.replaceAll(RegExp('\"'), ''))));
       }
@@ -51,5 +54,10 @@ class _WebviewWithTitleState extends State<WebviewWithTitle> {
       url: widget.url,
       appBar: AppBar(title:_textWidget),
     );
+  }
+  @override
+  void dispose(){
+    _flutterWebviewPlugin.dispose();
+    super.dispose();
   }
 }
