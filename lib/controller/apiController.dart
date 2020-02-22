@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:cookiej/model/reposts.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -35,7 +36,9 @@ class ApiController{
       "bilateralTimeline":{"type":"get","value":"/2/statuses/bilateral_timeline.json"},
       //单条微博的全部内容
       //该死的微博文档里没写要获取全文即超过140字的长微博要加上 isGetLongText=1 
-      'show':{"type":"get","value":"/2/statuses/show.json"}
+      'show':{"type":"get","value":"/2/statuses/show.json"},
+      //对某条微博进行转发的微博
+      'repostTimeline':{"type":"get","value":"/2/statuses/repost_timeline.json"},
     },
     //评论
     'comments':{
@@ -61,9 +64,7 @@ class ApiController{
         httpcount++;
         print('Http已发起请求次数'+httpcount.toString()+':'+url);
         //加载cookie
-        
       }
-
       return options;
     }));
   }
@@ -111,67 +112,53 @@ class ApiController{
   }
   
   ///获取微博列表
-  static Future<Weibos> getTimeLine({int sinceId=0,int maxId=0,WeiboTimelineType timelineType=WeiboTimelineType.Statuses}){
-    Future<Weibos> returnTimeline;
+  static Future<Weibos> getTimeLine({int sinceId=0,int maxId=0,WeiboTimelineType timelineType=WeiboTimelineType.Statuses}) {
+    // Future<Weibos> returnTimeline;
+    var url=_apiUrl;
     switch (timelineType){
       case WeiboTimelineType.Public:
-        returnTimeline = getStatusesPublicTimeline();
+        url+=_apiUrlMap["statuses"]["publicTimeline"]["value"];
         break;
       case WeiboTimelineType.Statuses:
-        returnTimeline = getStatusesHomeTimeline(sinceId: sinceId,maxId: maxId);
+        url+=_apiUrlMap["statuses"]["homeTimeline"]["value"];
         break;
       case WeiboTimelineType.Bilateral:
-        returnTimeline = getStatusesBilateralTimeline(sinceId: sinceId,maxId: maxId);
+        url+=_apiUrlMap["statuses"]["bilateralTimeline"]["value"];
         break;
       default:
-        returnTimeline = null;
+        return null;
     }
-    //获取微博后，缓存文本中url的实际内容
-     return returnTimeline.then((weibos) async{
-      if(weibos.statuses.length==0){
-        return returnTimeline;
-      }
+    var params={
+      "since_id":sinceId.toString(),
+      "max_id":maxId.toString()
+    };
+    final result=_httpClient.get(formatUrlParams(url, params));
+    return result.then((result) async {
+      final weibos=Weibos.fromJson(result.data);
       await CacheController.cacheUrlInfoToRAM(weibos.statuses);
-      return returnTimeline;
+      return weibos;
+    }).catchError((e){
+      print(e.response.data);
+      return null;
     });
-    
   }
-
-  ///获取公共微博
-  static Future<Weibos>  getStatusesPublicTimeline() async{
-    return null;
-  }
-
-  ///获取当前登录用户及其所关注（授权）用户的最新微博
-  static Future<Weibos> getStatusesHomeTimeline({int sinceId=0,int maxId=0}) async{
-    try{
-      var url=_apiUrl+_apiUrlMap["statuses"]["homeTimeline"]["value"];
-      var params={
-        "since_id":sinceId.toString(),
-        "max_id":maxId.toString()
-      };
-      final result=(await _httpClient.get(formatUrlParams(url, params))).data;
-      return Weibos.fromJson(result);
-    }catch(e){
+  ///获取转发的微博
+  static Future<Reposts> getReposts(int id,{int sinceId=0,int maxId=0}){
+    var url=_apiUrl+_apiUrlMap["statuses"]["repostTimeline"]["value"];
+    var params={
+      "since_id":sinceId.toString(),
+      "max_id":maxId.toString(),
+      'id':id.toString()
+    };
+    final result=_httpClient.get(formatUrlParams(url, params));
+    return result.then((result) async {
+      final repost=Reposts.fromJson(result.data);
+      await CacheController.cacheUrlInfoToRAM(repost.reposts);
+      return repost;
+    }).catchError((e){
       print(e.response.data);
       return null;
-    }
-  }
-
-  ///获取双向关注用户的最新微博
-  static Future<Weibos> getStatusesBilateralTimeline({int sinceId=0,int maxId=0}) async{
-    try{
-      var url=_apiUrl+_apiUrlMap["statuses"]["bilateralTimeline"]["value"];
-      var params={
-        "since_id":sinceId.toString(),
-        "max_id":maxId.toString()
-      };
-      final result=(await _httpClient.get(formatUrlParams(url, params))).data;
-      return Weibos.fromJson(result);
-    }catch(e){
-      print(e.response.data);
-      return null;
-    }
+    });
   }
 
   ///根据微博ID获取单条微博内容

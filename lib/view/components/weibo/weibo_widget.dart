@@ -38,7 +38,7 @@ class WeiboWidget extends StatelessWidget {
             ),
           ),
           //微博正文
-          ConetntWidget(weibo)
+          ContentWidget(weibo,fontSize: GlobalConfig.weiboFontSize)
         ],
       ),
       padding: const EdgeInsets.only(left: 12,right: 12,top: 12),
@@ -49,7 +49,7 @@ class WeiboWidget extends StatelessWidget {
     if(weibo.retweetedWeibo!=null){
       (returnWidget.child as Column).children.add(GestureDetector(
         child: Container(
-          child: ConetntWidget(weibo.retweetedWeibo.rWeibo),
+          child: ContentWidget(weibo.retweetedWeibo.rWeibo,fontSize: GlobalConfig.weiboFontSize,),
           alignment: Alignment.topLeft,
           color: Color(0xFFF5F5F5),
           margin: EdgeInsets.only(top:4),
@@ -64,10 +64,11 @@ class WeiboWidget extends StatelessWidget {
     (returnWidget.child as Column).children.add(Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        Expanded(child: Text(weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(color:Colors.grey,fontSize: 11))),
-        FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.shareSquare,size: GlobalConfig.weiboFontSize,), label: Text(weibo.repostsCount.toString()),textColor: Colors.grey,),
-        FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.comments,size: GlobalConfig.weiboFontSize,), label: Text(weibo.commentsCount.toString()),textColor: Colors.grey,),
-        FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.thumbsUp,size: GlobalConfig.weiboFontSize,), label: Text(weibo.attitudesCount.toString()),textColor: Colors.grey,)
+        Expanded(child: Text(weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(color:Colors.grey,fontSize: 12))),
+        SizedBox(width:72,child:FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.shareSquare,size: GlobalConfig.weiboFontSize,), label: Text(weibo.repostsCount.toString()),textColor: Colors.grey)),
+        
+        SizedBox(width:72,child:FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.comments,size: GlobalConfig.weiboFontSize,), label: Text(weibo.commentsCount.toString()),textColor: Colors.grey)),
+        SizedBox(width:72,child:FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.thumbsUp,size: GlobalConfig.weiboFontSize,), label: Text(weibo.attitudesCount.toString()),textColor: Colors.grey)),
       ],
     ));
     return returnWidget;

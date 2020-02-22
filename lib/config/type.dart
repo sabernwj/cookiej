@@ -1,7 +1,8 @@
 enum WeiboTimelineType{
   Public,
   Statuses,
-  Bilateral
+  Bilateral,
+  Reposts
 }
 
 enum CommentsType{

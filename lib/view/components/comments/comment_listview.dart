@@ -3,6 +3,7 @@ import 'package:cookiej/controller/apiController.dart';
 import 'package:cookiej/model/comment.dart';
 import 'package:cookiej/model/comments.dart';
 import 'package:cookiej/view/components/comments/comment_widget.dart';
+import 'package:cookiej/view/components/comments/repost_listview.dart';
 import 'package:flutter/material.dart';
 import '../../../config/type.dart';
 import 'dart:async';
@@ -22,6 +23,9 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
   Comments initialComments;
   Comments earlyComments;
   Comments laterComments;
+  ///根据<rootId,<id,comment>>进行分组
+  Map<int,Map<int,Comment>> groupCommentMap;
+  List<Comment> displayCommentList=<Comment>[]; 
   Future<Comments> commentsTask;
   TabController _commentStatusController;
 
@@ -33,6 +37,14 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
     commentsTask=ApiController.getCommentsShow(widget.id).then((comments){
       initialComments=comments;
       laterComments=initialComments;
+      groupCommentMap=formatComments(comments);
+      //将直接回微博的-评论筛选出来
+      groupCommentMap.forEach((rootId,sameRootCommentMap){
+        //此处将同一rootId的评论扔到了和该rootId相同的评论的属性里
+        sameRootCommentMap[rootId].commentReplyMap=sameRootCommentMap;
+        displayCommentList.add(sameRootCommentMap[rootId]);
+      });
+      displayCommentList.sort((a,b)=>b.rootid.compareTo(a.rootid));
       return comments;
     });
     _commentStatusController=TabController(initialIndex: 1,length: 3,vsync: this);
@@ -74,12 +86,12 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                 ),
                 Container(
                   child: [
-                    Text('转发'),
+                    RepostListview(widget.id),
                     ListView.builder(
                       itemBuilder: (context,index){
-                        return CommentWidget(initialComments.comments[index]);
+                        return CommentWidget(displayCommentList[index]);
                       },
-                      itemCount: initialComments.comments.length,
+                      itemCount: groupCommentMap.length,
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                     ),
@@ -87,6 +99,7 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                   ][_commentStatusController.index],
                 )
               ]),
+              constraints: BoxConstraints(minHeight:300),
               margin: EdgeInsets.only(top:10),
             );
           default:
@@ -96,7 +109,21 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
     );
   }
 
-  List<Comment> formatCommentList(Comments comments){
-    
+  ///将获取到的评论数据集进行分组<rootId,<id,comment>>
+  Map<int,Map<int,Comment>> formatComments(Comments comments){
+    var commentMap=new Map<int,Map<int,Comment>>();
+    comments.comments.forEach((comment){
+      //对内容处理
+      if(comment.replyComment!=null){
+        comment.text='@'+comment.user.screenName+':'+comment.text;
+      }
+      //进行分组
+      if(commentMap.containsKey(comment.rootid)){
+        commentMap[comment.rootid][comment.id]=comment;
+      }else{
+        commentMap[comment.rootid]={comment.id:comment};
+      }
+    });
+    return commentMap;
   }
 }

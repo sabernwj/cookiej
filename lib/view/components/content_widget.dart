@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cookiej/config/global_config.dart';
 import 'package:cookiej/controller/apiController.dart';
-import 'package:cookiej/model/comment.dart';
 import 'package:cookiej/model/content.dart';
 import 'package:cookiej/controller/cacheController.dart';
 import 'package:cookiej/model/extraAPI.dart';
@@ -26,16 +24,26 @@ final emotionRegexStr=Utils.emotionRegexStr;
 final totalRegex=new RegExp("$urlRegexStr|$topicRegexStr|$userRegexStr|$emotionRegexStr");
 
 ///用于显示微博或评论中由链接产生的图片视频及其他微博应用
-class ConetntWidget extends StatelessWidget {
+class ContentWidget extends StatelessWidget {
 
   final Content content;
   final List<Widget> displayWidgetList=<Widget>[];
   final List<Widget> secondDisplayWidget=<Widget>[];
   final List<DisplayContent> displayContentList;
-  ConetntWidget(this.content):displayContentList=analysisContent(content);
+  final fontSize;
+  final commonTextStyle;
+  final linkTextStyle;
+  ///轻模式，不显示多媒体信息，应用链接化
+  final bool isLightMode;
+  ContentWidget(this.content,{
+    this.isLightMode=false,
+    this.fontSize=15.0
+    }):displayContentList=analysisContent(content),
+    commonTextStyle=TextStyle(fontFamily:'fontawesome',fontSize: fontSize,color: Colors.black),
+    linkTextStyle=TextStyle(fontFamily:'fontawesome',fontSize: fontSize,color:Colors.blue);
   @override
   Widget build(BuildContext context) {
-    displayWidgetList.add(factoryTextWidget(context, displayContentList));
+    displayWidgetList.add(isLightMode?factoryTextWidgetLight(context, displayContentList):factoryTextWidget(context, displayContentList));
     displayWidgetList.addAll(secondDisplayWidget);
     typeAction(context);
     return Container(
@@ -101,6 +109,9 @@ class ConetntWidget extends StatelessWidget {
                   displayText=urlInfo.annotations[0].object.displayName;
                   contentType=ContentType.Image;
                   break;
+                case 'webpage':
+                  contentType=ContentType.Link;
+                  break;
                 default:
                   displayText='\u{f0c1}未知微博应用';
               }
@@ -118,12 +129,12 @@ class ConetntWidget extends StatelessWidget {
     displayContentList.forEach((displayContent){
       switch(displayContent.type){
         case ContentType.Text:
-          listInlineSpan.add(TextSpan(text: displayContent.text,style: GlobalConfig.contentTextStyle));
+          listInlineSpan.add(TextSpan(text: displayContent.text,style: commonTextStyle));
           break;
         case ContentType.Link:
           listInlineSpan.add(TextSpan(
             text: displayContent.text,
-            style: GlobalConfig.contentLinkStyle,
+            style: linkTextStyle,
             recognizer: TapGestureRecognizer()
             ..onTap=(()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>WebviewWithTitle(displayContent.info.urlLong))))
             ));
@@ -138,12 +149,41 @@ class ConetntWidget extends StatelessWidget {
           secondDisplayWidget.add(factoryImagesWidget(context, [(displayContent.info.annotations[0].object as Video).image.url.replaceFirst(RegExp(Utils.imgSizeStrFromUrl), ImgSize.thumbnail)]));
           break;
         default:
-          listInlineSpan.add(TextSpan(text: displayContent.text,style: GlobalConfig.contentLinkStyle));
+          listInlineSpan.add(TextSpan(text: displayContent.text,style:linkTextStyle));
       }
     });
     if(listInlineSpan.isEmpty){
       return Container();
     }
+    return Container(
+      child: RichText(
+        text: TextSpan(
+          children: listInlineSpan
+        ),
+      ),
+      alignment: Alignment.topLeft,
+    );
+  }
+  Widget factoryTextWidgetLight(BuildContext context,List<DisplayContent> displayContentList){
+    var listInlineSpan=<InlineSpan>[];
+    displayContentList.forEach((displayContent){
+      switch(displayContent.type){
+        case ContentType.Text:
+          listInlineSpan.add(TextSpan(text: displayContent.text,style: commonTextStyle));
+          break;
+        case ContentType.Emotion:
+          listInlineSpan.add(WidgetSpan(child:WeiboTextEmotionWidget(EmotionsController.emotionsMap[displayContent.text].imageProvider)));
+          break;
+        default:
+          listInlineSpan.add(TextSpan(
+            text: displayContent.text,
+            style: linkTextStyle,
+            recognizer: TapGestureRecognizer()
+            ..onTap=(()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>WebviewWithTitle(displayContent.info.urlLong))))
+            ));
+          break;
+      }
+    });
     return Container(
       child: RichText(
         text: TextSpan(

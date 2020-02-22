@@ -15,20 +15,25 @@ class _MainPageState extends State<MainPage> {
     _pageList=<Widget>[
       new HomePage(),
       new Container(),
+      new Container(),
       new Container()
     ];
     _navigationItems=<BottomNavigationBarItem>[
       new BottomNavigationBarItem(
         icon: new Icon(Icons.home),
-        title: new Text('主页')
+        title: Container()
       ),
       new BottomNavigationBarItem(
         icon: new Icon(Icons.search),
-        title: new Text('发现')
+        title: Container()
+      ),
+      new BottomNavigationBarItem(
+        icon: new Icon(Icons.message),
+        title: Container()
       ),
       new BottomNavigationBarItem(
         icon: new Icon(Icons.perm_identity),
-        title: new Text('我的')
+        title: Container()
       ),
     ];
   }
@@ -44,16 +49,20 @@ class _MainPageState extends State<MainPage> {
         children: _pageList,
         index: _currentIndex,
       ),
-      bottomNavigationBar: new BottomNavigationBar(
-        items: _navigationItems,
-        currentIndex: _currentIndex,
-        type: BottomNavigationBarType.fixed,
-        onTap: (int index){
-          setState(() {
-            _currentIndex=index;
-          });
-        },
-      ),
+      bottomNavigationBar: SizedBox(
+        height:46,
+        child:BottomNavigationBar(
+          items: _navigationItems,
+          currentIndex: _currentIndex,
+          type: BottomNavigationBarType.fixed,
+          iconSize: 30,
+          onTap: (int index){
+            setState(() {
+              _currentIndex=index;
+            });
+          },
+        ),
+      )
     );
   }
 
