@@ -31,9 +31,9 @@ class _IndexState extends State<Index> {
       AccessController.setNewOauth2AccessToken(url).then((result){
         if(result==true){
           //存储登录成功后的cookie
-          _flutterWebviewPlugin.getCookies().then((cookie){
-            LocalstorageHelper.setToStorage('cookie', cookie);
-          });
+          // _flutterWebviewPlugin.getCookies().then((cookie){
+          //   LocalstorageHelper.setToStorage('cookie', cookie);
+          // });
           setState(() {
             _acitveIndex=mainPage;
             _flutterWebviewPlugin.dispose();

@@ -4,9 +4,12 @@ import 'package:localstorage/localstorage.dart';
 class LocalstorageHelper{
   static final LocalStorage _storage =new LocalStorage('key');
 
+
   static checkStorageIsReady(){
     return _storage.ready;
   }
+
+
   ///存入数据到storage缓存
   static bool setToStorage(String key,dynamic item){
     try{

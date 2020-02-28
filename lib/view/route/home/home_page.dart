@@ -42,6 +42,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
           title: new Text('饼干酱'),
           bottom: new TabBar(
             tabs: _tabs,
+            isScrollable: true,
           ),
         ),
         body: TabBarView(

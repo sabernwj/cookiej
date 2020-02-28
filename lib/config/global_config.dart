@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import '../model/loacalUserInfo.dart';
 
 class GlobalConfig{
+  ///当前正在使用的微博用户信息
+  static LocalUserInfo currentUser;
 
   static TextStyle contentTextStyle=TextStyle(
     fontFamily: 'fontawesome',

@@ -39,11 +39,18 @@ class ApiController{
       'show':{"type":"get","value":"/2/statuses/show.json"},
       //对某条微博进行转发的微博
       'repostTimeline':{"type":"get","value":"/2/statuses/repost_timeline.json"},
+      //某用户发布的微博
+      'userTimeline':{"type":"get","value":"/2/statuses/user_timeline.json"},
     },
     //评论
     'comments':{
       //根据评论id获取评论的 List
       'show':{"type":"get","value":"/2/comments/show.json"}
+    },
+    //用户相关
+    'users':{
+      //用户个人信息
+      'show':{"type":"get","value":"/2/users/show.json"},
     },
     //短链接
     'short_url':{
@@ -112,7 +119,9 @@ class ApiController{
   }
   
   ///获取微博列表
-  static Future<Weibos> getTimeLine({int sinceId=0,int maxId=0,WeiboTimelineType timelineType=WeiboTimelineType.Statuses}) {
+  static Future<Weibos> getTimeLine({int sinceId=0,int maxId=0,
+  WeiboTimelineType timelineType=WeiboTimelineType.Statuses,
+  Map<String,String> extraParams}) {
     // Future<Weibos> returnTimeline;
     var url=_apiUrl;
     switch (timelineType){
@@ -125,6 +134,9 @@ class ApiController{
       case WeiboTimelineType.Bilateral:
         url+=_apiUrlMap["statuses"]["bilateralTimeline"]["value"];
         break;
+      case WeiboTimelineType.User:
+        url+=_apiUrlMap["statuses"]["userTimeline"]["value"];
+        break;
       default:
         return null;
     }
@@ -132,6 +144,9 @@ class ApiController{
       "since_id":sinceId.toString(),
       "max_id":maxId.toString()
     };
+    if(extraParams!=null){
+      params.addAll(extraParams);
+    }
     final result=_httpClient.get(formatUrlParams(url, params));
     return result.then((result) async {
       final weibos=Weibos.fromJson(result.data);
@@ -142,6 +157,7 @@ class ApiController{
       return null;
     });
   }
+  
   ///获取转发的微博
   static Future<Reposts> getReposts(int id,{int sinceId=0,int maxId=0}){
     var url=_apiUrl+_apiUrlMap["statuses"]["repostTimeline"]["value"];
@@ -196,6 +212,7 @@ class ApiController{
       return null;
     }
   }
+
   ///获取url短链接所包含的丰富信息
   static Future<List<UrlInfo>> getUrlsInfo(List<String> shortUrls) async{
     try{
@@ -236,7 +253,7 @@ class ApiController{
   }
 
   ///根据图片id取地址
-  static List<String> getImgUrlFromId(List<String> imgId,{String imgSize=ImgSize.thumbnail}){
+  static List<String> getImgUrlFromId(List<String> imgId,{String imgSize=SinaImgSize.thumbnail}){
     //从地址池里随机取一个地址
     var urlList=<String>[];
     var baseUrl=ExtraAPI.imgBaseUrlPool[Random.secure().nextInt(ExtraAPI.imgBaseUrlPool.length)];

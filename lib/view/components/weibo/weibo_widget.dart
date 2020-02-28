@@ -19,23 +19,22 @@ class WeiboWidget extends StatelessWidget {
       child:Column(
         children: <Widget>[
           //标题栏
-          Container(
-            child: Row(
-              children: <Widget>[
-                Container(child: CircleAvatar(backgroundImage: CachedNetworkImageProvider(weibo.user.avatarLarge),radius: 20)),
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      Text(weibo.user.name,),
-                      Text(Utils.getDistanceFromNow(weibo.createdAt),style: TextStyle(fontSize: 12,color: Colors.grey[600]))
-                    ],
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                  ),
-                  margin: const EdgeInsets.only(left: 10),
+          Row(
+            children: <Widget>[
+              Container(child: CircleAvatar(backgroundImage: CachedNetworkImageProvider(weibo.user.avatarLarge),radius: 20)),
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    Text(weibo.user.name,),
+                    Text(Utils.getDistanceFromNow(weibo.createdAt)+'    '+weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(fontSize: 12,color: Colors.grey[600])),
+                    // Text(weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(color:Colors.grey,fontSize: 12))
+                  ],
+                  crossAxisAlignment: CrossAxisAlignment.start,
                 ),
-                //预留一下微博组件标题右边内容
-              ],
-            ),
+                margin: const EdgeInsets.only(left: 10),
+              ),
+              //预留一下微博组件标题右边内容
+            ],
           ),
           //微博正文
           ContentWidget(weibo,fontSize: GlobalConfig.weiboFontSize)
@@ -64,11 +63,10 @@ class WeiboWidget extends StatelessWidget {
     (returnWidget.child as Column).children.add(Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        Expanded(child: Text(weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(color:Colors.grey,fontSize: 12))),
-        SizedBox(width:72,child:FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.shareSquare,size: GlobalConfig.weiboFontSize,), label: Text(weibo.repostsCount.toString()),textColor: Colors.grey)),
-        
-        SizedBox(width:72,child:FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.comments,size: GlobalConfig.weiboFontSize,), label: Text(weibo.commentsCount.toString()),textColor: Colors.grey)),
-        SizedBox(width:72,child:FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.thumbsUp,size: GlobalConfig.weiboFontSize,), label: Text(weibo.attitudesCount.toString()),textColor: Colors.grey)),
+        // Expanded(child: Text(weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(color:Colors.grey,fontSize: 12))),
+        FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.shareSquare,size: GlobalConfig.weiboFontSize,), label: Text(weibo.repostsCount.toString()),textColor: Colors.grey),
+        FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.comments,size: GlobalConfig.weiboFontSize,), label: Text(weibo.commentsCount.toString()),textColor: Colors.grey),
+        FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.thumbsUp,size: GlobalConfig.weiboFontSize,), label: Text(weibo.attitudesCount.toString()),textColor: Colors.grey),
       ],
     ));
     return returnWidget;

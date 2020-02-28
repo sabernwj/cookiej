@@ -27,7 +27,7 @@ class _ShowImagesViewState extends State<ShowImagesView> {
     widget.imgUlrs.forEach((url){
       widget.imageList.add(PhotoViewGalleryPageOptions(
         maxScale: 2.0,
-        imageProvider: CachedNetworkImageProvider(url.replaceFirst(RegExp(Utils.imgSizeStrFromUrl),ImgSize.large ))
+        imageProvider: CachedNetworkImageProvider(url.replaceFirst(RegExp(Utils.imgSizeStrFromUrlRegStr),SinaImgSize.large ))
       ));
     });
     currentIndex=widget.currentIndex;
@@ -61,7 +61,7 @@ class _ShowImagesViewState extends State<ShowImagesView> {
             child: Text(
               "${currentIndex + 1}/${widget.imageList.length}",
               style: const TextStyle(
-                  color: Colors.white70, fontSize: 20, decoration: null),
+                  color: Colors.white70, fontSize: 18, decoration: null),
             ),
           )
         ],

@@ -14,9 +14,9 @@ class ExtraAPI{
   ];
 }
 
-class ImgSize{
-  static const String small='small';
+class SinaImgSize{
   static const String thumbnail='thumbnail';
   static const String bmiddle='bmiddle';
   static const String large='large';
+  static const String original='original';
 }

@@ -11,7 +11,8 @@ import 'dart:async';
 
 class WeiboListview extends StatefulWidget {
   final WeiboTimelineType timelineType;
-  WeiboListview({this.timelineType=WeiboTimelineType.Statuses});
+  final Map<String,String> extraParams;
+  WeiboListview({this.timelineType=WeiboTimelineType.Statuses,this.extraParams});
   @override                                                                                                               
   _WeiboListviewState createState() => _WeiboListviewState();
 }
@@ -84,7 +85,7 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
   ///开始获取微博
   ///(目前从网络获取，可添加从本地缓存中读取)
   Future<bool> startLoadData() async{
-    var result=ApiController.getTimeLine(timelineType: widget.timelineType).then((timeline){
+    var result=ApiController.getTimeLine(timelineType: widget.timelineType,extraParams: widget.extraParams).then((timeline){
       homeTimeline=timeline;
       laterHomeTimeline=homeTimeline;
       for(var weibo in homeTimeline.statuses){
@@ -107,7 +108,7 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
       _refreshController.loadNoData();
       return;
     }
-    ApiController.getTimeLine(maxId: earlyHomeTimeline.maxId??0,timelineType: widget.timelineType).then((timeline){
+    ApiController.getTimeLine(maxId: earlyHomeTimeline.maxId??0,timelineType: widget.timelineType,extraParams: widget.extraParams).then((timeline){
       earlyHomeTimeline=timeline;
       if(earlyHomeTimeline!=null){
         setState(() {
@@ -116,7 +117,6 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
           }
         });
       }
-
       _refreshController.loadComplete();
     }).catchError((err){
       _refreshController.loadFailed();
@@ -126,7 +126,7 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
   ///刷新微博
   void refreshData() async{
     var weiboList=<Weibo>[];
-    ApiController.getTimeLine(sinceId: laterHomeTimeline.sinceId??0,timelineType: widget.timelineType).then((timeline){
+    ApiController.getTimeLine(sinceId: laterHomeTimeline.sinceId??0,timelineType: widget.timelineType,extraParams: widget.extraParams).then((timeline){
       laterHomeTimeline=timeline;
       if(laterHomeTimeline!=null){
         for(var weibo in laterHomeTimeline.statuses){

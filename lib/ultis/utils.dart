@@ -6,7 +6,7 @@ class Utils {
   static const String topicRegexStr=r"#[^#]+#";
   static const String userRegexStr=r"@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}";
   static const String emotionRegexStr=r"(\[[0-9a-zA-Z\u4e00-\u9fa5]+\])";
-  static const String imgSizeStrFromUrl=r"(?<=sinaimg.cn\/)\w+";
+  static const String imgSizeStrFromUrlRegStr=r"(?<=sinaimg.cn\/)\w+";
   ///获取输入时间和当前时间的距离
   static String getDistanceFromNow(String inputTime){
     inputTime=inputTime.substring(0,inputTime.indexOf('+'))+inputTime.substring(inputTime.indexOf('+')+5,inputTime.length);
@@ -24,4 +24,18 @@ class Utils {
     }
     return distance.inSeconds.toString()+'秒前';
   }
+
+  ///格式化url地址和参数
+  static String formatUrlParams(String url,Map<String,String> params){
+    if(!url.contains("?")){
+      url+="?";
+    }else{
+      url+="&";
+    }
+    
+    params.forEach((k,v)=>url+="$k=$v&");
+    url=url.substring(0,url.length-1);
+    return url;
+  }
+
 }

@@ -25,7 +25,7 @@ class _WeiboPageState extends State<WeiboPage>{
     return new Scaffold(
       appBar: new AppBar(
         leading: new BackButton(),
-        title: new Text('微博详情'),
+        title: new Text('微博正文'),
       ),
       body: FutureBuilder(
         future: weiboTask,

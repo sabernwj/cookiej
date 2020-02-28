@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage>{
   Widget build(BuildContext context){
     return new WebviewScaffold(
       appBar: new AppBar(
-        title: new Text("登录"),
+        title: new Text("用户授权"),
       ),
       url: ApiController.getOauth2Authorize(),
     );

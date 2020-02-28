@@ -8,6 +8,7 @@ import 'package:cookiej/model/extraAPI.dart';
 import 'package:cookiej/model/urlInfo.dart';
 import 'package:cookiej/model/weibo.dart';
 import 'package:cookiej/ultis/utils.dart';
+import 'package:cookiej/view/public/user_page.dart';
 
 import '../public/webview_with_title.dart';
 import 'package:flutter/gestures.dart';
@@ -51,6 +52,7 @@ class ContentWidget extends StatelessWidget {
         children: displayWidgetList,
         crossAxisAlignment: CrossAxisAlignment.start,
       ),
+      margin: EdgeInsets.only(top:4),
     );
   }
 
@@ -137,16 +139,24 @@ class ContentWidget extends StatelessWidget {
             style: linkTextStyle,
             recognizer: TapGestureRecognizer()
             ..onTap=(()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>WebviewWithTitle(displayContent.info.urlLong))))
-            ));
+          ));
           break;
         case ContentType.Emotion:
           listInlineSpan.add(WidgetSpan(child:WeiboTextEmotionWidget(EmotionsController.emotionsMap[displayContent.text].imageProvider)));
+          break;
+        case ContentType.User:
+          listInlineSpan.add(TextSpan(
+            text: displayContent.text,
+            style: linkTextStyle,
+            recognizer: TapGestureRecognizer()
+            ..onTap=(()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>UserPage(screenName:displayContent.text.replaceAll(RegExp('@'), '')))))
+          ));
           break;
         case ContentType.Image:
           secondDisplayWidget.add(factoryImagesWidget(context, ApiController.getImgUrlFromId((displayContent.info.annotations[0].object as Collection).picIds)));
           break;
         case ContentType.Video:
-          secondDisplayWidget.add(factoryImagesWidget(context, [(displayContent.info.annotations[0].object as Video).image.url.replaceFirst(RegExp(Utils.imgSizeStrFromUrl), ImgSize.thumbnail)]));
+          secondDisplayWidget.add(factoryImagesWidget(context, [(displayContent.info.annotations[0].object as Video).image.url.replaceFirst(RegExp(Utils.imgSizeStrFromUrlRegStr), SinaImgSize.thumbnail)]));
           break;
         default:
           listInlineSpan.add(TextSpan(text: displayContent.text,style:linkTextStyle));
@@ -173,6 +183,14 @@ class ContentWidget extends StatelessWidget {
           break;
         case ContentType.Emotion:
           listInlineSpan.add(WidgetSpan(child:WeiboTextEmotionWidget(EmotionsController.emotionsMap[displayContent.text].imageProvider)));
+          break;
+        case ContentType.User:
+          listInlineSpan.add(TextSpan(
+            text: displayContent.text,
+            style: linkTextStyle,
+            recognizer: TapGestureRecognizer()
+            ..onTap=(()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>UserPage(screenName:displayContent.text.replaceAll(RegExp('@'), '')))))
+          ));
           break;
         default:
           listInlineSpan.add(TextSpan(
@@ -203,7 +221,7 @@ class ContentWidget extends StatelessWidget {
       final imgProvider=CachedNetworkImageProvider(imgUrls[0]);
       imgProvider.resolve(ImageConfiguration()).addListener((ImageStreamListener((ImageInfo info,bool _) async{
         final imgWidth=info.image.width.toDouble();
-        final imgHeight=info.image.width.toDouble();
+        final imgHeight=info.image.height.toDouble();
         final imgWidget=Image(image: imgProvider,fit:BoxFit.cover,width:imgWidth/imgHeight<0.42?200:null);
         imgWidgetList.add(GestureDetector(
           child:LimitedBox(child: imgWidget,maxHeight: 300),
@@ -258,7 +276,7 @@ class ContentWidget extends StatelessWidget {
     if(content is Weibo){
       var weibo=content as Weibo;
       if(weibo.picUrls.length>0){
-        displayWidgetList.add(factoryImagesWidget(context,weibo.picUrls.map((picUrl)=>picUrl.thumbnailPic.replaceFirst(RegExp(Utils.imgSizeStrFromUrl), ImgSize.bmiddle)).toList()));
+        displayWidgetList.add(factoryImagesWidget(context,weibo.picUrls.map((picUrl)=>picUrl.thumbnailPic.replaceFirst(RegExp(Utils.imgSizeStrFromUrlRegStr), SinaImgSize.bmiddle)).toList()));
       }
     }
   }

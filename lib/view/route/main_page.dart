@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import './home/home_page.dart';
-
+import './personal_center/personal_center.dart';
 class MainPage extends StatefulWidget {
   @override
   _MainPageState createState() => _MainPageState();
 }
 
+///APP显示部分的主要框架
 class _MainPageState extends State<MainPage> {
   List<Widget> _pageList;
   List<BottomNavigationBarItem> _navigationItems;
@@ -16,7 +17,7 @@ class _MainPageState extends State<MainPage> {
       new HomePage(),
       new Container(),
       new Container(),
-      new Container()
+      new PersonalCenter()
     ];
     _navigationItems=<BottomNavigationBarItem>[
       new BottomNavigationBarItem(
@@ -24,7 +25,7 @@ class _MainPageState extends State<MainPage> {
         title: Container()
       ),
       new BottomNavigationBarItem(
-        icon: new Icon(Icons.search),
+        icon: new Icon(IconData(0xf14e,fontFamily: 'fontawesome')),
         title: Container()
       ),
       new BottomNavigationBarItem(
@@ -32,7 +33,7 @@ class _MainPageState extends State<MainPage> {
         title: Container()
       ),
       new BottomNavigationBarItem(
-        icon: new Icon(Icons.perm_identity),
+        icon: new Icon(Icons.person),
         title: Container()
       ),
     ];
