@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 class Config{
   static const appkey='1532678245';
   static const appSecret='71663753d61d39daa0cd6a7689304c64';
@@ -12,4 +15,5 @@ class Config{
 
   static const pictureDB='PictureInfo';
   static const pictureDB_id='picture_id';
+
 }

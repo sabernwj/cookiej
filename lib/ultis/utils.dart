@@ -1,3 +1,4 @@
+
 import 'package:intl/intl.dart';
 
 class Utils {
@@ -37,5 +38,4 @@ class Utils {
     url=url.substring(0,url.length-1);
     return url;
   }
-
 }

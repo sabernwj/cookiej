@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/page/login/login_page.dart';
+import 'package:cookiej/cookiej/page/personal_center/switch_theme.dart/switch_theme.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -56,8 +57,9 @@ class PersonalCenter extends StatelessWidget {
                             ]
                           ),
                           subtitle: Text(store.state.currentUser.description.isEmpty?'\u{3000}':store.state.currentUser.description,key: _displayUserNameKey,style: TextStyle(fontSize: 13,color: Colors.white70)),
+                          
                           trailing: IconButton(icon: Icon(IconData(0xf105,fontFamily: 'fontawesome'),color: Colors.white,size: 28,), onPressed: (){
-                            store.dispatch(RemoveAccess(store.state.accessState.loginAccesses[store.state.currentUser.idstr]));
+                            
                           }),
                         ),
                       )
@@ -94,6 +96,21 @@ class PersonalCenter extends StatelessWidget {
             ),
           ), 
           preferredSize: Size.fromHeight(128),
+        ),
+      ),
+      //菜单
+      body: Container(
+        margin: EdgeInsets.only(top:8),
+        child: ListView(
+          children:[
+            ListTile(
+              leading: Icon(Icons.palette),
+              title: Text('切换主题'),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>SwitchTheme()));
+              },
+            )
+          ]
         ),
       )
     );

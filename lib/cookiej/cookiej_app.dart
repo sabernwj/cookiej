@@ -8,6 +8,7 @@ import 'package:cookiej/cookiej/page/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:cookiej/cookiej/config/style.dart';
 
 class CookieJAPP extends StatefulWidget {
   @override
@@ -21,7 +22,8 @@ class _CookieJState extends State<CookieJAPP> {
     middleware: middleware,
     initialState: AppState(
       accessState:AccessState.init(),
-      currentUser: User()
+      currentUser: User(),
+      themeData: CookieJColors.getThemeData(CookieJColors.primarySwatch)
     )
   );
   @override
@@ -33,6 +35,7 @@ class _CookieJState extends State<CookieJAPP> {
           return new MaterialApp(
             title: '饼干酱',
             home: BootPage(),
+            theme: store.state.themeData,
           );
         },
       )

@@ -1,7 +1,19 @@
+import 'package:cookiej/cookiej/action/theme_state.dart';
+import 'package:cookiej/cookiej/reducer/theme_reducer.dart';
 import 'package:flutter/material.dart';
+import 'package:redux/redux.dart';
 
-class CookeJColors{
-
+class CookieJColors{
+  
+  static const List<Color> themeColors= <Color>[
+      CookieJColors.primarySwatch,
+      Colors.brown,
+      Colors.blue,
+      Colors.teal,
+      Colors.amber,
+      Colors.blueGrey,
+      Colors.deepOrange,
+  ];
   static const int primaryIntValue = 0xFF24292E;
   static const MaterialColor primarySwatch = const MaterialColor(
     primaryIntValue,
@@ -34,6 +46,18 @@ class CookeJColors{
 
   static const Color mainTextColor = primaryDarkValue;
   static const Color textColorWhite = white;
+
+  static pushTheme(Store store, int index) {
+    ThemeData themeData;
+    List<Color> colors = CookieJColors.themeColors;
+    themeData = getThemeData(colors[index]);
+    store.dispatch(RefreshThemeDataAction(themeData));
+  }
+
+  static getThemeData(Color color) {
+    return ThemeData(primarySwatch: color, platform: TargetPlatform.android);
+  }
+
 }
 
 class CookieJTextStyle{
@@ -46,179 +70,179 @@ class CookieJTextStyle{
 
   static const minText = TextStyle(
     
-    color: CookeJColors.subLightTextColor,
+    color: CookieJColors.subLightTextColor,
     fontSize: minTextSize,
     fontFamily: 'fontawesome',
   );
 
   static const smallTextWhite = TextStyle(
-    color: CookeJColors.textColorWhite,
+    color: CookieJColors.textColorWhite,
     fontSize: smallTextSize,
     fontFamily: 'fontawesome',
   );
 
   static const smallText = TextStyle(
-    color: CookeJColors.mainTextColor,
+    color: CookieJColors.mainTextColor,
     fontSize: smallTextSize,
     fontFamily: 'fontawesome',
   );
 
   static const smallTextBold = TextStyle(
-    color: CookeJColors.mainTextColor,
+    color: CookieJColors.mainTextColor,
     fontSize: smallTextSize,
     fontWeight: FontWeight.bold,
     fontFamily: 'fontawesome',
   );
 
   static const smallSubLightText = TextStyle(
-    color: CookeJColors.subLightTextColor,
+    color: CookieJColors.subLightTextColor,
     fontSize: smallTextSize,
     fontFamily: 'fontawesome',
   );
 
   static const smallActionLightText = TextStyle(
-    color: CookeJColors.actionBlue,
+    color: CookieJColors.actionBlue,
     fontSize: smallTextSize,
     fontFamily: 'fontawesome',
   );
 
   static const smallMiLightText = TextStyle(
-    color: CookeJColors.miWhite,
+    color: CookieJColors.miWhite,
     fontSize: smallTextSize,
     fontFamily: 'fontawesome',
   );
 
   static const smallSubText = TextStyle(
-    color: CookeJColors.subTextColor,
+    color: CookieJColors.subTextColor,
     fontSize: smallTextSize,
     fontFamily: 'fontawesome',
   );
 
   static const middleText = TextStyle(
-    color: CookeJColors.mainTextColor,
+    color: CookieJColors.mainTextColor,
     fontSize: middleTextWhiteSize,
     fontFamily: 'fontawesome',
   );
 
   static const middleTextWhite = TextStyle(
-    color: CookeJColors.textColorWhite,
+    color: CookieJColors.textColorWhite,
     fontSize: middleTextWhiteSize,
     fontFamily: 'fontawesome',
   );
 
   static const middleSubText = TextStyle(
-    color: CookeJColors.subTextColor,
+    color: CookieJColors.subTextColor,
     fontSize: middleTextWhiteSize,
     fontFamily: 'fontawesome',
   );
 
   static const middleSubLightText = TextStyle(
-    color: CookeJColors.subLightTextColor,
+    color: CookieJColors.subLightTextColor,
     fontSize: middleTextWhiteSize,
     fontFamily: 'fontawesome',
   );
 
   static const middleTextBold = TextStyle(
-    color: CookeJColors.mainTextColor,
+    color: CookieJColors.mainTextColor,
     fontSize: middleTextWhiteSize,
     fontWeight: FontWeight.bold,
     fontFamily: 'fontawesome',
   );
 
   static const middleTextWhiteBold = TextStyle(
-    color: CookeJColors.textColorWhite,
+    color: CookieJColors.textColorWhite,
     fontSize: middleTextWhiteSize,
     fontWeight: FontWeight.bold,
     fontFamily: 'fontawesome',
   );
 
   static const middleSubTextBold = TextStyle(
-    color: CookeJColors.subTextColor,
+    color: CookieJColors.subTextColor,
     fontSize: middleTextWhiteSize,
     fontWeight: FontWeight.bold,
     fontFamily: 'fontawesome',
   );
 
   static const normalText = TextStyle(
-    color: CookeJColors.mainTextColor,
+    color: CookieJColors.mainTextColor,
     fontSize: normalTextSize,
     fontFamily: 'fontawesome',
   );
 
   static const normalTextBold = TextStyle(
-    color: CookeJColors.mainTextColor,
+    color: CookieJColors.mainTextColor,
     fontSize: normalTextSize,
     fontWeight: FontWeight.bold,
     fontFamily: 'fontawesome',
   );
 
   static const normalSubText = TextStyle(
-    color: CookeJColors.subTextColor,
+    color: CookieJColors.subTextColor,
     fontSize: normalTextSize,
     fontFamily: 'fontawesome',
   );
 
   static const normalTextWhite = TextStyle(
-    color: CookeJColors.textColorWhite,
+    color: CookieJColors.textColorWhite,
     fontSize: normalTextSize,
     fontFamily: 'fontawesome',
   );
 
   static const normalTextMitWhiteBold = TextStyle(
-    color: CookeJColors.miWhite,
+    color: CookieJColors.miWhite,
     fontSize: normalTextSize,
     fontWeight: FontWeight.bold,
     fontFamily: 'fontawesome',
   );
 
   static const normalTextActionWhiteBold = TextStyle(
-    color: CookeJColors.actionBlue,
+    color: CookieJColors.actionBlue,
     fontSize: normalTextSize,
     fontWeight: FontWeight.bold,
     fontFamily: 'fontawesome',
   );
 
   static const normalTextLight = TextStyle(
-    color: CookeJColors.primaryLightValue,
+    color: CookieJColors.primaryLightValue,
     fontSize: normalTextSize,
     fontFamily: 'fontawesome',
   );
 
   static const largeText = TextStyle(
-    color: CookeJColors.mainTextColor,
+    color: CookieJColors.mainTextColor,
     fontSize: bigTextSize,
     fontFamily: 'fontawesome',
   );
 
   static const largeTextBold = TextStyle(
-    color: CookeJColors.mainTextColor,
+    color: CookieJColors.mainTextColor,
     fontSize: bigTextSize,
     fontWeight: FontWeight.bold,
     fontFamily: 'fontawesome',
   );
 
   static const largeTextWhite = TextStyle(
-    color: CookeJColors.textColorWhite,
+    color: CookieJColors.textColorWhite,
     fontSize: bigTextSize,
     fontFamily: 'fontawesome',
   );
 
   static const largeTextWhiteBold = TextStyle(
-    color: CookeJColors.textColorWhite,
+    color: CookieJColors.textColorWhite,
     fontSize: bigTextSize,
     fontWeight: FontWeight.bold,
     fontFamily: 'fontawesome',
   );
 
   static const largeLargeTextWhite = TextStyle(
-    color: CookeJColors.textColorWhite,
+    color: CookieJColors.textColorWhite,
     fontSize: lagerTextSize,
     fontWeight: FontWeight.bold,
     fontFamily: 'fontawesome',
   );
 
   static const largeLargeText = TextStyle(
-    color: CookeJColors.primaryValue,
+    color: CookieJColors.primaryValue,
     fontSize: lagerTextSize,
     fontWeight: FontWeight.bold,
     fontFamily: 'fontawesome',
