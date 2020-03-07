@@ -7,6 +7,8 @@ import 'package:redux/redux.dart';
 /// 其实就等于定义一个函数，传入参数是(User,Action),然后判断action的class，调用不同的方法。
 final userReducer =combineReducers<User>([
 
-  TypedReducer<User,UpdateCurrentUserAction>((user,action)=>user=action.user)
+  TypedReducer<User,UpdateCurrentUser>((user,action){
+    return(action.user);
+  })
   
 ]);

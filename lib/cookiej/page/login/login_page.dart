@@ -8,37 +8,25 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:redux/redux.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
-class LoginPage extends StatefulWidget{
-  static final routePath='login';
-
+class LoginPage extends StatelessWidget{
+  final _flutterWebviewPlugin=new FlutterWebviewPlugin();
   @override
-  _LoginPageState createState()=>new _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage>{
-  @override
-  void initState(){
-    //监听是否获取新token
-    final _flutterWebviewPlugin=new FlutterWebviewPlugin();
+  Widget build(BuildContext context){
     _flutterWebviewPlugin.onUrlChanged.listen((url) async{
+      _flutterWebviewPlugin.cleanCookies();
       if(url.contains(RegExp('code'))){
         _flutterWebviewPlugin.close();
         //登录成功，获取到code，下面获取access
         var provider=await AccessProvider.getAccessNet(Uri.tryParse(url).queryParameters['code']);
         if(provider.success){
           StoreProvider.of<AppState>(context).dispatch(AddNewAccess(provider.data));
-          Navigator.pushReplacementNamed(context, MainPage.routePath);
+          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainPage()));
+          Navigator.pop(context);
         }
         _flutterWebviewPlugin.dispose();
       }
-
     });
-    super.initState();
-  }
-  @override
-  Widget build(BuildContext context){
     return new WebviewScaffold(
       appBar: new AppBar(
         title: new Text("用户授权"),

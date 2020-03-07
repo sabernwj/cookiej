@@ -3,7 +3,7 @@ import 'package:cookiej/cookiej/model/user.dart';
 
 
 
-class UpdateCurrentUserAction{
+class UpdateCurrentUser{
   final User user;
-  UpdateCurrentUserAction(this.user);
+  UpdateCurrentUser(this.user);
 }

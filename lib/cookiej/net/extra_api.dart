@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:cookiej/cookiej/net/api.dart';
 
 class ExtraApi{
-  static final baseUrl=API.baseUrl;
   ///获取表情
   static Future<List<Map>> getEmotions() async{
     try{

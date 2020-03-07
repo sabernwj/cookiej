@@ -9,7 +9,7 @@ class Config{
 
   static const userInfoDB='UserInfo';
   static const userInfoDB_Id='uid';
-  static const userInfoDB_UserName='screenName';
-  static const userInfoDB_IconId='iconId';
-  static const userInfoDB_Data='data';
+
+  static const pictureDB='PictureInfo';
+  static const pictureDB_id='picture_id';
 }

@@ -1,5 +1,6 @@
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
+import 'package:cookiej/cookiej/model/user.dart';
 import 'package:cookiej/cookiej/page/boot_page.dart';
 import 'package:cookiej/cookiej/page/main_page.dart';
 import 'package:cookiej/cookiej/reducer/app_reducer.dart';
@@ -17,8 +18,10 @@ class _CookieJState extends State<CookieJAPP> {
 
   final store=Store<AppState>(
     appReducer,
+    middleware: middleware,
     initialState: AppState(
-      accessState:AccessState.init()
+      accessState:AccessState.init(),
+      currentUser: User()
     )
   );
   @override
@@ -29,17 +32,7 @@ class _CookieJState extends State<CookieJAPP> {
         builder: (context,store){
           return new MaterialApp(
             title: '饼干酱',
-            routes: {
-              BootPage.routePath:(context){
-                return BootPage();
-              },
-              LoginPage.routePath:(context){
-                return LoginPage();
-              },
-              MainPage.routePath:(context){
-                return MainPage();
-              }
-            },
+            home: BootPage(),
           );
         },
       )

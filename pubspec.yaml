@@ -21,7 +21,6 @@ dependencies:
   cupertino_icons: ^0.1.2
   dio: ^3.0.8
   dio_cookie_manager: ^1.0.0
-  webview_flutter: ^0.3.19+7
   flutter_webview_plugin: ^0.3.10+1
   localstorage: ^1.0.0
   intl: ^0.15.7

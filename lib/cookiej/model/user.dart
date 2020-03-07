@@ -1,17 +1,14 @@
+import 'package:cookiej/cookiej/utils/utils.dart';
+
 import 'user_lite.dart';
 
 import 'insecurity.dart';
 
 class User extends UserLite {
-	int id;
-	String idstr;
 	int weiboClass;
-	String screenName;
-	String name;
 	String province;
 	String city;
 	String location;
-	String description;
 	String url;
 	String profileImageUrl;
 	String coverImagePhone;
@@ -19,12 +16,6 @@ class User extends UserLite {
 	String domain;
 	String weihao;
 	String gender;
-	int followersCount;
-	int friendsCount;
-	int pagefriendsCount;
-	int statusesCount;
-	int videoStatusCount;
-	int favouritesCount;
 	String createdAt;
 	bool following;
 	bool allowAllActMsg;
@@ -63,8 +54,11 @@ class User extends UserLite {
 	int isTeenagerList;
 	bool specialFollow;
 	String tabManage;
+  //头像的id
+  String iconId;
 
-	User({this.id, this.idstr, this.weiboClass, this.screenName, this.name, this.province, this.city, this.location, this.description, this.url, this.profileImageUrl, this.coverImagePhone, this.profileUrl, this.domain, this.weihao, this.gender, this.followersCount, this.friendsCount, this.pagefriendsCount, this.statusesCount, this.videoStatusCount, this.favouritesCount, this.createdAt, this.following, this.allowAllActMsg, this.geoEnabled, this.verified, this.verifiedType, this.remark, this.insecurity, this.ptype, this.allowAllComment, this.avatarLarge, this.avatarHd, this.verifiedReason, this.verifiedTrade, this.verifiedReasonUrl, this.verifiedSource, this.verifiedSourceUrl, this.followMe, this.like, this.likeMe, this.onlineStatus, this.biFollowersCount, this.lang, this.star, this.mbtype, this.mbrank, this.blockWord, this.blockApp, this.creditScore, this.userAbility, this.urank, this.storyReadState, this.vclubMember, this.isTeenager, this.isGuardian, this.isTeenagerList, this.specialFollow, this.tabManage});
+	User({this.weiboClass, this.province, this.city, this.location, this.url, this.profileImageUrl, this.coverImagePhone, this.profileUrl, this.domain, this.weihao, this.gender, this.createdAt, this.following, this.allowAllActMsg, this.geoEnabled, this.verified, this.verifiedType, this.remark, this.insecurity, this.ptype, this.allowAllComment, this.avatarLarge, this.avatarHd, this.verifiedReason, this.verifiedTrade, this.verifiedReasonUrl, this.verifiedSource, this.verifiedSourceUrl, this.followMe, this.like, this.likeMe, this.onlineStatus, this.biFollowersCount, this.lang, this.star, this.mbtype, this.mbrank, this.blockWord, this.blockApp, this.creditScore, this.userAbility, this.urank, this.storyReadState, this.vclubMember, this.isTeenager, this.isGuardian, this.isTeenagerList, this.specialFollow, this.tabManage})
+    :super.init();
 
 	User.fromJson(Map<String, dynamic> json) {
 		id = json['id'];
@@ -127,6 +121,11 @@ class User extends UserLite {
 		isTeenagerList = json['is_teenager_list'];
 		specialFollow = json['special_follow'];
 		tabManage = json['tab_manage'];
+    if(json['icon_id']!=null){
+      iconId=json['icon_id'];
+    }else{
+      iconId=Utils.getImgIdFromUrl(json['profile_image_url']);
+    }
 	}
 
 	Map<String, dynamic> toJson() {
@@ -193,6 +192,7 @@ class User extends UserLite {
 		data['is_teenager_list'] = this.isTeenagerList;
 		data['special_follow'] = this.specialFollow;
 		data['tab_manage'] = this.tabManage;
+    data['icon_id']=this.iconId;
 		return data;
 	}
 }

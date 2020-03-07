@@ -5,6 +5,7 @@ class AccessState{
   ///有currentAccess的话loginAccesses长度必不为0
   Access currentAccess;
   Map<String,Access> loginAccesses;
+  AccessState({this.currentAccess,this.loginAccesses});
   AccessState.init(){
     this.loginAccesses=new Map<String,Access>();
   }
@@ -22,9 +23,10 @@ class AccessState{
       return null;
     }
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data[Config.loginAccessesStorageKey]=new Map<String,dynamic>();
     data[Config.currentAccessStorageKey]=this.currentAccess.toJson();
     loginAccesses.forEach((k,v){
-      data[Config.loginAccessesStorageKey][k]=v;
+      data[Config.loginAccessesStorageKey][k]=v.toJson();
     });
     return data;
   }
@@ -32,7 +34,7 @@ class AccessState{
 class Access{
   String uid;
   String accessToken;
-
+  Access({this.uid,this.accessToken});
   Access.fromJson(Map<String, dynamic> json){
     uid=json['uid'];
     accessToken=json['access_token'];
@@ -48,12 +50,9 @@ class Access{
 
 ///设置程序运行的AccessState
 class SetAccessState{
-  final Access access;
-  SetAccessState(this.access);
+  AccessState accessState;
+  SetAccessState(this.accessState);
 }
-///获取当前用户
-class GetCurrentAccess{}
-
 ///更换当前用户
 class UpdateCurrentAccess{
   final Access access;
@@ -70,4 +69,8 @@ class AddNewAccess{
 class RemoveAccess{
   final Access access;
   RemoveAccess(this.access);
+}
+
+///初始化
+class InitAccessState{
 }

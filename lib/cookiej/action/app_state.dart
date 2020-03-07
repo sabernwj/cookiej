@@ -9,7 +9,7 @@ class AppState{
   AccessState accessState;
 
   // ///用户信息
-  // User currentUser;
+  User currentUser;
 
   // ///主题
   // ThemeData themeData;
@@ -21,6 +21,6 @@ class AppState{
   // Locale platformLocale;
 
   // AppState({this.currentUser,this.locale,this.accessState,this.platformLocale,this.themeData});
-  AppState({this.accessState});
+  AppState({this.accessState,this.currentUser});
 
 }
