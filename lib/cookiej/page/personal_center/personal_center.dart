@@ -12,7 +12,7 @@ import 'package:redux/redux.dart';
 
 class PersonalCenter extends StatelessWidget {
 
-  GlobalKey _displayUserNameKey=GlobalKey();
+  final GlobalKey _displayUserNameKey=GlobalKey();
   @override
   Widget build(BuildContext context){
     final store=StoreProvider.of<AppState>(context);
