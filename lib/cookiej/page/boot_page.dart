@@ -1,10 +1,14 @@
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
+import 'package:cookiej/cookiej/action/theme_state.dart';
 import 'package:cookiej/cookiej/action/user_state.dart';
+import 'package:cookiej/cookiej/config/config.dart';
+import 'package:cookiej/cookiej/config/style.dart';
 import 'package:cookiej/cookiej/db/sql_manager.dart';
 import 'package:cookiej/cookiej/page/main_page.dart';
 import 'package:cookiej/cookiej/provider/access_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
+import 'package:cookiej/cookiej/utils/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'dart:async';
@@ -26,8 +30,14 @@ class _BootPageState extends State<BootPage> {
         Future.delayed(Duration(seconds: 1),(){
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainPage()));
     });
+    //初始化数据库
     await SqlManager.init();
+    //加载本地用户信息
     store.dispatch(InitAccessState());
+    //加载主题
+    String themeName=await LocalStorage.get(Config.themeNameStorageKey);
+    bool isDarkMode=await LocalStorage.get(Config.isDarkModeStorageKey)=='true';
+    store.dispatch(RefreshThemeState(ThemeState(themeName,CookieJColors.getThemeData(themeName,isDarkMode: isDarkMode))));
   }
 
   @override

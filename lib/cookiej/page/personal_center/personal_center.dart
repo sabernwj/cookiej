@@ -3,10 +3,15 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
+import 'package:cookiej/cookiej/action/theme_state.dart';
+import 'package:cookiej/cookiej/config/config.dart';
+import 'package:cookiej/cookiej/config/style.dart';
 import 'package:cookiej/cookiej/page/login/login_page.dart';
 import 'package:cookiej/cookiej/page/personal_center/switch_theme.dart/switch_theme.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
+import 'package:cookiej/cookiej/utils/local_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -17,6 +22,8 @@ class PersonalCenter extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     final store=StoreProvider.of<AppState>(context);
+    final _theme=store.state.themeState.themeData;
+    var _isDarkMode=_theme.brightness==Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -41,10 +48,9 @@ class PersonalCenter extends StatelessWidget {
                       ),
                       Expanded(
                         child:ListTile(
-                          
                           title:Row(
                             children:[
-                              Text(store.state.currentUser.screenName,style: TextStyle(color:Colors.white,fontSize: 19)),
+                              Text(store.state.currentUser.screenName,style: _theme.primaryTextTheme.headline),
                               IconButton(icon: Icon(IconData(0xf0d7,fontFamily: 'fontawesome'),color: Colors.white,size: 24), onPressed: () async{
                                 final RenderBox textDescription=_displayUserNameKey.currentContext.findRenderObject();
                                 showMenu(
@@ -100,16 +106,32 @@ class PersonalCenter extends StatelessWidget {
       ),
       //菜单
       body: Container(
-        margin: EdgeInsets.only(top:8),
+        color: Theme.of(context).cardColor,
+        margin: EdgeInsets.only(top:24,bottom: 0),
         child: ListView(
           children:[
             ListTile(
-              leading: Icon(Icons.palette),
+              leading: Icon(Icons.wb_sunny),
+              title: Text('夜间模式'),
+              trailing: CupertinoSwitch(
+                value: _isDarkMode,
+                activeColor: store.state.themeState.themeData.primaryColor,
+                onChanged: (value){
+                  store.dispatch(SwitchDarkMode(value));
+                  //存储夜间模式配置
+                  LocalStorage.save(Config.isDarkModeStorageKey, value.toString());
+                },
+              ),
+            ),
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.palette,color:CookieJColors.themeColors[store.state.themeState.themeName]),
               title: Text('切换主题'),
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>SwitchTheme()));
               },
-            )
+            ),
+            Divider()
           ]
         ),
       )
@@ -144,20 +166,30 @@ class PersonalCenter extends StatelessWidget {
         ));
         itemList.add(PopupMenuDivider(height: 1,));
       });
-      // for(int i=0;i<20;i++){
-      //   itemList.add(PopupMenuItem(child: Text('喵喵机'),));
-      // }
     }
     itemList.add(PopupMenuItem(
       child: Row(
         children:[
-          IconButton(icon: Icon(Icons.add_circle,color: Colors.green,), onPressed: (){
-            Navigator.pop(context);
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
-          })
+          IconButton(
+            padding: EdgeInsets.all(0),
+            icon: Icon(Icons.add_circle,color: Colors.green), 
+            onPressed: (){
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
+            }
+          )
         ],
         mainAxisAlignment:MainAxisAlignment.center
       ),
+      // child: GestureDetector(
+      //   child:Container(
+      //     child:Icon(Icons.add_circle,color: Colors.green)
+      //   ),
+      //   onTap: (){
+      //     Navigator.pop(context);
+      //     Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
+      //   },
+      // ),
     ));
 
     return itemList;

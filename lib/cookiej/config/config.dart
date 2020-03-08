@@ -10,6 +10,9 @@ class Config{
   static const currentAccessStorageKey='current_access';
   static const accessStateStorageKey='access_state';
 
+  static const themeNameStorageKey='theme_name';
+  static const isDarkModeStorageKey='is_dark_mode';
+
   static const userInfoDB='UserInfo';
   static const userInfoDB_Id='uid';
 

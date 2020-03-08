@@ -1,5 +1,6 @@
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
+import 'package:cookiej/cookiej/action/theme_state.dart';
 import 'package:cookiej/cookiej/model/user.dart';
 import 'package:cookiej/cookiej/page/boot_page.dart';
 import 'package:cookiej/cookiej/page/main_page.dart';
@@ -23,7 +24,7 @@ class _CookieJState extends State<CookieJAPP> {
     initialState: AppState(
       accessState:AccessState.init(),
       currentUser: User(),
-      themeData: CookieJColors.getThemeData(CookieJColors.primarySwatch)
+      themeState: ThemeState.init()
     )
   );
   @override
@@ -35,7 +36,7 @@ class _CookieJState extends State<CookieJAPP> {
           return new MaterialApp(
             title: '饼干酱',
             home: BootPage(),
-            theme: store.state.themeData,
+            theme: store.state.themeState.themeData,
           );
         },
       )

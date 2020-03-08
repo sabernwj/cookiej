@@ -1,33 +1,68 @@
 import 'package:cookiej/cookiej/action/theme_state.dart';
-import 'package:cookiej/cookiej/reducer/theme_reducer.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
 class CookieJColors{
   
-  static const List<Color> themeColors= <Color>[
-      CookieJColors.primarySwatch,
-      Colors.brown,
-      Colors.blue,
-      Colors.teal,
-      Colors.amber,
-      Colors.blueGrey,
-      Colors.deepOrange,
-  ];
-  static const int primaryIntValue = 0xFF24292E;
-  static const MaterialColor primarySwatch = const MaterialColor(
-    primaryIntValue,
+  static const Map<String,Color> themeColors= {
+    '经典黑':CookieJColors.classicalBlack,
+    '谷歌蓝':Colors.blue,
+    '薄荷青':Colors.teal,
+    '琥珀黄':Colors.amber,
+    '钢蓝灰':Colors.blueGrey,
+    '胡萝卜':Colors.orange,
+    '天空蓝':Colors.cyan,
+    '中国红':Colors.red,
+    '少女粉':CookieJColors.girlPink,
+    '杏黄色':CookieJColors.apricotYellow
+  };
+
+  static const int customBlack = 0xFF24292E;
+  static const int salmonPink=0xFFFA8072;
+  static const int apricot=0xFFF8B878;
+  static const MaterialColor apricotYellow=const MaterialColor(
+    apricot,
+    const<int,Color>{
+      50: const Color(apricot),
+      100: const Color(apricot),
+      200: const Color(apricot),
+      300: const Color(apricot),
+      400: const Color(apricot),
+      500: const Color(apricot),
+      600: const Color(apricot),
+      700: const Color(apricot),
+      800: const Color(apricot),
+      900: const Color(apricot),
+    }
+  );
+  static const MaterialColor girlPink=const MaterialColor(
+    salmonPink,
+    const<int,Color>{
+      50: const Color(salmonPink),
+      100: const Color(salmonPink),
+      200: const Color(salmonPink),
+      300: const Color(salmonPink),
+      400: const Color(salmonPink),
+      500: const Color(salmonPink),
+      600: const Color(salmonPink),
+      700: const Color(salmonPink),
+      800: const Color(salmonPink),
+      900: const Color(salmonPink),
+    },
+  );
+  static const MaterialColor classicalBlack = const MaterialColor(
+    customBlack,
     const <int, Color>{
-      50: const Color(primaryIntValue),
-      100: const Color(primaryIntValue),
-      200: const Color(primaryIntValue),
-      300: const Color(primaryIntValue),
-      400: const Color(primaryIntValue),
-      500: const Color(primaryIntValue),
-      600: const Color(primaryIntValue),
-      700: const Color(primaryIntValue),
-      800: const Color(primaryIntValue),
-      900: const Color(primaryIntValue),
+      50: const Color(customBlack),
+      100: const Color(customBlack),
+      200: const Color(customBlack),
+      300: const Color(customBlack),
+      400: const Color(customBlack),
+      500: const Color(customBlack),
+      600: const Color(customBlack),
+      700: const Color(customBlack),
+      800: const Color(customBlack),
+      900: const Color(customBlack),
     },
   ); 
   static const Color primaryValue = Color(0xFF24292E);
@@ -47,15 +82,14 @@ class CookieJColors{
   static const Color mainTextColor = primaryDarkValue;
   static const Color textColorWhite = white;
 
-  static pushTheme(Store store, int index) {
+  static pushTheme(Store store, String name) {
     ThemeData themeData;
-    List<Color> colors = CookieJColors.themeColors;
-    themeData = getThemeData(colors[index]);
-    store.dispatch(RefreshThemeDataAction(themeData));
+    themeData = getThemeData(name);
+    store.dispatch(RefreshThemeState(ThemeState(name,themeData)));
   }
 
-  static getThemeData(Color color) {
-    return ThemeData(primarySwatch: color, platform: TargetPlatform.android);
+  static getThemeData(String themeName,{bool isDarkMode=false}) {
+    return ThemeData(primarySwatch: themeColors[themeName],brightness: isDarkMode?Brightness.dark:Brightness.light);
   }
 
 }

@@ -1,7 +1,7 @@
 import 'package:cookiej/cookiej/model/user.dart';
-import 'package:flutter/material.dart';
 
 import 'access_state.dart';
+import 'theme_state.dart';
 
 class AppState{
 
@@ -12,7 +12,7 @@ class AppState{
   User currentUser;
 
   ///主题
-  ThemeData themeData;
+  ThemeState themeState;
 
   // ///语言
   // Locale locale;
@@ -21,6 +21,6 @@ class AppState{
   // Locale platformLocale;
 
   // AppState({this.currentUser,this.locale,this.accessState,this.platformLocale,this.themeData});
-  AppState({this.accessState,this.currentUser,this.themeData});
+  AppState({this.accessState,this.currentUser,this.themeState});
 
 }

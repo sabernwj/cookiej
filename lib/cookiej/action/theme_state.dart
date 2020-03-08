@@ -1,10 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:cookiej/cookiej/config/style.dart';
 
-///定义一个 Action 类
-///将该 Action 在 Reducer 中与处理该Action的方法绑定
-class RefreshThemeDataAction {
 
-  final ThemeData themeData;
+class ThemeState{
+  String themeName;
+  ThemeData themeData;
 
-  RefreshThemeDataAction(this.themeData);
+  ThemeState(this.themeName,this.themeData);
+  ThemeState.init(){
+    themeName=CookieJColors.themeColors.keys.toList()[0];
+    themeData=CookieJColors.getThemeData(themeName);
+  }
+}
+
+class RefreshThemeState {
+  final ThemeState themeState;
+  RefreshThemeState(this.themeState);
+}
+
+class SwitchDarkMode{
+  final bool isDarkMode;
+  SwitchDarkMode(this.isDarkMode);
+
 }

@@ -14,7 +14,7 @@ AppState appReducer(AppState state,action){
   return AppState(
     accessState: accessReducer(state.accessState,action),
     currentUser: userReducer(state.currentUser,action),
-    themeData:themeDataReducer(state.themeData,action)
+    themeState:themeDataReducer(state.themeState,action),
   );
 }
 
