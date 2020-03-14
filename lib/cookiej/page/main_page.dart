@@ -1,4 +1,6 @@
 import 'package:cookiej/cookiej/action/app_state.dart';
+import 'package:cookiej/cookiej/config/style.dart';
+import 'package:cookiej/cookiej/page/home/home_page.dart';
 import 'package:cookiej/cookiej/page/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -29,7 +31,7 @@ class _MainPageState extends State<MainPage> {
             Container(
               child: Center(
                 child:RaisedButton.icon(
-                  icon: Icon(IconData(0xf18a,fontFamily: 'fontawesome'),size: 24,),
+                  icon: Icon(IconData(0xf18a,fontFamily: CookieJTextStyle.iconFontFamily),size: 24),
                   label: Text('去登录',style: TextStyle(fontSize:18),),
                   onPressed: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
@@ -39,9 +41,7 @@ class _MainPageState extends State<MainPage> {
             )
             :IndexedStack(
             children: <Widget>[
-              Container(
-                // child: Center(child:Text(store.state.accessState.currentAccess.uid.toString())),
-              ),
+              HomePage(),
               Container(),
               Container(),
               PersonalCenter()
@@ -49,7 +49,6 @@ class _MainPageState extends State<MainPage> {
             index: _currentIndex,
           ),
           bottomNavigationBar: SizedBox(
-            height:46,
             child:BottomNavigationBar(
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
@@ -57,7 +56,7 @@ class _MainPageState extends State<MainPage> {
                   title: Container()
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(IconData(0xf14e,fontFamily: 'fontawesome')),
+                  icon: Icon(IconData(0xf14e,fontFamily: CookieJTextStyle.iconFontFamily)),
                   title: Container()
                 ),
                 BottomNavigationBarItem(

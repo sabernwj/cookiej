@@ -3,6 +3,7 @@ import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/model/user.dart';
 import 'package:cookiej/cookiej/net/interceptors/access_interceptor.dart';
+import 'package:cookiej/cookiej/provider/emotion_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
 import 'package:redux/redux.dart';
 import 'package:cookiej/cookiej/net/api.dart';
@@ -70,7 +71,7 @@ class AccessMiddleware implements MiddlewareClass<AppState>{
         if(res.success){
           store.dispatch(SetAccessState(res.data));
           store.dispatch(UpdateCurrentAccess(res.data.currentAccess));
-          
+          EmotionProvider.loadEmotions();
         }
       });
     }

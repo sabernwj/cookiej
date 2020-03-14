@@ -22,7 +22,6 @@ dependencies:
   dio: ^3.0.8
   dio_cookie_manager: ^1.0.0
   flutter_webview_plugin: ^0.3.10+1
-  localstorage: ^1.0.0
   intl: ^0.15.7
   photo_view: ^0.9.1
   cached_network_image: ^2.0.0
@@ -32,6 +31,7 @@ dependencies:
   redux: ^4.0.0
   sqflite: ^1.2.1
   shared_preferences: ^0.5.6+2
+  extended_image: ^0.7.1
 
 
 dev_dependencies:
@@ -49,6 +49,9 @@ flutter:
     - family: fontawesome
       fonts:
         - asset: fonts/fontawesome-webfont.ttf
+    - family: 思源宋体
+      fonts:
+        - asset: fonts/SourceHanSerifCN-Regular.otf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

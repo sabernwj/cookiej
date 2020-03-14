@@ -4,67 +4,32 @@ import 'package:redux/redux.dart';
 
 class CookieJColors{
   
-  static const Map<String,Color> themeColors= {
-    '经典黑':CookieJColors.classicalBlack,
+
+  static final Map<String,MaterialColor> themeColors= {
+    '经典黑':CookieJColors.customBlack,
     '谷歌蓝':Colors.blue,
-    '薄荷青':Colors.teal,
     '琥珀黄':Colors.amber,
+    '薄荷绿':Colors.teal,
     '钢蓝灰':Colors.blueGrey,
     '胡萝卜':Colors.orange,
     '天空蓝':Colors.cyan,
     '中国红':Colors.red,
+    '鲑鱼粉':CookieJColors.salmonPink,
+    '杏黄色':CookieJColors.apricot,
     '少女粉':CookieJColors.girlPink,
-    '杏黄色':CookieJColors.apricotYellow
   };
+  static const int customWhiteValue=0xFFF5F5F5;
+  static const int customBlackValue = 0xFF363636;
+  static const int salmonPinkValue=0xFFFA8072;
+  static const int apricotValue=0xFFF8B878;
+  static const int girlPinkValue=0xFFFA7298;
 
-  static const int customBlack = 0xFF24292E;
-  static const int salmonPink=0xFFFA8072;
-  static const int apricot=0xFFF8B878;
-  static const MaterialColor apricotYellow=const MaterialColor(
-    apricot,
-    const<int,Color>{
-      50: const Color(apricot),
-      100: const Color(apricot),
-      200: const Color(apricot),
-      300: const Color(apricot),
-      400: const Color(apricot),
-      500: const Color(apricot),
-      600: const Color(apricot),
-      700: const Color(apricot),
-      800: const Color(apricot),
-      900: const Color(apricot),
-    }
-  );
-  static const MaterialColor girlPink=const MaterialColor(
-    salmonPink,
-    const<int,Color>{
-      50: const Color(salmonPink),
-      100: const Color(salmonPink),
-      200: const Color(salmonPink),
-      300: const Color(salmonPink),
-      400: const Color(salmonPink),
-      500: const Color(salmonPink),
-      600: const Color(salmonPink),
-      700: const Color(salmonPink),
-      800: const Color(salmonPink),
-      900: const Color(salmonPink),
-    },
-  );
-  static const MaterialColor classicalBlack = const MaterialColor(
-    customBlack,
-    const <int, Color>{
-      50: const Color(customBlack),
-      100: const Color(customBlack),
-      200: const Color(customBlack),
-      300: const Color(customBlack),
-      400: const Color(customBlack),
-      500: const Color(customBlack),
-      600: const Color(customBlack),
-      700: const Color(customBlack),
-      800: const Color(customBlack),
-      900: const Color(customBlack),
-    },
-  ); 
+  static final MaterialColor apricot=getMaterialColor(apricotValue);
+  static final MaterialColor salmonPink=getMaterialColor(salmonPinkValue);
+  static final MaterialColor customBlack =getMaterialColor(customBlackValue);
+  static final MaterialColor girlPink=getMaterialColor(girlPinkValue);
+  static final MaterialColor customWhite=getMaterialColor(customWhiteValue);
+
   static const Color primaryValue = Color(0xFF24292E);
   static const Color primaryLightValue = Color(0xFF42464b);
   static const Color primaryDarkValue = Color(0xFF121917);
@@ -74,7 +39,7 @@ class CookieJColors{
   static const Color miWhite = Color(0xffececec);
   static const Color white = Color(0xFFFFFFFF);
   static const Color actionBlue = Color(0xff267aff);
-  static const Color subTextColor = Color(0xff959595);
+  static const Color subTextColor = Color(0xbbffffff);
   static const Color subLightTextColor = Color(0xffc4c4c4);
 
   static const Color mainBackgroundColor = miWhite;
@@ -89,14 +54,72 @@ class CookieJColors{
   }
 
   static getThemeData(String themeName,{bool isDarkMode=false}) {
-    return ThemeData(primarySwatch: themeColors[themeName],brightness: isDarkMode?Brightness.dark:Brightness.light);
+    MaterialColor color=themeColors[themeName];
+    //颜色的亮度，涉及夜间模式下深色主题的活动颜色设置
+    double luminance=color.computeLuminance();
+    color=luminance<0.15&&isDarkMode?Colors.teal:color;
+    return ThemeData(
+      fontFamily: CookieJTextStyle.mainFontFamily,
+      primarySwatch: color,
+      brightness: isDarkMode?Brightness.dark:Brightness.light,
+      //主颜色属于暗色还是亮色，关乎到文本的黑或白
+      primaryColorBrightness: Brightness.dark,
+      //选中文本时的背景颜色,
+      textSelectionHandleColor:color.shade300,
+      //前景色
+      accentColor: color.shade600,
+      //用于突出显示切换Widget（如Switch，Radio和Checkbox）的活动状态的颜色。
+      toggleableActiveColor:color.shade500,
+      unselectedWidgetColor: isDarkMode ? customBlack : customWhite,
+      //cardColor:isDarkMode ? CookieJColors.customBlack : color[200],
+      //主要用于内容显示部分的文字,黑白为主
+      textTheme: TextTheme(
+        body1: isDarkMode?CookieJTextStyle.middleTextWhite:CookieJTextStyle.middleText,
+      ),
+      //主要用于功能显示部分的文字
+      primaryTextTheme: TextTheme(
+        subtitle: CookieJTextStyle.minText,
+        subhead: CookieJTextStyle.middleTextWhite,
+        body1: TextStyle(
+          color:luminance<0.15&&!isDarkMode?Colors.blue:color,
+          fontSize: CookieJTextStyle.middleTextWhiteSize,
+          fontFamily: CookieJTextStyle.iconFontFamily,
+          fontFamilyFallback: [
+            CookieJTextStyle.mainFontFamily
+          ]
+        ),
+        body2: TextStyle(fontSize: CookieJTextStyle.middleTextWhiteSize,),
+        overline: TextStyle(fontSize:CookieJTextStyle.minTextSize,color:Colors.grey[600],letterSpacing: 0)
+      )
+
+    );
+  }
+
+  static MaterialColor getMaterialColor(int colorValue){
+    return MaterialColor(
+      colorValue,
+      <int,Color>{
+        50: Color(colorValue),
+        100:Color(colorValue),
+        200:Color(colorValue),
+        300:Color(colorValue),
+        400:Color(colorValue),
+        500:Color(colorValue),
+        600:Color(colorValue),
+        700:Color(colorValue),
+        800:Color(colorValue),
+        900:Color(colorValue),
+      }
+    );
   }
 
 }
 
 class CookieJTextStyle{
-  static const lagerTextSize = 30.0;
-  static const bigTextSize = 23.0;
+  static String mainFontFamily='思源宋体';
+  static const String iconFontFamily='fontawesome'; 
+  static const lagerTextSize = 24.0;
+  static const bigTextSize = 20.0;
   static const normalTextSize = 18.0;
   static const middleTextWhiteSize = 16.0;
   static const smallTextSize = 14.0;
@@ -104,181 +127,153 @@ class CookieJTextStyle{
 
   static const minText = TextStyle(
     
-    color: CookieJColors.subLightTextColor,
+    color: CookieJColors.subTextColor,
     fontSize: minTextSize,
-    fontFamily: 'fontawesome',
   );
 
   static const smallTextWhite = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: smallTextSize,
-    fontFamily: 'fontawesome',
   );
 
   static const smallText = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: smallTextSize,
-    fontFamily: 'fontawesome',
   );
 
   static const smallTextBold = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: smallTextSize,
     fontWeight: FontWeight.bold,
-    fontFamily: 'fontawesome',
   );
 
   static const smallSubLightText = TextStyle(
     color: CookieJColors.subLightTextColor,
     fontSize: smallTextSize,
-    fontFamily: 'fontawesome',
   );
 
   static const smallActionLightText = TextStyle(
     color: CookieJColors.actionBlue,
     fontSize: smallTextSize,
-    fontFamily: 'fontawesome',
   );
 
   static const smallMiLightText = TextStyle(
     color: CookieJColors.miWhite,
     fontSize: smallTextSize,
-    fontFamily: 'fontawesome',
   );
 
   static const smallSubText = TextStyle(
     color: CookieJColors.subTextColor,
     fontSize: smallTextSize,
-    fontFamily: 'fontawesome',
   );
 
   static const middleText = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: middleTextWhiteSize,
-    fontFamily: 'fontawesome',
   );
 
   static const middleTextWhite = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: middleTextWhiteSize,
-    fontFamily: 'fontawesome',
   );
 
   static const middleSubText = TextStyle(
     color: CookieJColors.subTextColor,
     fontSize: middleTextWhiteSize,
-    fontFamily: 'fontawesome',
   );
 
   static const middleSubLightText = TextStyle(
     color: CookieJColors.subLightTextColor,
     fontSize: middleTextWhiteSize,
-    fontFamily: 'fontawesome',
   );
 
   static const middleTextBold = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: middleTextWhiteSize,
     fontWeight: FontWeight.bold,
-    fontFamily: 'fontawesome',
   );
 
   static const middleTextWhiteBold = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: middleTextWhiteSize,
     fontWeight: FontWeight.bold,
-    fontFamily: 'fontawesome',
   );
 
   static const middleSubTextBold = TextStyle(
     color: CookieJColors.subTextColor,
     fontSize: middleTextWhiteSize,
     fontWeight: FontWeight.bold,
-    fontFamily: 'fontawesome',
   );
 
   static const normalText = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: normalTextSize,
-    fontFamily: 'fontawesome',
   );
 
   static const normalTextBold = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: normalTextSize,
     fontWeight: FontWeight.bold,
-    fontFamily: 'fontawesome',
   );
 
   static const normalSubText = TextStyle(
-    color: CookieJColors.subTextColor,
+    color: CookieJColors.white,
     fontSize: normalTextSize,
-    fontFamily: 'fontawesome',
   );
 
   static const normalTextWhite = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: normalTextSize,
-    fontFamily: 'fontawesome',
   );
 
   static const normalTextMitWhiteBold = TextStyle(
     color: CookieJColors.miWhite,
     fontSize: normalTextSize,
     fontWeight: FontWeight.bold,
-    fontFamily: 'fontawesome',
   );
 
   static const normalTextActionWhiteBold = TextStyle(
     color: CookieJColors.actionBlue,
     fontSize: normalTextSize,
     fontWeight: FontWeight.bold,
-    fontFamily: 'fontawesome',
   );
 
   static const normalTextLight = TextStyle(
     color: CookieJColors.primaryLightValue,
     fontSize: normalTextSize,
-    fontFamily: 'fontawesome',
   );
 
   static const largeText = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: bigTextSize,
-    fontFamily: 'fontawesome',
   );
 
   static const largeTextBold = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: bigTextSize,
     fontWeight: FontWeight.bold,
-    fontFamily: 'fontawesome',
   );
 
   static const largeTextWhite = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: bigTextSize,
-    fontFamily: 'fontawesome',
   );
 
   static const largeTextWhiteBold = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: bigTextSize,
     fontWeight: FontWeight.bold,
-    fontFamily: 'fontawesome',
   );
 
   static const largeLargeTextWhite = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: lagerTextSize,
     fontWeight: FontWeight.bold,
-    fontFamily: 'fontawesome',
   );
 
   static const largeLargeText = TextStyle(
     color: CookieJColors.primaryValue,
     fontSize: lagerTextSize,
     fontWeight: FontWeight.bold,
-    fontFamily: 'fontawesome',
   );
 }

@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:cookiej/cookiej/cookiej_app.dart';
 import 'package:flutter/material.dart';
-import './view/route/index.dart';
-import 'boot.dart';
 
 void main() {
   runZoned((){

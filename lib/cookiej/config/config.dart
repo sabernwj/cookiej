@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+
 
 class Config{
   static const appkey='1532678245';
@@ -19,4 +18,34 @@ class Config{
   static const pictureDB='PictureInfo';
   static const pictureDB_id='picture_id';
 
+  static const List<String> imgBaseUrlPool=[
+    'http://wx1.sinaimg.cn/',
+    'http://wx2.sinaimg.cn/',
+    'http://wx3.sinaimg.cn/',
+    'http://ww1.sinaimg.cn/',
+    'http://ww2.sinaimg.cn/',
+    'http://ww3.sinaimg.cn/',
+    'http://tva2.sinaimg.cn/',
+    'http://tvax3.sinaimg.cn/',
+  ];
+  static const String baseUrl='https://api.weibo.com';
+}
+
+class SinaImgSize{
+  static const String thumbnail='thumbnail';
+  static const String bmiddle='bmiddle';
+  static const String large='large';
+}
+
+enum WeiboTimelineType{
+  Public,
+  Statuses,
+  Bilateral,
+  Reposts,
+  User
+}
+
+enum CommentsType{
+  Hot,
+  Time
 }

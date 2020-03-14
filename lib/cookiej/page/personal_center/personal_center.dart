@@ -1,16 +1,16 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/action/theme_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/config/style.dart';
 import 'package:cookiej/cookiej/page/login/login_page.dart';
-import 'package:cookiej/cookiej/page/personal_center/switch_theme.dart/switch_theme.dart';
+import 'package:cookiej/cookiej/page/personal_center/switch_theme.dart/theme_style.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
 import 'package:cookiej/cookiej/utils/local_storage.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -30,7 +30,7 @@ class PersonalCenter extends StatelessWidget {
           //设置按钮
           IconButton(
             iconSize: 24,
-            icon: Icon(IconData(0xf1de,fontFamily: 'fontawesome')),
+            icon: Icon(IconData(0xf1de)),
             onPressed: (){},
           ),
         ],
@@ -43,29 +43,34 @@ class PersonalCenter extends StatelessWidget {
                   child:Row(
                     children: <Widget>[
                       SizedBox(
-                        child: CircleAvatar(backgroundImage: PictureProvider.getPictureFromId(store.state.currentUser.iconId),radius: 20),
+                        //头像
+                        child: ExtendedImage(
+                          image:PictureProvider.getPictureFromId(store.state.currentUser.iconId),
+                          shape: BoxShape.circle,
+                        ),
                         width: 64,height: 64,
                       ),
                       Expanded(
                         child:ListTile(
                           title:Row(
                             children:[
-                              Text(store.state.currentUser.screenName,style: _theme.primaryTextTheme.headline),
-                              IconButton(icon: Icon(IconData(0xf0d7,fontFamily: 'fontawesome'),color: Colors.white,size: 24), onPressed: () async{
-                                final RenderBox textDescription=_displayUserNameKey.currentContext.findRenderObject();
-                                showMenu(
-                                  context: _displayUserNameKey.currentContext,
-                                  position:RelativeRect.fromLTRB(textDescription.localToGlobal(Offset.zero).dx, textDescription.localToGlobal(Offset.zero).dy,100, 0), 
-                                  items: await getLocalUsersItems(store,context),
-                                  //color: Colors.blue
-                                );
-                              }),
+                              Text(store.state.currentUser.screenName,style: _theme.primaryTextTheme.subhead),
+                              InkWell(
+                                child: Icon(IconData(0xf0d7,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subhead.color ,size: 24),
+                                onTap: ()async{
+                                  final RenderBox textDescription=_displayUserNameKey.currentContext.findRenderObject();
+                                  showMenu(
+                                    context: _displayUserNameKey.currentContext,
+                                    position:RelativeRect.fromLTRB(textDescription.localToGlobal(Offset.zero).dx, textDescription.localToGlobal(Offset.zero).dy,100, 0), 
+                                    items: await getLocalUsersItems(store,context),
+                                  );
+                                },
+                              )
                             ]
                           ),
-                          subtitle: Text(store.state.currentUser.description.isEmpty?'\u{3000}':store.state.currentUser.description,key: _displayUserNameKey,style: TextStyle(fontSize: 13,color: Colors.white70)),
-                          
-                          trailing: IconButton(icon: Icon(IconData(0xf105,fontFamily: 'fontawesome'),color: Colors.white,size: 28,), onPressed: (){
-                            
+                          subtitle: Text(store.state.currentUser.description.isEmpty?'\u{3000}':store.state.currentUser.description,key: _displayUserNameKey,style: _theme.primaryTextTheme.subtitle),
+                          trailing: IconButton(icon: Icon(IconData(0xf105,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subhead.color,size: 28,), onPressed: (){
+
                           }),
                         ),
                       )
@@ -79,20 +84,20 @@ class PersonalCenter extends StatelessWidget {
                     children:[
                       FlatButton(onPressed: (){}, child: Column(
                         children:[
-                          Text(store.state.currentUser.statusesCount.toString(),style: TextStyle(color:Colors.white,fontSize:16)),
-                          Text('微博',style: TextStyle(color:Colors.white70,fontSize:13))
+                          Text(store.state.currentUser.statusesCount.toString(),style: _theme.primaryTextTheme.subhead),
+                          Text('微博',style: _theme.primaryTextTheme.subtitle)
                         ]
                       )),
                       FlatButton(onPressed: (){}, child: Column(
                         children:[
-                          Text(store.state.currentUser.friendsCount.toString(),style: TextStyle(color:Colors.white,fontSize:16)),
-                          Text('关注',style: TextStyle(color:Colors.white70,fontSize:13))
+                          Text(store.state.currentUser.friendsCount.toString(),style: _theme.primaryTextTheme.subhead),
+                          Text('关注',style: _theme.primaryTextTheme.subtitle)
                         ]
                       )),
                       FlatButton(onPressed: (){}, child: Column(
                         children:[
-                          Text(store.state.currentUser.followersCount.toString(),style: TextStyle(color:Colors.white,fontSize:16)),
-                          Text('粉丝',style: TextStyle(color:Colors.white70,fontSize:13))
+                          Text(store.state.currentUser.followersCount.toString(),style: _theme.primaryTextTheme.subhead),
+                          Text('粉丝',style: _theme.primaryTextTheme.subtitle)
                         ]
                       )),
                     ]
@@ -128,7 +133,7 @@ class PersonalCenter extends StatelessWidget {
               leading: Icon(Icons.palette,color:CookieJColors.themeColors[store.state.themeState.themeName]),
               title: Text('切换主题'),
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>SwitchTheme()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>ThemeStyle()));
               },
             ),
             Divider()
@@ -148,7 +153,13 @@ class PersonalCenter extends StatelessWidget {
         itemList.add(PopupMenuItem(
           key: _itemKey,
           child:ListTile(
-            leading: CircleAvatar(backgroundImage:PictureProvider.getPictureFromId(user.iconId,sinaImgSize: SinaImgSize.thumbnail)),
+            leading:ExtendedImage(
+              image:PictureProvider.getPictureFromId(user.iconId,sinaImgSize: SinaImgSize.thumbnail),
+              shape:BoxShape.circle,
+              width:36,
+              height: 36,
+            ),
+            //leading: CircleAvatar(backgroundImage:PictureProvider.getPictureFromId(user.iconId,sinaImgSize: SinaImgSize.thumbnail)),
             title: Text(user.screenName),
             trailing: IconButton(padding: EdgeInsets.all(0), icon: Icon(Icons.remove_circle,color: Colors.red,), onPressed: (){
               Navigator.pop(context);
@@ -181,15 +192,6 @@ class PersonalCenter extends StatelessWidget {
         ],
         mainAxisAlignment:MainAxisAlignment.center
       ),
-      // child: GestureDetector(
-      //   child:Container(
-      //     child:Icon(Icons.add_circle,color: Colors.green)
-      //   ),
-      //   onTap: (){
-      //     Navigator.pop(context);
-      //     Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
-      //   },
-      // ),
     ));
 
     return itemList;

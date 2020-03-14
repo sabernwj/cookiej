@@ -1,9 +1,10 @@
 import 'dart:convert';
 
-import 'weibo.dart';
+import 'package:cookiej/cookiej/model/weibo_lite.dart';
+
 
 class Weibos {
-  List<Weibo> statuses;
+  List<WeiboLite> statuses;
   bool hasVisible;
   int previousCursor;
   int nextCursor;
@@ -28,7 +29,7 @@ class Weibos {
     hasUnread=jsonRes["has_unread"];
     statuses=jsonRes["statuses"]== null ? null : [];
     for (var weiboItem in statuses == null ? [] : jsonRes['statuses']){
-            statuses.add(weiboItem == null ? null : Weibo.fromJson(weiboItem));
+            statuses.add(weiboItem == null ? null : WeiboLite.fromJson(weiboItem));
     }
   }
 

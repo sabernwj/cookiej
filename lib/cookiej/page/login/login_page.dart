@@ -1,14 +1,10 @@
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/net/access_api.dart';
-import 'package:cookiej/cookiej/page/main_page.dart';
 import 'package:cookiej/cookiej/provider/access_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:cookiej/cookiej/config/config.dart';
-import 'package:redux/redux.dart';
-
 class LoginPage extends StatelessWidget{
   final _flutterWebviewPlugin=new FlutterWebviewPlugin();
   @override

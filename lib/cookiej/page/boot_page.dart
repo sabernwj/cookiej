@@ -27,7 +27,7 @@ class _BootPageState extends State<BootPage> {
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     Store<AppState> store = StoreProvider.of(context);
-        Future.delayed(Duration(seconds: 1),(){
+    Future.delayed(Duration(seconds: 1),(){
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainPage()));
     });
     //初始化数据库
@@ -37,7 +37,10 @@ class _BootPageState extends State<BootPage> {
     //加载主题
     String themeName=await LocalStorage.get(Config.themeNameStorageKey);
     bool isDarkMode=await LocalStorage.get(Config.isDarkModeStorageKey)=='true';
-    store.dispatch(RefreshThemeState(ThemeState(themeName,CookieJColors.getThemeData(themeName,isDarkMode: isDarkMode))));
+    if(themeName!=null){
+      store.dispatch(RefreshThemeState(ThemeState(themeName,CookieJColors.getThemeData(themeName,isDarkMode: isDarkMode))));
+    }
+    
   }
 
   @override

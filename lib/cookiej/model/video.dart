@@ -1,3 +1,4 @@
+import 'data_objetc.dart';
 import 'author.dart';
 import 'biz.dart';
 import 'compressed_file_meta.dart';
@@ -12,7 +13,7 @@ import 'raw_file_meta.dart';
 import 'screen_hosts.dart';
 import 'video_extensions.dart';
 
-class Video extends Object{
+class Video extends DataObject{
   int fid;
   String storageType;
   String videoCover;

@@ -1,4 +1,4 @@
-import 'package:cookiej/cookiej/utils/utils.dart';
+import 'package:cookiej/cookiej/provider/picture_provider.dart';
 
 ///轻量版的用户信息
 class UserLite {
@@ -32,7 +32,7 @@ class UserLite {
     if(json['icon_id']!=null){
       iconId=json['icon_id'];
     }else{
-      iconId=Utils.getImgIdFromUrl(json['profile_image_url']);
+      iconId=PictureProvider.getImgIdFromUrl(json['profile_image_url']);
     }
     
   }

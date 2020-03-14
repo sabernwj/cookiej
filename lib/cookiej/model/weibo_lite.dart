@@ -10,6 +10,7 @@ class WeiboLite extends Content{
 	UserLite user;
 	String mid;
 	String idstr;
+  String source;
 	int repostsCount;
 	int commentsCount;
 	int attitudesCount;
@@ -17,7 +18,7 @@ class WeiboLite extends Content{
   RetweetedWeibo retweetedWeibo;
   List<PicUrls> picUrls;
 
-  WeiboLite({this.idstr,this.id,this.user,this.attitudesCount,this.commentsCount,this.createdAt,this.favorited,this.mid,this.picUrls,this.repostsCount,this.retweetedWeibo,this.text});
+  WeiboLite({this.idstr,this.id,this.user,this.attitudesCount,this.commentsCount,this.createdAt,this.favorited,this.mid,this.picUrls,this.repostsCount,this.retweetedWeibo,this.text,this.source});
 
   WeiboLite.fromJson(Map<String, dynamic> json){
 		createdAt = json['created_at'];
@@ -29,6 +30,7 @@ class WeiboLite extends Content{
 		repostsCount = json['reposts_count'];
 		commentsCount = json['comments_count'];
 		attitudesCount = json['attitudes_count'];
+    source = json['source'];
     user = json['user'] != null ? UserLite.fromJson(json['user']) : null;
 		if (json['pic_urls'] != null) {
 			picUrls = List<PicUrls>();
@@ -52,6 +54,7 @@ class WeiboLite extends Content{
 		data['reposts_count'] = this.repostsCount;
 		data['comments_count'] = this.commentsCount;
 		data['attitudes_count'] = this.attitudesCount;
+    data['source'] = this.source;
     data['user']=this.user.toJson();
 		if (this.picUrls != null) {
       data['pic_urls'] = this.picUrls.map((v) => v.toJson()).toList();

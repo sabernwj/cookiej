@@ -3,7 +3,6 @@ import 'package:cookiej/cookiej/model/weibo_lite.dart';
 
 import 'annotations.dart';
 import 'comment_manage_info.dart';
-import 'content.dart';
 import 'long_text.dart';
 import 'number_display_strategy.dart';
 import 'pic_urls.dart';
