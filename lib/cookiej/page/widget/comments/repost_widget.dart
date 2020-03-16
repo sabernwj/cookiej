@@ -2,6 +2,7 @@ import 'package:cookiej/cookiej/model/weibo_lite.dart';
 import 'package:cookiej/cookiej/page/widget/content_widget.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
 class RepostWidget extends StatelessWidget {
@@ -19,7 +20,12 @@ class RepostWidget extends StatelessWidget {
           Container(
             child: Row(
               children: <Widget>[
-                SizedBox(child: CircleAvatar(backgroundImage: PictureProvider.getPictureFromId(repost.user.iconId),radius: 20),width: 36,height: 36,),
+                ExtendedImage.network(
+                  PictureProvider.getImgUrlFromId(repost.user.iconId),
+                  shape:BoxShape.circle,
+                  width:36,
+                  height: 36,
+                ),
                 Container(
                   child: Column(
                     children: <Widget>[

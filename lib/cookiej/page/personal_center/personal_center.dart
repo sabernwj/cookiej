@@ -21,125 +21,128 @@ class PersonalCenter extends StatelessWidget {
   final GlobalKey _displayUserNameKey=GlobalKey();
   @override
   Widget build(BuildContext context){
-    final store=StoreProvider.of<AppState>(context);
-    final _theme=store.state.themeState.themeData;
-    var _isDarkMode=_theme.brightness==Brightness.dark;
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          //设置按钮
-          IconButton(
-            iconSize: 24,
-            icon: Icon(IconData(0xf1de)),
-            onPressed: (){},
-          ),
-        ],
-        bottom: PreferredSize(
-          child: Expanded(
-            flex: 3,
-            child: Column(
-              children:[
-                Container(
-                  child:Row(
-                    children: <Widget>[
-                      SizedBox(
-                        //头像
-                        child: ExtendedImage(
-                          image:PictureProvider.getPictureFromId(store.state.currentUser.iconId),
-                          shape: BoxShape.circle,
-                        ),
-                        width: 64,height: 64,
-                      ),
-                      Expanded(
-                        child:ListTile(
-                          title:Row(
-                            children:[
-                              Text(store.state.currentUser.screenName,style: _theme.primaryTextTheme.subhead),
-                              InkWell(
-                                child: Icon(IconData(0xf0d7,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subhead.color ,size: 24),
-                                onTap: ()async{
-                                  final RenderBox textDescription=_displayUserNameKey.currentContext.findRenderObject();
-                                  showMenu(
-                                    context: _displayUserNameKey.currentContext,
-                                    position:RelativeRect.fromLTRB(textDescription.localToGlobal(Offset.zero).dx, textDescription.localToGlobal(Offset.zero).dy,100, 0), 
-                                    items: await getLocalUsersItems(store,context),
-                                  );
-                                },
-                              )
-                            ]
+    return StoreBuilder<AppState>(
+      builder:(context,store){
+        final _theme=store.state.themeState.themeData;
+        var _isDarkMode=_theme.brightness==Brightness.dark;
+        return Scaffold(
+          appBar: AppBar(
+            // actions: <Widget>[
+            //   //设置按钮
+            //   IconButton(
+            //     iconSize: 24,
+            //     icon: Icon(IconData(0xf069,fontFamily:CookieJTextStyle.iconFontFamily)),
+            //     onPressed: (){},
+            //   ),
+            // ],
+            bottom: PreferredSize(
+              child: Expanded(
+                flex: 4,
+                child: Column(
+                  children:[
+                    Container(
+                      child:Row(
+                        children: <Widget>[
+                          SizedBox(
+                            //头像
+                            child: ExtendedImage.network(
+                              PictureProvider.getImgUrlFromId(store.state.currentUser.iconId),
+                              shape: BoxShape.circle,
+                            ),
+                            width: 64,height: 64,
                           ),
-                          subtitle: Text(store.state.currentUser.description.isEmpty?'\u{3000}':store.state.currentUser.description,key: _displayUserNameKey,style: _theme.primaryTextTheme.subtitle),
-                          trailing: IconButton(icon: Icon(IconData(0xf105,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subhead.color,size: 28,), onPressed: (){
+                          Expanded(
+                            child:ListTile(
+                              title:Row(
+                                children:[
+                                  Text(store.state.currentUser.screenName,style: _theme.primaryTextTheme.subhead),
+                                  InkWell(
+                                    child: Icon(IconData(0xf0d7,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subhead.color ,size: 24),
+                                    onTap: ()async{
+                                      final RenderBox textDescription=_displayUserNameKey.currentContext.findRenderObject();
+                                      showMenu(
+                                        context: _displayUserNameKey.currentContext,
+                                        position:RelativeRect.fromLTRB(textDescription.localToGlobal(Offset.zero).dx, textDescription.localToGlobal(Offset.zero).dy,100, 0), 
+                                        items: await getLocalUsersItems(store,context),
+                                      );
+                                    },
+                                  )
+                                ]
+                              ),
+                              subtitle: Text(store.state.currentUser.description.isEmpty?'\u{3000}':store.state.currentUser.description,key: _displayUserNameKey,style: _theme.primaryTextTheme.subtitle),
+                              trailing: IconButton(icon: Icon(IconData(0xf105,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subhead.color,size: 28,), onPressed: (){
 
-                          }),
-                        ),
+                              }),
+                            ),
+                          )
+                        ],
+                      ),
+                      margin: EdgeInsets.only(left:14,bottom: 10),
+                    ),
+                    Container(
+                      child:Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children:[
+                          FlatButton(onPressed: (){}, child: Column(
+                            children:[
+                              Text(store.state.currentUser.statusesCount.toString(),style: _theme.primaryTextTheme.subhead),
+                              Text('微博',style: _theme.primaryTextTheme.subtitle)
+                            ]
+                          )),
+                          FlatButton(onPressed: (){}, child: Column(
+                            children:[
+                              Text(store.state.currentUser.friendsCount.toString(),style: _theme.primaryTextTheme.subhead),
+                              Text('关注',style: _theme.primaryTextTheme.subtitle)
+                            ]
+                          )),
+                          FlatButton(onPressed: (){}, child: Column(
+                            children:[
+                              Text(store.state.currentUser.followersCount.toString(),style: _theme.primaryTextTheme.subhead),
+                              Text('粉丝',style: _theme.primaryTextTheme.subtitle)
+                            ]
+                          )),
+                        ]
                       )
-                    ],
-                  ),
-                  margin: EdgeInsets.only(left:14,bottom: 10),
+                    )
+                  ]
                 ),
-                Container(
-                  child:Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children:[
-                      FlatButton(onPressed: (){}, child: Column(
-                        children:[
-                          Text(store.state.currentUser.statusesCount.toString(),style: _theme.primaryTextTheme.subhead),
-                          Text('微博',style: _theme.primaryTextTheme.subtitle)
-                        ]
-                      )),
-                      FlatButton(onPressed: (){}, child: Column(
-                        children:[
-                          Text(store.state.currentUser.friendsCount.toString(),style: _theme.primaryTextTheme.subhead),
-                          Text('关注',style: _theme.primaryTextTheme.subtitle)
-                        ]
-                      )),
-                      FlatButton(onPressed: (){}, child: Column(
-                        children:[
-                          Text(store.state.currentUser.followersCount.toString(),style: _theme.primaryTextTheme.subhead),
-                          Text('粉丝',style: _theme.primaryTextTheme.subtitle)
-                        ]
-                      )),
-                    ]
-                  )
-                )
+              ), 
+              preferredSize: Size.fromHeight(128),
+            ),
+          ),
+          //菜单
+          body: Container(
+            color: Theme.of(context).cardColor,
+            margin: EdgeInsets.only(top:24,bottom: 0),
+            child: ListView(
+              children:[
+                ListTile(
+                  leading: Icon(Icons.wb_sunny),
+                  title: Text('夜间模式'),
+                  trailing: CupertinoSwitch(
+                    value: _isDarkMode,
+                    activeColor: store.state.themeState.themeData.primaryColor,
+                    onChanged: (value){
+                      store.dispatch(SwitchDarkMode(value));
+                      //存储夜间模式配置
+                      LocalStorage.save(Config.isDarkModeStorageKey, value.toString());
+                    },
+                  ),
+                ),
+                Divider(),
+                ListTile(
+                  leading: Icon(Icons.palette,color:CookieJColors.themeColors[store.state.themeState.themeName]),
+                  title: Text('切换主题'),
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ThemeStyle()));
+                  },
+                ),
+                Divider()
               ]
             ),
-          ), 
-          preferredSize: Size.fromHeight(128),
-        ),
-      ),
-      //菜单
-      body: Container(
-        color: Theme.of(context).cardColor,
-        margin: EdgeInsets.only(top:24,bottom: 0),
-        child: ListView(
-          children:[
-            ListTile(
-              leading: Icon(Icons.wb_sunny),
-              title: Text('夜间模式'),
-              trailing: CupertinoSwitch(
-                value: _isDarkMode,
-                activeColor: store.state.themeState.themeData.primaryColor,
-                onChanged: (value){
-                  store.dispatch(SwitchDarkMode(value));
-                  //存储夜间模式配置
-                  LocalStorage.save(Config.isDarkModeStorageKey, value.toString());
-                },
-              ),
-            ),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.palette,color:CookieJColors.themeColors[store.state.themeState.themeName]),
-              title: Text('切换主题'),
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>ThemeStyle()));
-              },
-            ),
-            Divider()
-          ]
-        ),
-      )
+          )
+        );
+      }
     );
   }
 
@@ -153,8 +156,8 @@ class PersonalCenter extends StatelessWidget {
         itemList.add(PopupMenuItem(
           key: _itemKey,
           child:ListTile(
-            leading:ExtendedImage(
-              image:PictureProvider.getPictureFromId(user.iconId,sinaImgSize: SinaImgSize.thumbnail),
+            leading:ExtendedImage.network(
+              PictureProvider.getImgUrlFromId(user.iconId,sinaImgSize: SinaImgSize.thumbnail),
               shape:BoxShape.circle,
               width:36,
               height: 36,

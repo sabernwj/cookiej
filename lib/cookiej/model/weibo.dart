@@ -28,7 +28,7 @@ class Weibo extends WeiboLite{
 	String inReplyToStatusId;
 	String inReplyToUserId;
 	String inReplyToScreenName;
-	List<PicUrls> picUrls;
+	List<String> picUrls;
 	String thumbnailPic;
 	String bmiddlePic;
 	String originalPic;
@@ -63,7 +63,7 @@ class Weibo extends WeiboLite{
 	CommentManageInfo commentManageInfo;
 	int picNum;
   ///转发的原微博
-  RetweetedWeibo retweetedWeibo;
+  WeiboLite retweetedWeibo;
 
 	Weibo({this.visible, this.createdAt, this.id, this.idstr, this.mid, this.canEdit, this.showAdditionalIndication, this.text, this.textLength, this.sourceAllowclick, this.sourceType, this.source, this.favorited, this.truncated, this.inReplyToStatusId, this.inReplyToUserId, this.inReplyToScreenName, this.picUrls, this.thumbnailPic, this.bmiddlePic, this.originalPic, this.geo, this.isPaid, this.mblogVipType, this.user, this.annotations, this.repostsCount, this.commentsCount, this.attitudesCount, this.pendingApprovalCount, this.isLongText, this.longText, this.rewardExhibitionType, this.hideFlag, this.mlevel, this.bizFeature, this.pageType, this.hasActionTypeCard, this.darwinTags, this.hotWeiboTags, this.textTagTips, this.mblogtype, this.userType, this.moreInfoType, this.numberDisplayStrategy, this.positiveRecomFlag, this.contentAuth, this.gifIds, this.isShowBulletin, this.commentManageInfo, this.picNum});
 
@@ -86,8 +86,8 @@ class Weibo extends WeiboLite{
 		inReplyToUserId = json['in_reply_to_user_id'];
 		inReplyToScreenName = json['in_reply_to_screen_name'];
 		if (json['pic_urls'] != null) {
-			picUrls = new List<PicUrls>();
-			json['pic_urls'].forEach((v) { picUrls.add(new PicUrls.fromJson(v)); });
+			picUrls = new List<String>();
+			json['pic_urls'].forEach((v) { picUrls.add(v['thumbnail_pic']); });
 		}
 		thumbnailPic = json['thumbnail_pic'];
 		bmiddlePic = json['bmiddle_pic'];
@@ -136,9 +136,8 @@ class Weibo extends WeiboLite{
 		picNum = json['pic_num'];
 
     if(json['retweeted_status']!=null){
-      retweetedWeibo=new RetweetedWeibo();
-      retweetedWeibo.rWeibo=Weibo.fromJson(json['retweeted_status']);
-      retweetedWeibo.rWeibo.text='@'+retweetedWeibo.rWeibo.user.name+'\n'+retweetedWeibo.rWeibo.text;
+      retweetedWeibo=Weibo.fromJson(json['retweeted_status']);
+      retweetedWeibo.text='@'+retweetedWeibo.user.name+'\n'+retweetedWeibo.text;
     }
 	}
 
@@ -164,7 +163,7 @@ class Weibo extends WeiboLite{
 		data['in_reply_to_user_id'] = this.inReplyToUserId;
 		data['in_reply_to_screen_name'] = this.inReplyToScreenName;
 		if (this.picUrls != null) {
-      data['pic_urls'] = this.picUrls.map((v) => v.toJson()).toList();
+      data['pic_urls'] = this.picUrls.map((v) => v).toList();
     }
 		data['thumbnail_pic'] = this.thumbnailPic;
 		data['bmiddle_pic'] = this.bmiddlePic;

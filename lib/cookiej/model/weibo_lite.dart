@@ -1,22 +1,37 @@
-import 'pic_urls.dart';
-import 'retweeted_weibo.dart';
 import 'user_lite.dart';
 import 'content.dart';
+import 'package:hive/hive.dart';
 
+part 'weibo_lite.g.dart';
+
+@HiveType(typeId: 0)
 class WeiboLite extends Content{
-	String createdAt;
+  @HiveField(0)
 	int id;
+  @HiveField(1)
+  String createdAt;
+  @HiveField(2)
 	String text;
+  @HiveField(3)
 	UserLite user;
+  @HiveField(4)
 	String mid;
+  @HiveField(5)
 	String idstr;
+  @HiveField(6)
   String source;
+  @HiveField(7)
 	int repostsCount;
+  @HiveField(8)
 	int commentsCount;
+  @HiveField(9)
 	int attitudesCount;
+  @HiveField(10)
   bool favorited;
-  RetweetedWeibo retweetedWeibo;
-  List<PicUrls> picUrls;
+  @HiveField(11)
+  WeiboLite retweetedWeibo;
+  @HiveField(12)
+  List<String> picUrls;
 
   WeiboLite({this.idstr,this.id,this.user,this.attitudesCount,this.commentsCount,this.createdAt,this.favorited,this.mid,this.picUrls,this.repostsCount,this.retweetedWeibo,this.text,this.source});
 
@@ -33,13 +48,12 @@ class WeiboLite extends Content{
     source = json['source'];
     user = json['user'] != null ? UserLite.fromJson(json['user']) : null;
 		if (json['pic_urls'] != null) {
-			picUrls = List<PicUrls>();
-			json['pic_urls'].forEach((v) { picUrls.add(PicUrls.fromJson(v)); });
+			picUrls = List<String>();
+			json['pic_urls'].forEach((v) { picUrls.add(v['thumbnail_pic']); });
 		}
     if(json['retweeted_status']!=null){
-      retweetedWeibo=new RetweetedWeibo();
-      retweetedWeibo.rWeibo=WeiboLite.fromJson(json['retweeted_status']);
-      retweetedWeibo.rWeibo.text='@'+retweetedWeibo.rWeibo.user.name+'\n'+retweetedWeibo.rWeibo.text;
+      retweetedWeibo=WeiboLite.fromJson(json['retweeted_status']);
+      retweetedWeibo.text='@'+retweetedWeibo.user.name+'\n'+retweetedWeibo.text;
     }
   }
 
@@ -57,10 +71,10 @@ class WeiboLite extends Content{
     data['source'] = this.source;
     data['user']=this.user.toJson();
 		if (this.picUrls != null) {
-      data['pic_urls'] = this.picUrls.map((v) => v.toJson()).toList();
+      data['pic_urls'] = this.picUrls.map((v) => v).toList();
     }
     if(this.retweetedWeibo!=null){
-      data['retweeted_status']=retweetedWeibo.rWeibo.toJson();
+      data['retweeted_status']=retweetedWeibo.toJson();
     }
 		return data;
   }

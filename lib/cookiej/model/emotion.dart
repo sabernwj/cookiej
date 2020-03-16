@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
 class Emotion{
@@ -15,6 +15,6 @@ class Emotion{
     category=map['category'];
     hot=map['hot'];
     common=map['common'];
-    imageProvider=CachedNetworkImageProvider(map['url']);
+    imageProvider=ExtendedNetworkImageProvider(map['url'],cache: true);
   }
 }

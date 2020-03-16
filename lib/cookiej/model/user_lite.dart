@@ -1,19 +1,34 @@
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
+import 'package:hive/hive.dart';
+part 'user_lite.g.dart';
 
 ///轻量版的用户信息
+@HiveType(typeId: 1)
 class UserLite {
+  @HiveField(0)
   int id;
+  @HiveField(1)
   String idstr;
+  @HiveField(2)
   String screenName;
+  @HiveField(3)
   String name;
+  @HiveField(4)
   //头像的id
   String iconId;
+  @HiveField(5)
 	String description;
+  @HiveField(6)
 	int followersCount;
+  @HiveField(7)
 	int friendsCount;
+  @HiveField(8)
 	int pagefriendsCount;
+  @HiveField(9)
 	int statusesCount;
+  @HiveField(10)
 	int videoStatusCount;
+  @HiveField(11)
 	int favouritesCount;
 
   UserLite({this.id,this.idstr,this.screenName,this.name,this.iconId,this.description,this.favouritesCount,this.followersCount,this.friendsCount,this.pagefriendsCount,this.statusesCount,this.videoStatusCount});

@@ -10,8 +10,9 @@ class CommentProvider{
     var result;
     result=CommentApi.getCommentsShow(id, sinceId, maxId)
       .then((json)=>Comments.fromJson(json))
-      .then((comments){
-        UrlProvider.saveUrlInfoToRAM(comments.comments);
+      .then((comments) async {
+        //UrlProvider.saveUrlInfoToRAM(comments.comments);
+        await UrlProvider.saveUrlInfoToHive(comments.comments);
         return ProviderResult(comments,true);
       })
       .catchError((e)=>ProviderResult(null,true));

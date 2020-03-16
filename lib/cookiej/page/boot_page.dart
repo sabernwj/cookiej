@@ -7,10 +7,14 @@ import 'package:cookiej/cookiej/config/style.dart';
 import 'package:cookiej/cookiej/db/sql_manager.dart';
 import 'package:cookiej/cookiej/page/main_page.dart';
 import 'package:cookiej/cookiej/provider/access_provider.dart';
+import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
+import 'package:cookiej/cookiej/provider/url_provider.dart';
 import 'package:cookiej/cookiej/utils/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'dart:async';
 
 import 'package:redux/redux.dart';
@@ -32,6 +36,10 @@ class _BootPageState extends State<BootPage> {
     });
     //初始化数据库
     await SqlManager.init();
+    await Hive.initFlutter();
+    await UrlProvider.init();
+    await PictureProvider.init();
+    //await Hive.openBox('cookiej_hive_database');
     //加载本地用户信息
     store.dispatch(InitAccessState());
     //加载主题

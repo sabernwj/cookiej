@@ -20,8 +20,8 @@ class WeiboProvider{
     var result;
     result= WeiboApi.getTimeLine(sinceId,maxId,timelineType,extraParams)
       .then((json)=>Weibos.fromJson(json))
-      .then((weibos){
-        UrlProvider.saveUrlInfoToRAM(weibos.statuses);
+      .then((weibos) async {
+        await UrlProvider.saveUrlInfoToHive(weibos.statuses);
         return ProviderResult(weibos,true);
       })
       .catchError((e)=>ProviderResult(null,false));
@@ -33,8 +33,8 @@ class WeiboProvider{
     var result;
     result=WeiboApi.getReposts(id,sinceId,maxId)
       .then((json)=>Reposts.fromJson(json))
-      .then((repost){
-        UrlProvider.saveUrlInfoToRAM(repost.reposts);
+      .then((repost) async {
+        await UrlProvider.saveUrlInfoToHive(repost.reposts);
         return ProviderResult(repost, true);
       })
       .catchError((e)=> ProviderResult(null, false));
@@ -46,8 +46,8 @@ class WeiboProvider{
     var result;
     result=WeiboApi.getStatusesShow(id)
       .then((json)=>Weibo.fromJson(json))
-      .then((weibo){
-        UrlProvider.saveUrlInfoToRAM([weibo]);
+      .then((weibo) async {
+        await UrlProvider.saveUrlInfoToHive([weibo]);
         return ProviderResult(weibo,true);
       })
       .catchError((e)=>ProviderResult(null,false));

@@ -1,6 +1,7 @@
 import 'package:cookiej/cookiej/page/widget/content_widget.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import '../../../model/comment.dart';
 class CommentWidget extends StatelessWidget{
@@ -17,7 +18,12 @@ class CommentWidget extends StatelessWidget{
           Container(
             child: Row(
               children: <Widget>[
-                SizedBox(child: CircleAvatar(backgroundImage:PictureProvider.getPictureFromId(comment.user.iconId)),width: 36,height: 36,),
+                ExtendedImage.network(
+                  PictureProvider.getImgUrlFromId(comment.user.iconId),
+                  shape:BoxShape.circle,
+                  width:36,
+                  height: 36,
+                ),
                 Container(
                   child: Column(
                     children: <Widget>[

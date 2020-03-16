@@ -1,7 +1,9 @@
+import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/provider/weibo_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import './weibo_widget.dart';
 import 'package:cookiej/cookiej/model/weibos.dart';
@@ -26,6 +28,7 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
   Weibos laterHomeTimeline;
   var _weiboList=<WeiboLite>[];
   Future<bool> _isStartLoad;
+  String uid;
 
   @override
   bool get wantKeepAlive => true;
@@ -38,46 +41,60 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return FutureBuilder(
-      future:_isStartLoad,
-      builder: (BuildContext context,snaphot){
-        if(snaphot.data==true){
-          return SmartRefresher(
-            enablePullDown: true,
-            enablePullUp: true,
-            header: ClassicHeader(
-              refreshingText: '刷新中',
-              failedText: '刷新失败',
-              completeText:'刷新成功' ,
-              releaseText: '刷新微博',
-              idleText: '下拉刷新',
-            ),
-            footer: ClassicFooter(
-              failedText: '加载失败',
-              idleText: '加载更多',
-              loadingText: '加载中',
-              noDataText: '已无更多数据'
-            ),
-            controller: _refreshController,
-            child: ListView.builder(
-              itemBuilder: (BuildContext context,int index){
-                  return GestureDetector(
-                    child: WeiboWidget(_weiboList[index]),
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(_weiboList[index].id)));
-                    },
-                  );
-              },
-              itemCount: _weiboList.length,
-              physics: const AlwaysScrollableScrollPhysics(),
-            ),
-            onRefresh: refreshData,
-            onLoading: loadMoreData,
-          );
-        }else{
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+    return StoreBuilder<AppState>(
+      builder: (context,store){
+        return FutureBuilder(
+          future:_isStartLoad,
+          builder: (BuildContext context,snaphot){
+            if(snaphot.data==true){
+              return SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: true,
+                header: ClassicHeader(
+                  refreshingText: '刷新中',
+                  failedText: '刷新失败',
+                  completeText:'刷新成功' ,
+                  releaseText: '刷新微博',
+                  idleText: '下拉刷新',
+                ),
+                footer: ClassicFooter(
+                  failedText: '加载失败',
+                  canLoadingText: '加载更多',
+                  idleText: '加载更多',
+                  loadingText: '加载中',
+                  noDataText: '已无更多数据'
+                ),
+                controller: _refreshController,
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context,int index){
+                      return GestureDetector(
+                        child: WeiboWidget(_weiboList[index]),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(_weiboList[index].id)));
+                        },
+                      );
+                  },
+                  itemCount: _weiboList.length,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                ),
+                onRefresh: refreshData,
+                onLoading: loadMoreData,
+              );
+            }else{
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        );
+      },
+      onDidChange: (store){
+        if(uid!=store.state.accessState.currentAccess.uid){
+          uid=store.state.accessState.currentAccess.uid;
+          setState(() {
+            _weiboList=[];
+            startLoadData();
+          });
         }
       },
     );

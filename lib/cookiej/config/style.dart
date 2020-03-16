@@ -6,10 +6,10 @@ class CookieJColors{
   
 
   static final Map<String,MaterialColor> themeColors= {
+    '薄荷绿':Colors.teal,
     '经典黑':CookieJColors.customBlack,
     '谷歌蓝':Colors.blue,
     '琥珀黄':Colors.amber,
-    '薄荷绿':Colors.teal,
     '钢蓝灰':Colors.blueGrey,
     '胡萝卜':Colors.orange,
     '天空蓝':Colors.cyan,

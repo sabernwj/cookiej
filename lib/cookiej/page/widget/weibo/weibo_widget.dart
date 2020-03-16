@@ -1,4 +1,5 @@
 
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
@@ -25,7 +26,13 @@ class WeiboWidget extends StatelessWidget {
           Row(
             children: <Widget>[
               //头像
-              Container(child: CircleAvatar(backgroundImage: PictureProvider.getPictureFromId(weibo.user.iconId),radius: 20)),
+                ExtendedImage.network(
+                  PictureProvider.getImgUrlFromId(weibo.user.iconId),
+                  shape:BoxShape.circle,
+                  width:40,
+                  height: 40,
+                  //border: Border.all(color:_theme.primaryColor),
+                ),
               Container(
                 child: Column(
                   children: <Widget>[
@@ -53,7 +60,7 @@ class WeiboWidget extends StatelessWidget {
     if(weibo.retweetedWeibo!=null){
       (returnWidget.child as Column).children.add(GestureDetector(
         child: Container(
-          child: ContentWidget(weibo.retweetedWeibo.rWeibo),
+          child: ContentWidget(weibo.retweetedWeibo),
           alignment: Alignment.topLeft,
           color: _theme.unselectedWidgetColor,
           //color: Color(0xFFF5F5F5)
@@ -61,7 +68,7 @@ class WeiboWidget extends StatelessWidget {
           padding: const EdgeInsets.only(left: 10,top: 6,right: 4,bottom: 10),
         ),
         onTap:(){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(weibo.retweetedWeibo.rWeibo.id)));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(weibo.retweetedWeibo.id)));
         },
       ));
     }

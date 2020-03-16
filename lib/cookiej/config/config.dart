@@ -49,3 +49,11 @@ enum CommentsType{
   Hot,
   Time
 }
+
+enum CookieJHiveType{
+  WeiboLite,
+  UserLite,
+  Annotations,
+  DataObject,
+  
+}

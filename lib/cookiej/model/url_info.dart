@@ -1,14 +1,28 @@
+import 'package:hive/hive.dart';
+
 import 'annotations.dart';
 
+part 'url_info.g.dart';
+
+@HiveType(typeId: 2)
 class UrlInfo {
+  @HiveField(0)
   bool result;
+  @HiveField(1)
   String urlShort;
+  @HiveField(2)
   String urlLong;
+  @HiveField(3)
   int transcode;
+  @HiveField(4)
   String description;
+  @HiveField(5)
   List<Annotations> annotations;
+  @HiveField(6)
   int type;
+  @HiveField(7)
   String title;
+  @HiveField(8)
   int lastModified;
 
   UrlInfo(
@@ -31,6 +45,9 @@ class UrlInfo {
     if (json['annotations'] != null) {
       annotations = new List<Annotations>();
       json['annotations'].forEach((v) {
+        if(v is! Map<String,dynamic>){
+          print(v.runtimeType);
+        }
         annotations.add(new Annotations.fromJson(v));
       });
     }
