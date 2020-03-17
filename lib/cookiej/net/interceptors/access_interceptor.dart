@@ -5,6 +5,7 @@ import 'package:cookiej/cookiej/utils/utils.dart';
 
 class AccessInterceptor extends InterceptorsWrapper{
   final Access access;
+  int httpCount=0;
   AccessInterceptor(this.access);
   @override
   onRequest(RequestOptions options) async{
@@ -12,8 +13,8 @@ class AccessInterceptor extends InterceptorsWrapper{
       var url=options.path;
       var params= {"access_token":access.accessToken};
       options.path=Utils.formatUrlParams(url, params);
-      // httpcount++;
-      // print('Http已发起请求次数'+httpcount.toString()+':'+url);
+      httpCount++;
+      print('${access.uid} 已发起请求次数'+httpCount.toString()+':'+url);
       //加载cookie
     }
     return options;

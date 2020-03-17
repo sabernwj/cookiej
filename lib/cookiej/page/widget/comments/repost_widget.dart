@@ -20,12 +20,13 @@ class RepostWidget extends StatelessWidget {
           Container(
             child: Row(
               children: <Widget>[
-                ExtendedImage.network(
-                  PictureProvider.getImgUrlFromId(repost.user.iconId),
-                  shape:BoxShape.circle,
-                  width:36,
-                  height: 36,
-                ),
+                // ExtendedImage.network(
+                //   PictureProvider.getImgUrlFromId(repost.user.iconId),
+                //   shape:BoxShape.circle,
+                //   width:36,
+                //   height: 36,
+                // ),
+                SizedBox(child: CircleAvatar(backgroundImage:PictureProvider.getPictureFromId(repost.user.iconId)),width: 36,height: 36,),
                 Container(
                   child: Column(
                     children: <Widget>[

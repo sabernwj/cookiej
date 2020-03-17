@@ -1,9 +1,13 @@
 import 'dart:convert';
-
+import 'package:cookiej/cookiej/config/config.dart';
+import 'package:hive/hive.dart';
 import 'package:cookiej/cookiej/model/weibo_lite.dart';
 
+part 'weibos.g.dart';
 
+@HiveType(typeId: CookieJHiveType.Weibos)
 class Weibos {
+  @HiveField(0)
   List<WeiboLite> statuses;
   bool hasVisible;
   int previousCursor;
@@ -11,11 +15,14 @@ class Weibos {
   int totalNumber;
   int interval;
   int uveBlank;
+  @HiveField(1)
   int sinceId;
+  @HiveField(2)
   int maxId;
   int hasUnread;
 
-  factory Weibos(jsonStr) => jsonStr == null ? null : jsonStr is String ? new Weibos.fromJson(json.decode(jsonStr)) : new Weibos.fromJson(jsonStr);
+  Weibos({this.statuses,this.sinceId,this.maxId});
+  //factory Weibos(jsonStr) => jsonStr == null ? null : jsonStr is String ? new Weibos.fromJson(json.decode(jsonStr)) : new Weibos.fromJson(jsonStr);
   
   Weibos.fromJson(jsonRes){
     hasVisible=jsonRes["hasvisible"];

@@ -22,10 +22,10 @@ class WeiboListview extends StatefulWidget {
 //微博列表，目前叫timeline是以时间倒序来显示微博
 //后面会有热门微博，推荐微博之类的非时间线微博，可在此组件上复用也可考虑再开一个组件
 class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveClientMixin{
-  final RefreshController _refreshController=RefreshController(initialRefresh:false);
+  RefreshController _refreshController=RefreshController(initialRefresh:false);
   Weibos homeTimeline;
-  Weibos earlyHomeTimeline;
-  Weibos laterHomeTimeline;
+  Weibos oldHomeTimeline;
+  Weibos newHomeTimeline;
   var _weiboList=<WeiboLite>[];
   Future<bool> _isStartLoad;
   String uid;
@@ -35,7 +35,6 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
 
   @override
   void initState(){
-    _isStartLoad=startLoadData();
     super.initState();
   }
   @override
@@ -68,12 +67,19 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
                 child: ListView.builder(
                   itemBuilder: (BuildContext context,int index){
                       return GestureDetector(
-                        child: WeiboWidget(_weiboList[index]),
+                        child: Container(
+                          child:WeiboWidget(_weiboList[index]),
+                          color:Theme.of(context).dialogBackgroundColor,
+                          margin: EdgeInsets.only(bottom:12),
+                        ),
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(_weiboList[index].id)));
                         },
                       );
                   },
+                  // separatorBuilder: (context,index){
+                  //   return Divider(height:12,color:Colors.grey);
+                  // },
                   itemCount: _weiboList.length,
                   physics: const AlwaysScrollableScrollPhysics(),
                 ),
@@ -88,12 +94,17 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
           },
         );
       },
-      onDidChange: (store){
+      onInit: (store){
+        uid=store.state.accessState.currentAccess.uid;
+        _isStartLoad=startLoadData();
+      },
+      onWillChange: (oldStore,store){
         if(uid!=store.state.accessState.currentAccess.uid){
           uid=store.state.accessState.currentAccess.uid;
-          setState(() {
+          setState((){
             _weiboList=[];
-            startLoadData();
+            _refreshController.resetNoData();
+            _isStartLoad=startLoadData();
           });
         }
       },
@@ -102,9 +113,10 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
   ///开始获取微博
   ///(目前从网络获取，可添加从本地缓存中读取)
   Future<bool> startLoadData() async{
-    var result=WeiboProvider.getTimeLine(timelineType: widget.timelineType,extraParams: widget.extraParams).then((timeline){
+    var result=WeiboProvider.getTimeLine(uid: uid,timelineType: widget.timelineType,extraParams: widget.extraParams).then((timeline){
       homeTimeline=timeline.data;
-      laterHomeTimeline=homeTimeline;
+      newHomeTimeline=homeTimeline;
+      oldHomeTimeline=homeTimeline;
       for(var weibo in homeTimeline.statuses){
         _weiboList.add(weibo);
       }
@@ -118,18 +130,15 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
   ///加载更多
   void loadMoreData()async{
     //解释一下，这里的意思是第一次获取更早的微博，最早微博时间线取当前主页时间线
-    if(earlyHomeTimeline==null){
-      earlyHomeTimeline=homeTimeline;
-    }
-    if(earlyHomeTimeline.maxId==0){
+    if(oldHomeTimeline.maxId==0){
       _refreshController.loadNoData();
       return;
     }
-    WeiboProvider.getTimeLine(maxId: earlyHomeTimeline.maxId??0,timelineType: widget.timelineType,extraParams: widget.extraParams).then((timeline){
-      earlyHomeTimeline=timeline.data;
-      if(earlyHomeTimeline!=null){
+    WeiboProvider.getTimeLine(maxId: oldHomeTimeline.maxId??0,timelineType: widget.timelineType,extraParams: widget.extraParams).then((timeline){
+      oldHomeTimeline=timeline.data;
+      if(oldHomeTimeline!=null){
         setState(() {
-          for(var weibo in earlyHomeTimeline.statuses){
+          for(var weibo in oldHomeTimeline.statuses){
             _weiboList.add(weibo);
           }
         });
@@ -143,15 +152,22 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
   ///刷新微博
   void refreshData() async{
     var weiboList=<WeiboLite>[];
-    WeiboProvider.getTimeLine(sinceId: laterHomeTimeline.sinceId??0,timelineType: widget.timelineType,extraParams: widget.extraParams).then((timeline){
-      laterHomeTimeline=timeline.data;
-      if(laterHomeTimeline!=null){
-        for(var weibo in laterHomeTimeline.statuses){
+    WeiboProvider.getTimeLine(sinceId: newHomeTimeline.sinceId??0,timelineType: widget.timelineType,extraParams: widget.extraParams).then((timeline){
+      newHomeTimeline=timeline.data;
+      if(newHomeTimeline!=null){
+        for(var weibo in newHomeTimeline.statuses){
           weiboList.add(weibo);
         }
         setState(() {
           _weiboList.insertAll(0, weiboList);
         });
+        //刷新成功，更新本地缓存
+        Weibos tempWeibos=Weibos(
+          statuses: _weiboList,
+          sinceId: _weiboList[0].id,
+          maxId: _weiboList[_weiboList.length-1].id
+        );
+        WeiboProvider.putIntoWeibosBox(uid, tempWeibos);
       }
       _refreshController.refreshCompleted();
     }).catchError((err){

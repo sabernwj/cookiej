@@ -2,7 +2,7 @@ import 'user_lite.dart';
 import 'long_text.dart';
 
 abstract class Content{
-	String createdAt;
+	DateTime createdAt;
 	int id;
 	String text;
 	UserLite user;

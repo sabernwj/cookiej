@@ -10,6 +10,7 @@ import 'package:cookiej/cookiej/provider/access_provider.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
 import 'package:cookiej/cookiej/provider/url_provider.dart';
+import 'package:cookiej/cookiej/provider/weibo_provider.dart';
 import 'package:cookiej/cookiej/utils/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -39,6 +40,7 @@ class _BootPageState extends State<BootPage> {
     await Hive.initFlutter();
     await UrlProvider.init();
     await PictureProvider.init();
+    await WeiboProvider.init();
     //await Hive.openBox('cookiej_hive_database');
     //加载本地用户信息
     store.dispatch(InitAccessState());

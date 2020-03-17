@@ -1,9 +1,10 @@
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
+import 'package:cookiej/cookiej/config/config.dart';
 import 'package:hive/hive.dart';
 part 'user_lite.g.dart';
 
 ///轻量版的用户信息
-@HiveType(typeId: 1)
+@HiveType(typeId: CookieJHiveType.UserLite)
 class UserLite {
   @HiveField(0)
   int id;

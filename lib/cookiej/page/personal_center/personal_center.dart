@@ -44,11 +44,7 @@ class PersonalCenter extends StatelessWidget {
                       child:Row(
                         children: <Widget>[
                           SizedBox(
-                            //头像
-                            child: ExtendedImage.network(
-                              PictureProvider.getImgUrlFromId(store.state.currentUser.iconId),
-                              shape: BoxShape.circle,
-                            ),
+                            child: CircleAvatar(backgroundImage: PictureProvider.getPictureFromId(store.state.currentUser.iconId),radius: 20),
                             width: 64,height: 64,
                           ),
                           Expanded(
@@ -156,13 +152,13 @@ class PersonalCenter extends StatelessWidget {
         itemList.add(PopupMenuItem(
           key: _itemKey,
           child:ListTile(
-            leading:ExtendedImage.network(
-              PictureProvider.getImgUrlFromId(user.iconId,sinaImgSize: SinaImgSize.thumbnail),
-              shape:BoxShape.circle,
-              width:36,
-              height: 36,
-            ),
-            //leading: CircleAvatar(backgroundImage:PictureProvider.getPictureFromId(user.iconId,sinaImgSize: SinaImgSize.thumbnail)),
+            // leading:ExtendedImage.network(
+            //   PictureProvider.getImgUrlFromId(user.iconId,sinaImgSize: SinaImgSize.thumbnail),
+            //   shape:BoxShape.circle,
+            //   width:36,
+            //   height: 36,
+            // ),
+            leading: CircleAvatar(backgroundImage:PictureProvider.getPictureFromId(user.iconId,sinaImgSize: SinaImgSize.thumbnail)),
             title: Text(user.screenName),
             trailing: IconButton(padding: EdgeInsets.all(0), icon: Icon(Icons.remove_circle,color: Colors.red,), onPressed: (){
               Navigator.pop(context);

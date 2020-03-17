@@ -18,12 +18,13 @@ class CommentWidget extends StatelessWidget{
           Container(
             child: Row(
               children: <Widget>[
-                ExtendedImage.network(
-                  PictureProvider.getImgUrlFromId(comment.user.iconId),
-                  shape:BoxShape.circle,
-                  width:36,
-                  height: 36,
-                ),
+                // ExtendedImage.network(
+                //   PictureProvider.getImgUrlFromId(comment.user.iconId),
+                //   shape:BoxShape.circle,
+                //   width:36,
+                //   height: 36,
+                // ),
+                SizedBox(child: CircleAvatar(backgroundImage:PictureProvider.getPictureFromId(comment.user.iconId)),width: 36,height: 36,),
                 Container(
                   child: Column(
                     children: <Widget>[

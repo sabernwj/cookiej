@@ -1,15 +1,18 @@
+import 'package:cookiej/cookiej/config/config.dart';
+import 'package:cookiej/cookiej/utils/utils.dart';
+
 import 'user_lite.dart';
 import 'content.dart';
 import 'package:hive/hive.dart';
 
 part 'weibo_lite.g.dart';
 
-@HiveType(typeId: 0)
+@HiveType(typeId: CookieJHiveType.WeiboLite)
 class WeiboLite extends Content{
   @HiveField(0)
 	int id;
   @HiveField(1)
-  String createdAt;
+  DateTime createdAt;
   @HiveField(2)
 	String text;
   @HiveField(3)
@@ -36,7 +39,7 @@ class WeiboLite extends Content{
   WeiboLite({this.idstr,this.id,this.user,this.attitudesCount,this.commentsCount,this.createdAt,this.favorited,this.mid,this.picUrls,this.repostsCount,this.retweetedWeibo,this.text,this.source});
 
   WeiboLite.fromJson(Map<String, dynamic> json){
-		createdAt = json['created_at'];
+		createdAt = createdAt = Utils.parseWeiboTimeStrToUtc(json['created_at']);;
 		id = json['id'];
 		idstr = json['idstr'];
 		mid = json['mid'];
@@ -45,7 +48,8 @@ class WeiboLite extends Content{
 		repostsCount = json['reposts_count'];
 		commentsCount = json['comments_count'];
 		attitudesCount = json['attitudes_count'];
-    source = json['source'];
+    //此处对来源进行了格式化
+    source = json['source'].replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),'');
     user = json['user'] != null ? UserLite.fromJson(json['user']) : null;
 		if (json['pic_urls'] != null) {
 			picUrls = List<String>();

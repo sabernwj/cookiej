@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:cookiej/cookiej/model/content.dart';
 import 'package:cookiej/cookiej/model/url_info.dart';
-import 'package:cookiej/cookiej/model/weibo.dart';
 import 'package:cookiej/cookiej/net/url_api.dart';
 import 'package:cookiej/cookiej/provider/provider_result.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
@@ -10,10 +11,10 @@ import 'dart:async';
 
 class UrlProvider{
   //static Map<String,UrlInfo> urlInfoRAMCache=new Map();
-  static Box _urlInfoBox;
+  static Box<String> _urlInfoBox;
 
   static Future<void> init() async {
-    _urlInfoBox=await Hive.openBox('url_info_box');
+    _urlInfoBox=await Hive.openBox<String>('url_info_box');
     //.registerAdapter(UrlInfoAdapter());
   }
   ///将url信息缓存至内存
@@ -62,12 +63,12 @@ class UrlProvider{
   }
 
   static ProviderResult<UrlInfo> getUrlInfo(String url) {
-    var urlJson=_urlInfoBox.get(url);
+    var urlJsonStr=_urlInfoBox.get(url);
       // ??UrlApi.getUrlsInfo([url]).then((json){
       //   _urlInfoBox.put(url, json['urls'][0]);
       //   return json['urls'][0];
       // }).catchError((e)=>null);
-    if(urlJson!=null) return ProviderResult(UrlInfo.fromJson(urlJson.cast<String,dynamic>()), true);
+    if(urlJsonStr!=null) return ProviderResult(UrlInfo.fromJson(json.decode(urlJsonStr)), true);
     else return ProviderResult(null, false);
   }
 
@@ -75,11 +76,11 @@ class UrlProvider{
     var shortUrlList=findUrlFromContents(contents);
     if(shortUrlList.length>0 && shortUrlList.length<=20){
       
-      UrlApi.getUrlsInfo(shortUrlList).then((json) async {
-        var map=new Map();
-        (json['urls'] as List<dynamic>).forEach((urlInfoJson){
+      UrlApi.getUrlsInfo(shortUrlList).then((infosJson) async {
+        var map=new Map<dynamic,String>();
+        (infosJson['urls'] as List<dynamic>).forEach((urlInfoJson){
           //将获取到的短链信息存入内存
-          map[urlInfoJson['url_short']]=urlInfoJson;
+          map[urlInfoJson['url_short']]=json.encode(urlInfoJson);
         });
         await _urlInfoBox.putAll(map);
       });

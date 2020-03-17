@@ -1,5 +1,6 @@
 
-import 'package:extended_image/extended_image.dart';
+import 'package:cookiej/cookiej/config/config.dart';
+import 'package:cookiej/cookiej/page/widget/content_Picture_flow.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
@@ -19,53 +20,50 @@ class WeiboWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _theme=Theme.of(context);
-    var returnWidget=Container(
-      child:Column(
-        children: <Widget>[
-          //标题栏
-          Row(
+    var returnWidget=Column(
+      children:[
+        Container(
+          child:Column(
             children: <Widget>[
-              //头像
-                ExtendedImage.network(
-                  PictureProvider.getImgUrlFromId(weibo.user.iconId),
-                  shape:BoxShape.circle,
-                  width:40,
-                  height: 40,
-                  //border: Border.all(color:_theme.primaryColor),
-                ),
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    Text(weibo.user.name,),
-                    Text(Utils.getDistanceFromNow(weibo.createdAt)+'    '+weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: _theme.primaryTextTheme.overline),
-                    // Text(weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(color:Colors.grey,fontSize: 12))
-                  ],
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                ),
-                margin: const EdgeInsets.only(left: 10),
+              //标题栏
+              Row(
+                children: <Widget>[
+                  //头像
+                  Container(child: CircleAvatar(backgroundImage: PictureProvider.getPictureFromId(weibo.user.iconId,sinaImgSize: SinaImgSize.thumbnail),radius: 20)),
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        Text(weibo.user.name,),
+                        Text(Utils.getDistanceFromNow(weibo.createdAt)+'    '+weibo.source,style: _theme.primaryTextTheme.overline),
+                        // Text(weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(color:Colors.grey,fontSize: 12))
+                      ],
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    margin: const EdgeInsets.only(left: 10),
+                  ),
+                  //预留一下微博组件标题右边内容
+                ],
               ),
-              //预留一下微博组件标题右边内容
+              //微博正文
+              ContentWidget(weibo),
             ],
           ),
-          //微博正文
-          ContentWidget(weibo)
-        ],
-      ),
-      padding: const EdgeInsets.only(left: 12,right: 12,top: 12),
-      margin: const EdgeInsets.only(bottom: 10),
-      color: _theme.dialogBackgroundColor,
-      //color: Colors.white,
+          padding: const EdgeInsets.only(left: 12,right: 12,top: 12,bottom: 4),
+          // margin: const EdgeInsets.only(bottom: 10),
+          // color: _theme.dialogBackgroundColor,
+          //color: Colors.white,
+        )
+      ]
     );
     //判断当前微博是否有转发原微博
     if(weibo.retweetedWeibo!=null){
-      (returnWidget.child as Column).children.add(GestureDetector(
+      returnWidget.children.add(GestureDetector(
         child: Container(
           child: ContentWidget(weibo.retweetedWeibo),
           alignment: Alignment.topLeft,
           color: _theme.unselectedWidgetColor,
           //color: Color(0xFFF5F5F5)
-          margin: EdgeInsets.only(top:4),
-          padding: const EdgeInsets.only(left: 10,top: 6,right: 4,bottom: 10),
+          padding: const EdgeInsets.only(left: 12,right: 12,bottom: 4),
         ),
         onTap:(){
           Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(weibo.retweetedWeibo.id)));
@@ -73,7 +71,7 @@ class WeiboWidget extends StatelessWidget {
       ));
     }
     //来源转发评论点赞显示
-    (returnWidget.child as Column).children.add(Row(
+    returnWidget.children.add(Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         // Expanded(child: Text(weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(color:Colors.grey,fontSize: 12))),

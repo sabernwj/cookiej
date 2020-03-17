@@ -3,8 +3,7 @@ import 'package:cookiej/cookiej/model/url_info.dart';
 import 'package:cookiej/cookiej/provider/emotion_provider.dart';
 import 'package:cookiej/cookiej/provider/url_provider.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
-
-import 'content.dart';
+import 'package:cookiej/cookiej/model/content.dart';
 
 class DisplayContent{
   final ContentType type;

@@ -12,34 +12,22 @@ import 'visible.dart';
 
 class Weibo extends WeiboLite{
 	Visible visible;
-	String createdAt;
-	int id;
-	String idstr;
-	String mid;
 	bool canEdit;
 	int showAdditionalIndication;
-	String text;
 	int textLength;
 	int sourceAllowclick;
 	int sourceType;
-	String source;
-	bool favorited;
 	bool truncated;
 	String inReplyToStatusId;
 	String inReplyToUserId;
 	String inReplyToScreenName;
-	List<String> picUrls;
 	String thumbnailPic;
 	String bmiddlePic;
 	String originalPic;
 	dynamic geo;
 	bool isPaid;
 	int mblogVipType;
-	UserLite user;
 	List<Annotations> annotations;
-	int repostsCount;
-	int commentsCount;
-	int attitudesCount;
 	int pendingApprovalCount;
 	bool isLongText;
 	LongText longText;
@@ -62,47 +50,30 @@ class Weibo extends WeiboLite{
 	int isShowBulletin;
 	CommentManageInfo commentManageInfo;
 	int picNum;
-  ///转发的原微博
-  WeiboLite retweetedWeibo;
 
-	Weibo({this.visible, this.createdAt, this.id, this.idstr, this.mid, this.canEdit, this.showAdditionalIndication, this.text, this.textLength, this.sourceAllowclick, this.sourceType, this.source, this.favorited, this.truncated, this.inReplyToStatusId, this.inReplyToUserId, this.inReplyToScreenName, this.picUrls, this.thumbnailPic, this.bmiddlePic, this.originalPic, this.geo, this.isPaid, this.mblogVipType, this.user, this.annotations, this.repostsCount, this.commentsCount, this.attitudesCount, this.pendingApprovalCount, this.isLongText, this.longText, this.rewardExhibitionType, this.hideFlag, this.mlevel, this.bizFeature, this.pageType, this.hasActionTypeCard, this.darwinTags, this.hotWeiboTags, this.textTagTips, this.mblogtype, this.userType, this.moreInfoType, this.numberDisplayStrategy, this.positiveRecomFlag, this.contentAuth, this.gifIds, this.isShowBulletin, this.commentManageInfo, this.picNum});
+	Weibo({this.visible, this.canEdit, this.showAdditionalIndication, this.textLength, this.sourceAllowclick, this.sourceType, this.truncated, this.inReplyToStatusId, this.inReplyToUserId, this.inReplyToScreenName, this.thumbnailPic, this.bmiddlePic, this.originalPic, this.geo, this.isPaid, this.mblogVipType, this.annotations, this.pendingApprovalCount, this.isLongText, this.longText, this.rewardExhibitionType, this.hideFlag, this.mlevel, this.bizFeature, this.pageType, this.hasActionTypeCard, this.darwinTags, this.hotWeiboTags, this.textTagTips, this.mblogtype, this.userType, this.moreInfoType, this.numberDisplayStrategy, this.positiveRecomFlag, this.contentAuth, this.gifIds, this.isShowBulletin, this.commentManageInfo, this.picNum});
 
-	Weibo.fromJson(Map<String, dynamic> json) {
+	Weibo.fromJson(Map<String, dynamic> json) :super.fromJson(json) {
 		visible = json['visible'] != null ? new Visible.fromJson(json['visible']) : null;
-		createdAt = json['created_at'];
-		id = json['id'];
-		idstr = json['idstr'];
-		mid = json['mid'];
 		canEdit = json['can_edit'];
 		showAdditionalIndication = json['show_additional_indication'];
-		text = json['text'];
 		textLength = json['textLength'];
 		sourceAllowclick = json['source_allowclick'];
 		sourceType = json['source_type'];
-		source = json['source'];
-		favorited = json['favorited'];
 		truncated = json['truncated'];
 		inReplyToStatusId = json['in_reply_to_status_id'];
 		inReplyToUserId = json['in_reply_to_user_id'];
 		inReplyToScreenName = json['in_reply_to_screen_name'];
-		if (json['pic_urls'] != null) {
-			picUrls = new List<String>();
-			json['pic_urls'].forEach((v) { picUrls.add(v['thumbnail_pic']); });
-		}
 		thumbnailPic = json['thumbnail_pic'];
 		bmiddlePic = json['bmiddle_pic'];
 		originalPic = json['original_pic'];
 		geo = json['geo'];
 		isPaid = json['is_paid'];
 		mblogVipType = json['mblog_vip_type'];
-		user = json['user'] != null ? new User.fromJson(json['user']) : null;
 		if (json['annotations'] != null) {
 			annotations = new List<Annotations>();
 			json['annotations'].forEach((v) { annotations.add(new Annotations.fromJson(v)); });
 		}
-		repostsCount = json['reposts_count'];
-		commentsCount = json['comments_count'];
-		attitudesCount = json['attitudes_count'];
 		pendingApprovalCount = json['pending_approval_count'];
 		isLongText = json['isLongText'];
 		longText = json['longText'] != null ? new LongText.fromJson(json['longText']) : null;
@@ -135,10 +106,6 @@ class Weibo extends WeiboLite{
 		commentManageInfo = json['comment_manage_info'] != null ? new CommentManageInfo.fromJson(json['comment_manage_info']) : null;
 		picNum = json['pic_num'];
 
-    if(json['retweeted_status']!=null){
-      retweetedWeibo=Weibo.fromJson(json['retweeted_status']);
-      retweetedWeibo.text='@'+retweetedWeibo.user.name+'\n'+retweetedWeibo.text;
-    }
 	}
 
 	Map<String, dynamic> toJson() {

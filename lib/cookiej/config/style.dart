@@ -18,7 +18,7 @@ class CookieJColors{
     '杏黄色':CookieJColors.apricot,
     '少女粉':CookieJColors.girlPink,
   };
-  static const int customWhiteValue=0xFFF5F5F5;
+  static const int customWhiteValue=0xFFFEFEFEF;
   static const int customBlackValue = 0xFF363636;
   static const int salmonPinkValue=0xFFFA8072;
   static const int apricotValue=0xFFF8B878;
@@ -59,7 +59,7 @@ class CookieJColors{
     double luminance=color.computeLuminance();
     color=luminance<0.15&&isDarkMode?Colors.teal:color;
     return ThemeData(
-      fontFamily: CookieJTextStyle.mainFontFamily,
+      fontFamily: null,
       primarySwatch: color,
       brightness: isDarkMode?Brightness.dark:Brightness.light,
       //主颜色属于暗色还是亮色，关乎到文本的黑或白
@@ -84,9 +84,9 @@ class CookieJColors{
           color:luminance<0.15&&!isDarkMode?Colors.blue:color,
           fontSize: CookieJTextStyle.middleTextWhiteSize,
           fontFamily: CookieJTextStyle.iconFontFamily,
-          fontFamilyFallback: [
-            CookieJTextStyle.mainFontFamily
-          ]
+          // fontFamilyFallback: [
+          //   CookieJTextStyle.mainFontFamily
+          // ]
         ),
         body2: TextStyle(fontSize: CookieJTextStyle.middleTextWhiteSize,),
         overline: TextStyle(fontSize:CookieJTextStyle.minTextSize,color:Colors.grey[600],letterSpacing: 0)

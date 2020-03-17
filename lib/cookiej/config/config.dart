@@ -50,10 +50,10 @@ enum CommentsType{
   Time
 }
 
-enum CookieJHiveType{
-  WeiboLite,
-  UserLite,
-  Annotations,
-  DataObject,
-  
+class CookieJHiveType{
+  static const WeiboLite=0;
+  static const UserLite=1;
+  static const Annotations=2;
+  static const DataObject=3;
+  static const Weibos=4;
 }

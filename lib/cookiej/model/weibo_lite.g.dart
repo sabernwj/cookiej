@@ -22,7 +22,7 @@ class WeiboLiteAdapter extends TypeAdapter<WeiboLite> {
       user: fields[3] as UserLite,
       attitudesCount: fields[9] as int,
       commentsCount: fields[8] as int,
-      createdAt: fields[1] as String,
+      createdAt: fields[1] as DateTime,
       favorited: fields[10] as bool,
       mid: fields[4] as String,
       picUrls: (fields[12] as List)?.cast<String>(),

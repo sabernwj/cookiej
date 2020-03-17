@@ -1,15 +1,11 @@
 import 'dart:async';
 
 import 'package:cookiej/cookiej/config/config.dart';
-import 'package:cookiej/cookiej/model/display_content.dart';
+import 'package:cookiej/cookiej/model//snapshot/display_content.dart';
 import 'package:cookiej/cookiej/model/video.dart';
 import 'package:cookiej/cookiej/model/weibo_lite.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/model/content.dart';
-import 'package:cookiej/cookiej/model/url_info.dart';
-import 'package:cookiej/cookiej/model/weibo.dart';
-import 'package:cookiej/cookiej/provider/url_provider.dart';
-import 'package:cookiej/cookiej/utils/utils.dart';
 import 'package:cookiej/cookiej/page/public/user_page.dart';
 import 'package:cookiej/cookiej/page/public/webview_with_title.dart';
 import 'package:cookiej/cookiej/provider/emotion_provider.dart';
@@ -34,11 +30,8 @@ import 'show_image_view.dart';
 class ContentWidget extends StatelessWidget {
 
   final Content content;
-  final List<Widget> displayWidgetList=<Widget>[];
-  final List<Widget> secondDisplayWidget=<Widget>[];
   final List<DisplayContent> displayContentList;
-  TextStyle commonTextStyle;
-  TextStyle linkTextStyle;
+  
   ///轻模式，不显示多媒体信息，应用链接化
   final bool isLightMode;
   ContentWidget(this.content,{
@@ -46,23 +39,38 @@ class ContentWidget extends StatelessWidget {
     }):displayContentList=DisplayContent.analysisContent(content);
   @override
   Widget build(BuildContext context) {
-    commonTextStyle=Theme.of(context).textTheme.body1;
-    linkTextStyle=Theme.of(context).primaryTextTheme.body1;
-    displayWidgetList.add(isLightMode?factoryTextWidgetLight(context, displayContentList):factoryTextWidget(context, displayContentList));
-    displayWidgetList.addAll(secondDisplayWidget);
-    typeAction(context);
     return Container(
       child:Column(
-        children: displayWidgetList,
+        children: getDisplayWidget(context),
         crossAxisAlignment: CrossAxisAlignment.start,
       ),
-      margin: EdgeInsets.only(top:4),
     );
   }
 
+  List<Widget> getDisplayWidget(BuildContext context){
+    if(isLightMode){
+      return[factoryTextWidgetLight(context, displayContentList)];
+    }else{
+      final displayWidgetList= factoryContentWidget(context, displayContentList);
+      //如果是微博，则可能带图片
+      if(content is WeiboLite){
+        var weibo=content as WeiboLite;
+        if(weibo.picUrls.length>0){
+          displayWidgetList.add(factoryImagesWidget(context,weibo.picUrls.map((picUrl)=>picUrl).toList(),sinaImgSize: SinaImgSize.bmiddle));
+        }
+      }
+      return displayWidgetList;
+    }
+  }
+
   ///生成显示的内容部分
-  Widget factoryTextWidget(BuildContext context, List<DisplayContent> displayContentList){
-    var listInlineSpan=<InlineSpan>[];
+  List<Widget> factoryContentWidget(BuildContext context, List<DisplayContent> displayContentList){
+    final returnWidgets=<Widget>[];
+    final listInlineSpan=<InlineSpan>[];
+    final secondDisplayWidget=<Widget>[];
+    var imgWidth=(MediaQuery.of(context).size.width-32)/3;
+    var commonTextStyle=Theme.of(context).textTheme.body1;
+    var linkTextStyle=Theme.of(context).primaryTextTheme.body1;
     displayContentList.forEach((displayContent){
       switch(displayContent.type){
         case ContentType.Text:
@@ -92,27 +100,48 @@ class ContentWidget extends StatelessWidget {
           break;
         case ContentType.Video:
           //先展示下视频封面
-          secondDisplayWidget.add(factoryImagesWidget(context, [(displayContent.info.annotations[0].object as Video).image.url],sinaImgSize: SinaImgSize.thumbnail));
+          secondDisplayWidget.add(
+            Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Container(
+                  width: imgWidth*1.8,
+                  height: imgWidth*1.2,
+                  child: Image(
+                    image: PictureProvider.getPictureFromUrl((displayContent.info.annotations[0].object as Video).image.url),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Icon(
+                  Icons.play_circle_outline,
+                  size: 48,
+                  color: Theme.of(context).accentColor,
+                ),
+              ],
+            ),
+          );
           break;
         default:
           listInlineSpan.add(TextSpan(text: displayContent.text,style:linkTextStyle));
       }
     });
-    if(listInlineSpan.isEmpty){
-      return Container();
-    }
-    return Container(
+    returnWidgets.add(Container(
       child: RichText(
         text: TextSpan(
           children: listInlineSpan
         ),
       ),
       alignment: Alignment.topLeft,
-    );
+      margin: EdgeInsets.only(top: 4,bottom:4),
+    ));
+    returnWidgets.addAll(secondDisplayWidget);
+    return returnWidgets;
   }
   ///生成显示的内容部分，不带多媒体信息
   Widget factoryTextWidgetLight(BuildContext context,List<DisplayContent> displayContentList){
     var listInlineSpan=<InlineSpan>[];
+    var commonTextStyle=Theme.of(context).textTheme.body1;
+    var linkTextStyle=Theme.of(context).primaryTextTheme.body1;
     displayContentList.forEach((displayContent){
       switch(displayContent.type){
         case ContentType.Text:
@@ -150,30 +179,31 @@ class ContentWidget extends StatelessWidget {
   }
   ///生成图片部分
   Widget factoryImagesWidget(BuildContext context,List<String> imgUrls,{String sinaImgSize=SinaImgSize.bmiddle}){
+    var imgWidth=(MediaQuery.of(context).size.width-32)/3;
     var imgWidgetList=<Widget>[];
     var imgOnTap=(BuildContext context,List<String> imgUrls,{int index=0}){
       Navigator.push(context,MaterialPageRoute(builder:(context)=>ShowImagesView(imgUrls,currentIndex: index,)));
     };
-    Completer<bool> isImgLoadComplete=new Completer();
     if(imgUrls.length==1){
-      final imgProvider=PictureProvider.getPictureFromUrl(imgUrls[0],sinaImgSize: sinaImgSize);
-      var imgStream=imgProvider.resolve(ImageConfiguration());
-      imgStream.completer.addListener((ImageStreamListener((ImageInfo info,bool _) async{
-        if(isImgLoadComplete.isCompleted){
-          return;
+      imgWidgetList.add(GestureDetector(
+        child:ConstrainedBox(
+          child: Image(
+            image: PictureProvider.getPictureFromUrl(imgUrls[0],sinaImgSize: sinaImgSize),
+            fit:BoxFit.cover,
+          ),
+          constraints: BoxConstraints(
+            maxHeight:imgWidth*1.5,
+            minWidth:imgWidth
+          ),
+        ),
+        onTap: (){
+          imgOnTap(context,imgUrls);
         }
-        final imgWidth=info.image.width.toDouble();
-        final imgHeight=info.image.height.toDouble();
-        final imgWidget=Image(image: imgProvider,fit:BoxFit.cover,width:imgWidth/imgHeight<0.42?200:null);
-        imgWidgetList.add(GestureDetector(
-          child:LimitedBox(child: imgWidget,maxHeight: 300),
-          onTap: (){
-            imgOnTap(context,imgUrls);
-          }
-        ));
-        isImgLoadComplete.complete(true);
-      })));
+      ));
     }else if(imgUrls.length>1){
+      if(imgUrls.length<=4){
+        imgWidth=(MediaQuery.of(context).size.width-28)/2;
+      }
       for(var i=0;i<imgUrls.length;i++){
         imgWidgetList.add(
           GestureDetector(
@@ -182,8 +212,8 @@ class ContentWidget extends StatelessWidget {
                 image: PictureProvider.getPictureFromUrl(imgUrls[i],sinaImgSize: sinaImgSize),
                 fit: BoxFit.cover,
               ),
-              width: 119,
-              height: 119,   
+              width: imgWidth,
+              height: imgWidth,   
             ),
             onTap: (){
               imgOnTap(context,imgUrls,index:i);
@@ -191,38 +221,16 @@ class ContentWidget extends StatelessWidget {
           )
         );
       }
-      isImgLoadComplete.complete(true);
     }
     return Container(
-      child: FutureBuilder(
-        future: isImgLoadComplete.future,
-        builder: (context,snaphot){
-          if(snaphot.hasData){
-            if(snaphot.data==true){
-              return Wrap(
-                children: imgWidgetList,
-                spacing: 5.0,
-                runSpacing: 5.0,
-              );
-            }
-          }
-          return Text('图片加载中');
-        },
+      child: Wrap(
+        children: imgWidgetList,
+        spacing: 4,
+        runSpacing: 4.0,
       ),
       alignment: Alignment.topLeft,
-      margin: EdgeInsets.only(top: 5),
+      margin: EdgeInsets.only(bottom:4),
     );
-  }
-
-  ///判断传入的是微博还是评论，做出不同动作
-  void typeAction(BuildContext context){
-    //如果是微博，则可能带图片
-    if(content is WeiboLite){
-      var weibo=content as WeiboLite;
-      if(weibo.picUrls.length>0){
-        displayWidgetList.add(factoryImagesWidget(context,weibo.picUrls.map((picUrl)=>picUrl).toList(),sinaImgSize: SinaImgSize.bmiddle));
-      }
-    }
   }
 }
 

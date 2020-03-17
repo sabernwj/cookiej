@@ -4,9 +4,10 @@ import 'content.dart';
 import 'reply_comment.dart';
 import 'user.dart';
 import 'weibo.dart';
+import 'package:cookiej/cookiej/utils/utils.dart';
 
 class Comment extends Content{
-	String createdAt;
+	DateTime createdAt;
 	int id;
 	int rootid;
 	String rootidstr;
@@ -27,7 +28,7 @@ class Comment extends Content{
 	Comment({this.createdAt, this.id, this.rootid, this.rootidstr, this.floorNumber, this.text, this.disableReply, this.user, this.mid, this.idstr, this.weibo, this.readtimetype,this.replyComment,this.commentBadge,this.replyOriginalText});
 
 	Comment.fromJson(Map<String, dynamic> json) {
-		createdAt = json['created_at'];
+		createdAt = Utils.parseWeiboTimeStrToUtc(json['created_at']);
 		id = json['id'];
 		rootid = json['rootid'];
 		rootidstr = json['rootidstr'];
