@@ -56,4 +56,5 @@ class CookieJHiveType{
   static const Annotations=2;
   static const DataObject=3;
   static const Weibos=4;
+  static const WeiboTimelineType=5;
 }

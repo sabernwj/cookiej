@@ -1,6 +1,5 @@
 
 import 'package:cookiej/cookiej/config/config.dart';
-import 'package:cookiej/cookiej/page/widget/content_Picture_flow.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
@@ -75,9 +74,15 @@ class WeiboWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         // Expanded(child: Text(weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(color:Colors.grey,fontSize: 12))),
-        FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.shareSquare,size: CookieJTextStyle.normalText.fontSize,), label: Text(weibo.repostsCount.toString()),textColor: Colors.grey),
-        FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.comments,size: CookieJTextStyle.normalText.fontSize,), label: Text(weibo.commentsCount.toString()),textColor: Colors.grey),
-        FlatButton.icon(onPressed: (){}, icon: Icon(FontAwesomeIcons.thumbsUp,size: CookieJTextStyle.normalText.fontSize,), label: Text(weibo.attitudesCount.toString()),textColor: Colors.grey),
+        FlatButton.icon(onPressed: (){
+          //转发
+        }, icon: Icon(FontAwesomeIcons.shareSquare,size: CookieJTextStyle.normalText.fontSize,), label: Text(Utils.formatNumToChineseStr(weibo.repostsCount)),textColor: Colors.grey),
+        FlatButton.icon(onPressed: (){
+          //评论
+        }, icon: Icon(FontAwesomeIcons.comments,size: CookieJTextStyle.normalText.fontSize,), label: Text(Utils.formatNumToChineseStr(weibo.commentsCount)),textColor: Colors.grey),
+        FlatButton.icon(onPressed: (){
+          //点赞
+        }, icon: Icon(FontAwesomeIcons.thumbsUp,size: CookieJTextStyle.normalText.fontSize,), label: Text(Utils.formatNumToChineseStr(weibo.attitudesCount)),textColor: Colors.grey),
       ],
     ));
     return returnWidget;

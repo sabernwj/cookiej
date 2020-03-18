@@ -26,6 +26,7 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
   Weibos homeTimeline;
   Weibos oldHomeTimeline;
   Weibos newHomeTimeline;
+  ///即当前显示在页面上的weiboList
   var _weiboList=<WeiboLite>[];
   Future<bool> _isStartLoad;
   String uid;
@@ -78,7 +79,7 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
                       );
                   },
                   // separatorBuilder: (context,index){
-                  //   return Divider(height:12,color:Colors.grey);
+                  //   return(Text(index.toString()));
                   // },
                   itemCount: _weiboList.length,
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -142,6 +143,9 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
             _weiboList.add(weibo);
           }
         });
+        //刷新成功，更新本地缓存
+        //这里考虑把homeTimeline维护成本地缓存的
+        WeiboProvider.putIntoWeibosBox(uid, _weiboList);
       }
       _refreshController.loadComplete();
     }).catchError((err){
@@ -152,7 +156,9 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
   ///刷新微博
   void refreshData() async{
     var weiboList=<WeiboLite>[];
-    WeiboProvider.getTimeLine(sinceId: newHomeTimeline.sinceId??0,timelineType: widget.timelineType,extraParams: widget.extraParams).then((timeline){
+    //之前使用的是weibos的sinceId，发现用过一次后返回的timeLine即weibos的sinceId为0，造成重复叠加，遂使用当前_weibolist的0位weibo的id
+    //loadMoreData暂时没改，需要测试观察一下
+    WeiboProvider.getTimeLine(sinceId: _weiboList[0].id??0,timelineType: widget.timelineType,extraParams: widget.extraParams).then((timeline){
       newHomeTimeline=timeline.data;
       if(newHomeTimeline!=null){
         for(var weibo in newHomeTimeline.statuses){
@@ -162,12 +168,8 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
           _weiboList.insertAll(0, weiboList);
         });
         //刷新成功，更新本地缓存
-        Weibos tempWeibos=Weibos(
-          statuses: _weiboList,
-          sinceId: _weiboList[0].id,
-          maxId: _weiboList[_weiboList.length-1].id
-        );
-        WeiboProvider.putIntoWeibosBox(uid, tempWeibos);
+        //这里考虑把homeTimeline维护成本地缓存的
+        WeiboProvider.putIntoWeibosBox(uid, _weiboList);
       }
       _refreshController.refreshCompleted();
     }).catchError((err){

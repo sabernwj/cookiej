@@ -15,8 +15,10 @@ class Weibos {
   int totalNumber;
   int interval;
   int uveBlank;
+  ///若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博）
   @HiveField(1)
   int sinceId;
+  ///若指定此参数，则返回ID小于或等于max_id的微博
   @HiveField(2)
   int maxId;
   int hasUnread;

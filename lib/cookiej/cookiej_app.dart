@@ -8,6 +8,7 @@ import 'package:cookiej/cookiej/reducer/app_reducer.dart';
 import 'package:cookiej/cookiej/page/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:hive/hive.dart';
 import 'package:redux/redux.dart';
 import 'package:cookiej/cookiej/config/style.dart';
 
@@ -41,5 +42,11 @@ class _CookieJState extends State<CookieJAPP> {
         },
       )
     );
+  }
+
+  @override
+  void dispose(){
+    Hive.close();
+    super.dispose();
   }
 }

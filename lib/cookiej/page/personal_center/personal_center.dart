@@ -5,6 +5,7 @@ import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/action/theme_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/config/style.dart';
+import 'package:cookiej/cookiej/model/weibos.dart';
 import 'package:cookiej/cookiej/page/login/login_page.dart';
 import 'package:cookiej/cookiej/page/personal_center/switch_theme.dart/theme_style.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
@@ -14,6 +15,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:hive/hive.dart';
 import 'package:redux/redux.dart';
 
 class PersonalCenter extends StatelessWidget {
@@ -110,7 +112,7 @@ class PersonalCenter extends StatelessWidget {
           body: Container(
             color: Theme.of(context).cardColor,
             margin: EdgeInsets.only(top:24,bottom: 0),
-            child: ListView(
+            child: Column(
               children:[
                 ListTile(
                   leading: Icon(Icons.wb_sunny),
@@ -133,7 +135,19 @@ class PersonalCenter extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>ThemeStyle()));
                   },
                 ),
-                Divider()
+                Divider(),
+                ListTile(
+                  leading: Icon(Icons.delete),
+                  title: Text('清除HiveDB缓存'),
+                  onTap: (){
+                    Hive.lazyBox<Weibos>('weibos_box').delete(store.state.accessState.currentAccess.uid);
+                    //print(Hive.lazyBox<Weibos>('weibos_box').path);
+                  },
+                  trailing: FutureBuilder(
+                    future: Hive.lazyBox<Weibos>('weibos_box').get(store.state.accessState.currentAccess.uid).then((weibos)=>weibos.statuses.length.toString()),
+                    builder: (context,snaphot)=>Text('已缓存数量${snaphot.data??'0'}',style: _theme.primaryTextTheme.overline)
+                  )
+                )
               ]
             ),
           )

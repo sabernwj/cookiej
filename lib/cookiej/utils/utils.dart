@@ -34,6 +34,13 @@ class Utils {
     return distance.inSeconds.toString()+'秒前';
   }
   
+  ///将数字转化为文字
+  static String formatNumToChineseStr(int number){
+    if(number>=1000&&number<10000) return '${(number/1000).toStringAsFixed(1)}k';
+    else if(number>=10000) return '${(number/10000).toStringAsFixed(1)}万';
+    return number.toString();
+  }
+
   ///格式化url地址和参数
   static String formatUrlParams(String url,Map<String,String> params){
     if(!url.contains("?")){

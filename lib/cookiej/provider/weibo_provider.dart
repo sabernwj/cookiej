@@ -21,7 +21,12 @@ class WeiboProvider{
     Hive.registerAdapter(UserLiteAdapter());
   }
 
-  static Future<void> putIntoWeibosBox(String uid, Weibos weibos) async{
+  static void putIntoWeibosBox(String uid, List<WeiboLite> weiboList) {
+      Weibos weibos=Weibos(
+        statuses: weiboList,
+        sinceId: weiboList[0].id,
+        maxId: weiboList[weiboList.length-1].id
+      );
     _weibosBox.put(uid, weibos);
     print('存储后_weibosBox容量为${weibos.statuses.length}');
     print('$uid 缓存微博成功,sinceId:${weibos.sinceId},maxId:${weibos.maxId}');
@@ -53,7 +58,7 @@ class WeiboProvider{
       .then((weibos) async {
         //如果uid不为空，说明此次调用是由StartloadData发起的，刷新缓存
         if(uid!=null){
-          putIntoWeibosBox(uid, weibos);
+          putIntoWeibosBox(uid, weibos.statuses);
         }
         await UrlProvider.saveUrlInfoToHive(weibos.statuses);
         return ProviderResult(weibos,true);
