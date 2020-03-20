@@ -15,7 +15,7 @@ class VideoStream {
       this.height});
 
   VideoStream.fromJson(Map<String, dynamic> json) {
-    duration = json['duration'];
+    duration = (json['duration'] is int)?double.parse(json['duration'].toString()):json['duration'];
     format = json['format'];
     width = json['width'];
     hdUrl = json['hd_url'];

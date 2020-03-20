@@ -1,6 +1,7 @@
 import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/provider/weibo_provider.dart';
+import 'package:cookiej/cookiej/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -11,10 +12,12 @@ import 'package:cookiej/cookiej/model/weibo_lite.dart';
 import '../../public/weibo_page.dart';
 import 'dart:async';
 
+///自带刷新加载更多的微博列表
 class WeiboListview extends StatefulWidget {
   final WeiboTimelineType timelineType;
   final Map<String,String> extraParams;
-  WeiboListview({this.timelineType=WeiboTimelineType.Statuses,this.extraParams});
+  final String groupId;
+  WeiboListview({this.timelineType=WeiboTimelineType.Statuses,this.extraParams,this.groupId});
   @override                                                                                                               
   _WeiboListviewState createState() => _WeiboListviewState();
 }
@@ -67,20 +70,11 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
                 controller: _refreshController,
                 child: ListView.builder(
                   itemBuilder: (BuildContext context,int index){
-                      return GestureDetector(
-                        child: Container(
-                          child:WeiboWidget(_weiboList[index]),
-                          color:Theme.of(context).dialogBackgroundColor,
-                          margin: EdgeInsets.only(bottom:12),
-                        ),
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(_weiboList[index].id)));
-                        },
-                      );
+                    return Container(
+                      child:WeiboWidget(_weiboList[index]),
+                      margin: EdgeInsets.only(bottom:12),
+                    );
                   },
-                  // separatorBuilder: (context,index){
-                  //   return(Text(index.toString()));
-                  // },
                   itemCount: _weiboList.length,
                   physics: const AlwaysScrollableScrollPhysics(),
                 ),
@@ -145,7 +139,7 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
         });
         //刷新成功，更新本地缓存
         //这里考虑把homeTimeline维护成本地缓存的
-        WeiboProvider.putIntoWeibosBox(uid, _weiboList);
+        WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(widget.timelineType, uid), _weiboList);
       }
       _refreshController.loadComplete();
     }).catchError((err){
@@ -169,7 +163,7 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
         });
         //刷新成功，更新本地缓存
         //这里考虑把homeTimeline维护成本地缓存的
-        WeiboProvider.putIntoWeibosBox(uid, _weiboList);
+        WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(widget.timelineType, uid), _weiboList);
       }
       _refreshController.refreshCompleted();
     }).catchError((err){

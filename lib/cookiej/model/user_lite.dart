@@ -53,11 +53,11 @@ class UserLite {
     
   }
   UserLite.init(){
-    screenName='用户名';
+    screenName='.用户名.';
     description='个人简介';
-    followersCount=7;
-    friendsCount=7;
-    statusesCount=7;
+    followersCount=0;
+    friendsCount=0;
+    statusesCount=0;
   }
 
   Map<String, dynamic> toJson() {

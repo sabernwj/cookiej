@@ -24,6 +24,7 @@
 .dart_tool/
 .flutter-plugins
 .packages
+.flutter-plugins-dependencies
 .pub-cache/
 .pub/
 build/
@@ -69,5 +70,4 @@ build/
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
-.flutter-plugins-dependencies
 

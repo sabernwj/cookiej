@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cookiej/cookiej/config/config.dart';
-import 'package:cookiej/cookiej/model//snapshot/display_content.dart';
+import 'package:cookiej/cookiej/model//local/display_content.dart';
 import 'package:cookiej/cookiej/model/video.dart';
 import 'package:cookiej/cookiej/model/weibo_lite.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
@@ -180,12 +180,12 @@ class ContentWidget extends StatelessWidget {
   ///生成图片部分
   Widget factoryImagesWidget(BuildContext context,List<String> imgUrls,{String sinaImgSize=SinaImgSize.bmiddle}){
     var imgWidth=(MediaQuery.of(context).size.width-32)/3;
-    var imgWidgetList=<Widget>[];
+    
     var imgOnTap=(BuildContext context,List<String> imgUrls,{int index=0}){
       Navigator.push(context,MaterialPageRoute(builder:(context)=>ShowImagesView(imgUrls,currentIndex: index,)));
     };
     if(imgUrls.length==1){
-      imgWidgetList.add(GestureDetector(
+      return GestureDetector(
         child:ConstrainedBox(
           child: Image(
             image: PictureProvider.getPictureFromUrl(imgUrls[0],sinaImgSize: sinaImgSize),
@@ -199,21 +199,15 @@ class ContentWidget extends StatelessWidget {
         onTap: (){
           imgOnTap(context,imgUrls);
         }
-      ));
+      );
     }else if(imgUrls.length>1){
-      if(imgUrls.length<=4){
-        imgWidth=(MediaQuery.of(context).size.width-28)/2;
-      }
+      var imgWidgetList=<Widget>[];
       for(var i=0;i<imgUrls.length;i++){
         imgWidgetList.add(
           GestureDetector(
-            child:SizedBox(
-              child:Image(
-                image: PictureProvider.getPictureFromUrl(imgUrls[i],sinaImgSize: sinaImgSize),
-                fit: BoxFit.cover,
-              ),
-              width: imgWidth,
-              height: imgWidth,   
+            child:Image(
+              image: PictureProvider.getPictureFromUrl(imgUrls[i],sinaImgSize: sinaImgSize),
+              fit: BoxFit.cover,
             ),
             onTap: (){
               imgOnTap(context,imgUrls,index:i);
@@ -221,16 +215,16 @@ class ContentWidget extends StatelessWidget {
           )
         );
       }
-    }
-    return Container(
-      child: Wrap(
+      return GridView.count(
+        crossAxisCount: imgUrls.length<=4?2:3,
+        crossAxisSpacing: 4,
+        mainAxisSpacing: 4,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
         children: imgWidgetList,
-        spacing: 4,
-        runSpacing: 4.0,
-      ),
-      alignment: Alignment.topLeft,
-      margin: EdgeInsets.only(bottom:4),
-    );
+      );
+    }
+    return Container();
   }
 }
 

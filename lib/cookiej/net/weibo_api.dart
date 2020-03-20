@@ -21,19 +21,19 @@ class WeiboApi{
   ///获取微博列表
   static Future<Map> getTimeLine(int sinceId,int maxId,WeiboTimelineType timelineType,Map<String,String> extraParams) async {
     // Future<Weibos> returnTimeline;
-    var url=API.baseUrl;
+    var url;
     switch (timelineType){
       case WeiboTimelineType.Public:
-        url+=_public;
+        url=_public;
         break;
       case WeiboTimelineType.Statuses:
-        url+=_home;
+        url=_home;
         break;
       case WeiboTimelineType.Bilateral:
-        url+=_bilateral;
+        url=_bilateral;
         break;
       case WeiboTimelineType.User:
-        url+=_user;
+        url=_user;
         break;
       default:
         return null;
@@ -47,19 +47,11 @@ class WeiboApi{
     }
     final result=await API.httpClient.get(Utils.formatUrlParams(url, params));
     return result.data;
-    // return result.then((result) async {
-    //   final weibos=Weibos.fromJson(result.data);
-    //   //await CacheController.cacheUrlInfoToRAM(weibos.statuses);
-    //   return weibos;
-    // }).catchError((e){
-    //   print(e.response.data);
-    //   return null;
-    // });
   }
   
   ///获取转发的微博
   static Future<Map> getReposts(int id,int sinceId,int maxId) async {
-    var url=API.baseUrl+ _repost;
+    var url=_repost;
     var params={
       "since_id":sinceId.toString(),
       "max_id":maxId.toString(),
@@ -79,7 +71,7 @@ class WeiboApi{
 
   ///根据微博ID获取单条微博内容
   static Future<Map> getStatusesShow(int id) async{
-    var url=API.baseUrl+_weibo;
+    var url=_weibo;
     var params={
       'id':id.toString(),
       'isGetLongText':'1'

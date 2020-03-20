@@ -41,7 +41,7 @@ class UserProvider{
       return result;
     }
     //本地获取失败再从网络获取
-    return await getUserInfoFromNet(uid);
+    return await getUserInfoFromNet(uid: uid);
     //获得之后存入本地
 
   }
@@ -75,15 +75,16 @@ class UserProvider{
     return ProviderResult(localUsers, true);
   }
   ///从网络上获取用户信息
-  static Future<ProviderResult<User>> getUserInfoFromNet(String uid) async{
-    var json=await UserApi.getUserInfo(uid);
-    if(json!=null){
-      var result=User.fromJson(json);
-      saveUserInfoToDB(result);
-      return ProviderResult(result,true);
-    }else{
-      return ProviderResult(null, false);
-    }
+  static Future<ProviderResult<User>> getUserInfoFromNet({String uid,String screenName}) async{
+    return UserApi.getUserInfo(uid: uid,screenName: screenName)
+      .then((json){
+        if(json!=null){
+          var result=User.fromJson(json);
+          if(uid!=null) saveUserInfoToDB(result);
+          return ProviderResult(result,true);
+        }
+        return ProviderResult(null, false);
+      }).catchError((e)=>ProviderResult(null, false));
   }
 
   ///将用户信息存入本地数据库

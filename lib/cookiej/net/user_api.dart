@@ -4,11 +4,14 @@ import 'package:cookiej/cookiej/utils/utils.dart';
 
 class UserApi {
 
-  static Future<Map> getUserInfo(String uid) async{
+  static const String userShow='/2/users/show.json';
+
+  static Future<Map> getUserInfo({String uid,String screenName}) async{
     var url='/2/users/show.json';
-    var params={
-      'uid':uid
-    };
+    var params=<String,String>{};
+    if(screenName!= null) params['screen_name']=screenName;
+    if(uid!=null) params['uid']=uid;
+    
     return (await API.httpClient.get(Utils.formatUrlParams(url, params))).data;
   }
 }

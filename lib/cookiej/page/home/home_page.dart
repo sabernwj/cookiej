@@ -32,15 +32,21 @@ class HomePage extends StatelessWidget{
 
   Map<WeiboTimelineType,Tab> getTabItems(){
     var tab=Map<WeiboTimelineType,Tab>();
-    tab[WeiboTimelineType.Statuses]=Tab(text:'全部关注');
-    tab[WeiboTimelineType.Bilateral]=Tab(text:'朋友圈');
+    tab[WeiboTimelineType.Statuses]=Tab(text:WeiboTimelineType.Statuses.text);
+    tab[WeiboTimelineType.Bilateral]=Tab(text:WeiboTimelineType.Bilateral.text);
     return tab;
   }
 
   List<WeiboListview> getTabViews(Map<WeiboTimelineType,Tab> tabs){
     var views=<WeiboListview>[];
     tabs.keys.forEach((timelineType){
-      views.add(new WeiboListview(timelineType: timelineType));
+      //备用添加groupId
+      if(timelineType==WeiboTimelineType.Group){
+        views.add(new WeiboListview(timelineType: timelineType,groupId: null,));
+      }else{
+        views.add(new WeiboListview(timelineType: timelineType));
+      }
+      
     });
     return views;
   }

@@ -9,6 +9,7 @@ import 'package:cookiej/cookiej/model/weibos.dart';
 import 'package:cookiej/cookiej/net/weibo_api.dart';
 import 'package:cookiej/cookiej/provider/provider_result.dart';
 import 'package:cookiej/cookiej/provider/url_provider.dart';
+import 'package:cookiej/cookiej/utils/utils.dart';
 import 'package:hive/hive.dart';
 
 class WeiboProvider{
@@ -21,15 +22,15 @@ class WeiboProvider{
     Hive.registerAdapter(UserLiteAdapter());
   }
 
-  static void putIntoWeibosBox(String uid, List<WeiboLite> weiboList) {
+  static void putIntoWeibosBox(String key, List<WeiboLite> weiboList) {
       Weibos weibos=Weibos(
         statuses: weiboList,
         sinceId: weiboList[0].id,
         maxId: weiboList[weiboList.length-1].id
       );
-    _weibosBox.put(uid, weibos);
+    _weibosBox.put(key, weibos);
     print('存储后_weibosBox容量为${weibos.statuses.length}');
-    print('$uid 缓存微博成功,sinceId:${weibos.sinceId},maxId:${weibos.maxId}');
+    print('$key 缓存微博成功,sinceId:${weibos.sinceId},maxId:${weibos.maxId}');
     print('从微博列表读取的sinceId:${weibos.statuses[0].id},时间:${weibos.statuses[0].createdAt}');
     print('从微博列表读取的maxId:${weibos.statuses[weibos.statuses.length-1].id},时间:${weibos.statuses[weibos.statuses.length-1].createdAt}');
   
@@ -41,13 +42,14 @@ class WeiboProvider{
       int sinceId=0,
       int maxId=0,
       WeiboTimelineType timelineType=WeiboTimelineType.Statuses,
+      String grouId,
       Map<String,String> extraParams
     }
   ) async {
     var result;
     //读取本地缓存的微博
     if(uid!=null){
-      var _weibos=await _weibosBox.get(uid);
+      var _weibos=await _weibosBox.get(Utils.generateHiveWeibosKey(timelineType, uid));
       if(_weibos!=null){
         print('此时读取_weibosBox容量为${_weibos.statuses.length}');
         return ProviderResult(_weibos,true);
@@ -58,7 +60,7 @@ class WeiboProvider{
       .then((weibos) async {
         //如果uid不为空，说明此次调用是由StartloadData发起的，刷新缓存
         if(uid!=null){
-          putIntoWeibosBox(uid, weibos.statuses);
+          putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, uid), weibos.statuses);
         }
         await UrlProvider.saveUrlInfoToHive(weibos.statuses);
         return ProviderResult(weibos,true);

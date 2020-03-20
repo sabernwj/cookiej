@@ -13,7 +13,7 @@ class PictureProvider{
   static final imgUrlPool=API.imgUrlPool;
   static String _currentServer;
   static int _serverUseCount=0;
-  ///记录某图片使用哪个服务器的使用记录，才能正确使用根据url缓存的图片
+  ///记录某ID图片使用哪个服务器的使用记录，才能正确使用根据url缓存的图片
   static Map<String,String> _imgIdServerCache=new Map();
   static Box _imgIdBox;
 
@@ -51,8 +51,9 @@ class PictureProvider{
     String baseUrl=_imgIdServerCache[id]??_imgIdBox.get(id)??_getImgServer();
     _imgIdServerCache[id]=baseUrl;
     if(_imgIdServerCache.length>20){
-      _imgIdBox.putAll(_imgIdServerCache)
-      .whenComplete(()=>_imgIdServerCache.clear());
+      var cacheClone=Map.from(_imgIdServerCache);
+      _imgIdBox.putAll(cacheClone);
+      _imgIdServerCache.clear();
     }
     return '$baseUrl$sinaImgSize/$id.jpg';
   }
@@ -66,8 +67,9 @@ class PictureProvider{
     });
     //缓存到20次存入一次到Hive
     if(_imgIdServerCache.length>20){
-      _imgIdBox.putAll(_imgIdServerCache)
-      .whenComplete(()=>_imgIdServerCache.clear());
+      var cacheClone=Map.from(_imgIdServerCache);
+      _imgIdBox.putAll(cacheClone);
+      _imgIdServerCache.clear();
     }
     return urlList;
   }
@@ -78,6 +80,7 @@ class PictureProvider{
 
   ///根据图片Url返回图片Provider
   static ImageProvider getPictureFromUrl(String url,{String sinaImgSize}){
+    url=url??'https://www.baidu.com/img/superlogo_c4d7df0a003d3db9b65e9ef0fe6da1ec.png?where=super';
     if(sinaImgSize!=null){
       url=url.replaceFirst(RegExp(Utils.imgSizeStrFromUrlRegStr), sinaImgSize);
     }

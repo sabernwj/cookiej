@@ -1,3 +1,4 @@
+import 'package:cookiej/cookiej/config/config.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
@@ -53,5 +54,14 @@ class Utils {
     url=url.substring(0,url.length-1);
     return url;
   }
+  ///生成存储微博到hive的key
+  static String generateHiveWeibosKey(WeiboTimelineType timelineType,String uid,{String groupId}){
+    var key='$uid.${timelineType.toStringNew()}.${groupId??''}';
+    print(key);
+    return key;
+  }
 
+  static String getWeiboTimelineFromHiveKey(String key){
+    
+  }
 }

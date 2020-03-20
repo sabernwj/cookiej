@@ -16,10 +16,11 @@ class WeibosAdapter extends TypeAdapter<Weibos> {
     var fields = <int, dynamic>{
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Weibos()
-      ..statuses = (fields[0] as List)?.cast<WeiboLite>()
-      ..sinceId = fields[1] as int
-      ..maxId = fields[2] as int;
+    return Weibos(
+      statuses: (fields[0] as List)?.cast<WeiboLite>(),
+      sinceId: fields[1] as int,
+      maxId: fields[2] as int,
+    );
   }
 
   @override

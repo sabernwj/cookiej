@@ -90,6 +90,7 @@ class AccessMiddleware implements MiddlewareClass<AppState>{
         UserProvider.getUserInfo(store.state.accessState.currentAccess.uid).then((res){
           if(res.success){
             store.dispatch(UpdateCurrentUser(res.data));
+            AccessProvider.saveAccessStateLocal(store.state.accessState);
           }
         });
       }else{

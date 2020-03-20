@@ -54,8 +54,6 @@ class User extends UserLite {
 	int isTeenagerList;
 	bool specialFollow;
 	String tabManage;
-  //头像的id
-  String iconId;
 
 	User({this.weiboClass, this.province, this.city, this.location, this.url, this.profileImageUrl, this.coverImagePhone, this.profileUrl, this.domain, this.weihao, this.gender, this.createdAt, this.following, this.allowAllActMsg, this.geoEnabled, this.verified, this.verifiedType, this.remark, this.insecurity, this.ptype, this.allowAllComment, this.avatarLarge, this.avatarHd, this.verifiedReason, this.verifiedTrade, this.verifiedReasonUrl, this.verifiedSource, this.verifiedSourceUrl, this.followMe, this.like, this.likeMe, this.onlineStatus, this.biFollowersCount, this.lang, this.star, this.mbtype, this.mbrank, this.blockWord, this.blockApp, this.creditScore, this.userAbility, this.urank, this.storyReadState, this.vclubMember, this.isTeenager, this.isGuardian, this.isTeenagerList, this.specialFollow, this.tabManage})
     :super.init();
