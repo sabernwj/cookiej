@@ -108,7 +108,7 @@ class _WeiboListviewState extends State<WeiboListview> with AutomaticKeepAliveCl
   ///开始获取微博
   ///(目前从网络获取，可添加从本地缓存中读取)
   Future<bool> startLoadData() async{
-    var result=WeiboProvider.getTimeLine(uid: uid,timelineType: widget.timelineType,extraParams: widget.extraParams).then((timeline){
+    var result=WeiboProvider.getTimeLine(localUid: uid,timelineType: widget.timelineType,extraParams: widget.extraParams).then((timeline){
       homeTimeline=timeline.data;
       newHomeTimeline=homeTimeline;
       oldHomeTimeline=homeTimeline;

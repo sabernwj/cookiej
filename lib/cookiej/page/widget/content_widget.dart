@@ -55,9 +55,12 @@ class ContentWidget extends StatelessWidget {
       //如果是微博，则可能带图片
       if(content is WeiboLite){
         var weibo=content as WeiboLite;
-        if(weibo.picUrls.length>0){
-          displayWidgetList.add(factoryImagesWidget(context,weibo.picUrls.map((picUrl)=>picUrl).toList(),sinaImgSize: SinaImgSize.bmiddle));
+        if(weibo.picUrls!=null){
+          if(weibo.picUrls.length>0){
+            displayWidgetList.add(factoryImagesWidget(context,weibo.picUrls.map((picUrl)=>picUrl).toList(),sinaImgSize: SinaImgSize.bmiddle));
+          }
         }
+
       }
       return displayWidgetList;
     }
@@ -187,9 +190,12 @@ class ContentWidget extends StatelessWidget {
     if(imgUrls.length==1){
       return GestureDetector(
         child:ConstrainedBox(
-          child: Image(
-            image: PictureProvider.getPictureFromUrl(imgUrls[0],sinaImgSize: sinaImgSize),
-            fit:BoxFit.cover,
+          child: Padding(
+              child:Image(
+              image: PictureProvider.getPictureFromUrl(imgUrls[0],sinaImgSize: sinaImgSize),
+              fit:BoxFit.cover,
+            ),
+            padding: EdgeInsets.only(bottom:6),
           ),
           constraints: BoxConstraints(
             maxHeight:imgWidth*1.5,

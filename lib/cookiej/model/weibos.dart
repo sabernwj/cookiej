@@ -36,10 +36,8 @@ class Weibos {
     sinceId=jsonRes["since_id"];
     maxId=jsonRes["max_id"];
     hasUnread=jsonRes["has_unread"];
-    statuses=jsonRes["statuses"]== null ? null : [];
-    for (var weiboItem in statuses == null ? [] : jsonRes['statuses']){
-            statuses.add(weiboItem == null ? null : WeiboLite.fromJson(weiboItem));
-    }
+    statuses = new List<WeiboLite>();
+    jsonRes['statuses'].forEach((v) { statuses.add(WeiboLite.fromJson(v)); });
   }
 
 }

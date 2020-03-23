@@ -58,6 +58,21 @@ class User extends UserLite {
 	User({this.weiboClass, this.province, this.city, this.location, this.url, this.profileImageUrl, this.coverImagePhone, this.profileUrl, this.domain, this.weihao, this.gender, this.createdAt, this.following, this.allowAllActMsg, this.geoEnabled, this.verified, this.verifiedType, this.remark, this.insecurity, this.ptype, this.allowAllComment, this.avatarLarge, this.avatarHd, this.verifiedReason, this.verifiedTrade, this.verifiedReasonUrl, this.verifiedSource, this.verifiedSourceUrl, this.followMe, this.like, this.likeMe, this.onlineStatus, this.biFollowersCount, this.lang, this.star, this.mbtype, this.mbrank, this.blockWord, this.blockApp, this.creditScore, this.userAbility, this.urank, this.storyReadState, this.vclubMember, this.isTeenager, this.isGuardian, this.isTeenagerList, this.specialFollow, this.tabManage})
     :super.init();
 
+  User.fromUserLite(UserLite userLite){
+    this.id=userLite.id;
+    this.idstr=userLite.idstr;
+    this.screenName=userLite.screenName;
+    this.name=userLite.name;
+    this.iconId=userLite.iconId;
+    this.description=userLite.description;
+    this.followersCount=userLite.followersCount;
+    this.friendsCount=userLite.friendsCount;
+    this.pagefriendsCount=userLite.pagefriendsCount;
+    this.statusesCount=userLite.statusesCount;
+    this.videoStatusCount=userLite.videoStatusCount;
+    this.favouritesCount=userLite.favouritesCount;
+  }
+
 	User.fromJson(Map<String, dynamic> json) {
 		id = json['id'];
 		idstr = json['idstr'];

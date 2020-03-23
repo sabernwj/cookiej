@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:cookiej/cookiej/cookiej_app.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runZoned((){
     runApp(CookieJ());
+    SystemUiOverlayStyle systemUiOverlayStyle =SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   },onError: (obj,stack){
     print(obj);
     print(stack);

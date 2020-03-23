@@ -1,6 +1,8 @@
 import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/config/style.dart';
 import 'package:cookiej/cookiej/page/home/home_page.dart';
+import 'package:cookiej/cookiej/page/discovery/discovery_page.dart';
+import 'package:cookiej/cookiej/page/message/message_page.dart';
 import 'package:cookiej/cookiej/page/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -42,24 +44,24 @@ class _MainPageState extends State<MainPage> {
             :IndexedStack(
             children: <Widget>[
               HomePage(),
-              Container(),
-              Container(),
+              //DiscoveryPage(),
+              MessagePage(),
               PersonalCenter()
             ],
             index: _currentIndex,
           ),
           bottomNavigationBar: SizedBox(
-            height: 46,
+            height: 50,
             child:BottomNavigationBar(
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home),
                   title: Container()
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(IconData(0xf14e,fontFamily: CookieJTextStyle.iconFontFamily)),
-                  title: Container()
-                ),
+                // BottomNavigationBarItem(
+                //   icon: Icon(IconData(0xf14e,fontFamily: CookieJTextStyle.iconFontFamily)),
+                //   title: Container()
+                // ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.local_post_office),
                   title: Container()

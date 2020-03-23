@@ -10,7 +10,7 @@ class EmotionProvider{
     return await ExtraApi.getEmotions();
   }
 
-  static void loadEmotions() async{
+  static Future<void> loadEmotions() async{
     final mapList=await _downloadEmotions();
     mapList.forEach((map)=>_emotionsMap[map['phrase']]=Emotion.fromMap(map));
   }

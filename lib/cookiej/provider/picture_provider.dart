@@ -80,7 +80,7 @@ class PictureProvider{
 
   ///根据图片Url返回图片Provider
   static ImageProvider getPictureFromUrl(String url,{String sinaImgSize}){
-    url=url??'https://www.baidu.com/img/superlogo_c4d7df0a003d3db9b65e9ef0fe6da1ec.png?where=super';
+    url=url??getImgUrlFromId('549d0121tw1egm1kjly3jj20hs0hsq4f');
     if(sinaImgSize!=null){
       url=url.replaceFirst(RegExp(Utils.imgSizeStrFromUrlRegStr), sinaImgSize);
     }

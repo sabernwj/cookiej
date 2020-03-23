@@ -64,14 +64,14 @@ AccessState _removeAccess(AccessState accessState,RemoveAccess action){
 // }
 class AccessMiddleware implements MiddlewareClass<AppState>{
   @override
-  call(Store<AppState> store, action, next) {
+  call(Store<AppState> store, action, next) async {
     if(action is InitAccessState){
-      AccessProvider.getAccessStateLocal().then((res){
+      AccessProvider.getAccessStateLocal().then((res) async {
         //读取本地access成功，通过setAccess使用AccessState
         if(res.success){
           store.dispatch(SetAccessState(res.data));
           store.dispatch(UpdateCurrentAccess(res.data.currentAccess));
-          EmotionProvider.loadEmotions();
+          await EmotionProvider.loadEmotions();
         }
       });
     }
@@ -79,6 +79,9 @@ class AccessMiddleware implements MiddlewareClass<AppState>{
       next(action);
       store.dispatch(UpdateCurrentAccess(action.access));
       AccessProvider.saveAccessStateLocal(store.state.accessState);
+      if(store.state.accessState.loginAccesses.length==1){
+        await EmotionProvider.loadEmotions();
+      }
     }else if(action is RemoveAccess){
       next(action);
       store.dispatch(UpdateCurrentAccess(store.state.accessState.currentAccess));

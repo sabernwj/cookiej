@@ -110,46 +110,48 @@ class PersonalCenter extends StatelessWidget {
           ),
           //菜单
           body: Container(
-            color: Theme.of(context).cardColor,
             margin: EdgeInsets.only(top:24,bottom: 0),
-            child: Column(
-              children:[
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('夜间模式'),
-                  trailing: CupertinoSwitch(
-                    value: _isDarkMode,
-                    activeColor: store.state.themeState.themeData.primaryColor,
-                    onChanged: (value){
-                      store.dispatch(SwitchDarkMode(value));
-                      //存储夜间模式配置
-                      LocalStorage.save(Config.isDarkModeStorageKey, value.toString());
+            child: Ink(
+              color: _theme.cardColor,
+              child:Column(
+                children:[
+                  ListTile(
+                    leading: Icon(Icons.wb_sunny),
+                    title: Text('夜间模式'),
+                    trailing: CupertinoSwitch(
+                      value: _isDarkMode,
+                      activeColor: store.state.themeState.themeData.primaryColor,
+                      onChanged: (value){
+                        store.dispatch(SwitchDarkMode(value));
+                        //存储夜间模式配置
+                        LocalStorage.save(Config.isDarkModeStorageKey, value.toString());
+                      },
+                    ),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.palette,color:CookieJColors.themeColors[store.state.themeState.themeName]),
+                    title: Text('切换主题'),
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ThemeStyle()));
                     },
                   ),
-                ),
-                Divider(),
-                ListTile(
-                  leading: Icon(Icons.palette,color:CookieJColors.themeColors[store.state.themeState.themeName]),
-                  title: Text('切换主题'),
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ThemeStyle()));
-                  },
-                ),
-                Divider(),
-                ListTile(
-                  leading: Icon(Icons.delete),
-                  title: Text('清除HiveDB缓存'),
-                  onTap: (){
-                    Hive.lazyBox<Weibos>('weibos_box').delete(store.state.accessState.currentAccess.uid);
-                    //print(Hive.lazyBox<Weibos>('weibos_box').path);
-                  },
-                  trailing: FutureBuilder(
-                    future: Hive.lazyBox<Weibos>('weibos_box').get(store.state.accessState.currentAccess.uid).then((weibos)=>weibos.statuses.length.toString()),
-                    builder: (context,snaphot)=>Text('已缓存数量${snaphot.data??'0'}',style: _theme.primaryTextTheme.overline)
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.delete),
+                    title: Text('清除缓存'),
+                    onTap: (){
+                      Hive.lazyBox<Weibos>('weibos_box').delete(store.state.accessState.currentAccess.uid);
+                      //print(Hive.lazyBox<Weibos>('weibos_box').path);
+                    },
+                    // trailing: FutureBuilder(
+                    //   future: Hive.lazyBox<Weibos>('weibos_box').get(store.state.accessState.currentAccess.uid).then((weibos)=>weibos.statuses.length.toString()),
+                    //   builder: (context,snaphot)=>Text('已缓存数量${snaphot.data??'0'}',style: _theme.primaryTextTheme.overline)
+                    // )
                   )
-                )
-              ]
-            ),
+                ]
+              ),
+            )
           )
         );
       }

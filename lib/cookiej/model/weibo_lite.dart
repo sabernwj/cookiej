@@ -49,7 +49,7 @@ class WeiboLite extends Content{
 		commentsCount = json['comments_count'];
 		attitudesCount = json['attitudes_count'];
     //此处对来源进行了格式化
-    source = json['source'].replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),'');
+    source = json['source']?.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),'');
     user = json['user'] != null ? UserLite.fromJson(json['user']) : null;
 		if (json['pic_urls'] != null) {
 			picUrls = List<String>();
@@ -57,7 +57,9 @@ class WeiboLite extends Content{
 		}
     if(json['retweeted_status']!=null){
       retweetedWeibo=WeiboLite.fromJson(json['retweeted_status']);
-      retweetedWeibo.text='@'+retweetedWeibo.user.name+'\n'+retweetedWeibo.text;
+      retweetedWeibo.text=retweetedWeibo?.user?.name==null?
+        retweetedWeibo.text
+        :'@'+retweetedWeibo.user.name+'\n'+retweetedWeibo.text;
     }
   }
 

@@ -38,7 +38,7 @@ class WeiboProvider{
 
   static Future<ProviderResult<Weibos>> getTimeLine(
     { 
-      String uid,
+      String localUid,
       int sinceId=0,
       int maxId=0,
       WeiboTimelineType timelineType=WeiboTimelineType.Statuses,
@@ -48,8 +48,8 @@ class WeiboProvider{
   ) async {
     var result;
     //读取本地缓存的微博
-    if(uid!=null){
-      var _weibos=await _weibosBox.get(Utils.generateHiveWeibosKey(timelineType, uid));
+    if(localUid!=null){
+      var _weibos=await _weibosBox.get(Utils.generateHiveWeibosKey(timelineType, localUid));
       if(_weibos!=null){
         print('此时读取_weibosBox容量为${_weibos.statuses.length}');
         return ProviderResult(_weibos,true);
@@ -57,12 +57,12 @@ class WeiboProvider{
     }
     result= WeiboApi.getTimeLine(sinceId,maxId,timelineType,extraParams)
       .then((json)=>Weibos.fromJson(json))
-      .then((weibos) async {
+      .then((weibos) {
         //如果uid不为空，说明此次调用是由StartloadData发起的，刷新缓存
-        if(uid!=null){
-          putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, uid), weibos.statuses);
+        if(localUid!=null){
+          putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid), weibos.statuses);
         }
-        await UrlProvider.saveUrlInfoToHive(weibos.statuses);
+        UrlProvider.saveUrlInfoToHive(weibos.statuses);
         return ProviderResult(weibos,true);
       })
       .catchError((e)=>ProviderResult(null,false));
