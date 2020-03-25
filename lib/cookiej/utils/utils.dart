@@ -8,7 +8,7 @@ class Utils {
   static const String userRegexStr=r"@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}";
   static const String emotionRegexStr=r"(\[[0-9a-zA-Z\u4e00-\u9fa5]+\])";
   static const String imgSizeStrFromUrlRegStr=r"(?<=sinaimg.cn\/)\w+";
-  static const String imgIdStrFromUrl=r"\w+(?=\.jpg)";
+  static const String imgIdStrFromUrl=r"\w+(?=\.jpg)|\w+(?=\.gif)";
 
 
   ///将微博内日期字符串转化为标准UTC时间
@@ -23,6 +23,9 @@ class Utils {
   static String getDistanceFromNow(DateTime inputTime){
     DateTime now=new DateTime.now();
     var distance=now.difference(inputTime);
+    if(distance.inSeconds<0){
+      return '刚刚';
+    }
     if(distance.inSeconds>=60){
       if(distance.inMinutes>=60){
         if(distance.inHours>=24){

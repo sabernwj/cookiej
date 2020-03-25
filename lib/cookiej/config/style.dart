@@ -64,6 +64,7 @@ class CookieJColors{
       brightness: isDarkMode?Brightness.dark:Brightness.light,
       //主颜色属于暗色还是亮色，关乎到文本的黑或白
       primaryColorBrightness: Brightness.dark,
+      accentColorBrightness: Brightness.dark,
       //选中文本时的背景颜色,
       textSelectionHandleColor:color.shade300,
       //前景色

@@ -30,8 +30,8 @@ AccessState _updateCurrentAccess(AccessState accessState,UpdateCurrentAccess act
   //如果像下面注释里一样换掉accessState的引用，通过addNewAccess调用的此函数，就等于没有更新到上一层函数里的accessState
   //accessState=AccessState(currentAccess: action.access,loginAccesses: accessState.loginAccesses);
   //更换Dio拦截器使用的token
-  API.httpClient.interceptors.removeWhere((interceptor)=>interceptor is AccessInterceptor);
-  API.httpClient.interceptors.add(AccessInterceptor(accessState.currentAccess));
+  API.httpClientDefault.interceptors.removeWhere((interceptor)=>interceptor is AccessInterceptor);
+  API.httpClientDefault.interceptors.add(AccessInterceptor(accessState.currentAccess));
   return accessState;
 }
 

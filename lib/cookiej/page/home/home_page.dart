@@ -2,6 +2,7 @@ import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_listview.dart';
+import 'package:cookiej/cookiej/page/home/edit_weibo_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
@@ -20,10 +21,18 @@ class HomePage extends StatelessWidget{
                 isScrollable: true,
                 indicatorColor: Theme.of(context).selectedRowColor,
               ),
+
             ),
             body: TabBarView(
               children: getTabViews(getTabItems()),
-            )
+            ),
+            floatingActionButton: FloatingActionButton(
+              tooltip: '发微博',
+              child: Icon(Icons.add,size: 36,),
+              onPressed:(){
+                Navigator.push(context, MaterialPageRoute(builder:(context)=> EditWeiboPage()));
+              },
+            ),
           ),
         );
       },

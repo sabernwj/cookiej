@@ -51,7 +51,7 @@ class _MainPageState extends State<MainPage> {
             index: _currentIndex,
           ),
           bottomNavigationBar: SizedBox(
-            height: 50,
+            height:46,
             child:BottomNavigationBar(
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(

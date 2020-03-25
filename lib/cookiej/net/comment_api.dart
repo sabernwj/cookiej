@@ -16,7 +16,7 @@ class CommentApi{
         "since_id":sinceId.toString(),
         "max_id":maxId.toString()
       };
-      return (await API.httpClient.get(Utils.formatUrlParams(url, params))).data;
+      return (await API.httpClientDefault.get(Utils.formatUrlParams(url, params))).data;
 
     }catch(e){
       print(e.response.data);

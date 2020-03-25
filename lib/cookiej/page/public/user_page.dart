@@ -331,6 +331,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        //用户名和签名
                         Text(user.screenName,style: _theme.primaryTextTheme.subhead),
                         Text(user.description,style:_theme.primaryTextTheme.subtitle)
                       ],
@@ -369,13 +370,18 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
   double get maxExtent => math.max(minExtent, expandedHeight+(bottomWidget!=null? bottomWidget?.preferredSize?.height : 0.0));
 
   @override
-  double get minExtent => 48 + topPadding +(bottomWidget!=null? bottomWidget?.preferredSize?.height : 0.0);
+  double get minExtent => 52 + topPadding +(bottomWidget!=null? bottomWidget?.preferredSize?.height : 0.0);
 
 
   @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+  bool shouldRebuild(covariant UserPageHeaderDelegate oldDelegate) {
     // SliverAppbar里的是属性发生了变动再rebuild
-    return true;
+    return collapsedHeight!=oldDelegate.collapsedHeight
+    || expandedHeight!=oldDelegate.expandedHeight
+    || topPadding!=oldDelegate.topPadding
+    || user!=oldDelegate.user
+    || bottomWidget!=oldDelegate.bottomWidget;
+    
   }
   
 }

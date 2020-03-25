@@ -6,7 +6,7 @@ class ExtraApi{
   static Future<List<Map>> getEmotions() async{
     try{
       var url='/2/emotions.json';
-      var result=(await API.httpClient.get(url)).data;
+      var result=(await API.httpClientDefault.get(url)).data;
       if(result is List<dynamic>){
         List<Map> jsonMap=new List<Map>();
         result.forEach((m){

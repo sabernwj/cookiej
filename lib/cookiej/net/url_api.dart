@@ -13,7 +13,7 @@ class UrlApi{
       shortUrls.forEach((shortUrl){
         url=Utils.formatUrlParams(url, {'url_short':shortUrl});
       });
-      return (await API.httpClient.get(url)).data;
+      return (await API.httpClientDefault.get(url)).data;
 
     }catch(e){
       print(e.response.data);

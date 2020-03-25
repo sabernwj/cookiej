@@ -18,7 +18,7 @@ class DisplayContent{
   static final totalRegex=new RegExp("$urlRegexStr|$topicRegexStr|$userRegexStr|$emotionRegexStr");
   
   ///分析text成分，是否包含图片视频，链接内容等等
-  static List<DisplayContent> analysisContent(Content content){
+  static List<DisplayContent> analysisContent(Content content){//这里也可以用栈遍历的方式来判断，比如以@开头并且以空格结束，我们就认为它是一个@的特殊文本
     //文本分析
     var _text=content.longText!=null?content.longText.longTextContent:content.text;
     final matchs=totalRegex.allMatches(_text).toList();
@@ -85,6 +85,10 @@ class DisplayContent{
       }
     }
     return _displayContentList;
+  }
+
+  static String formatDisplayContentsToStr (List<DisplayContent> displayContents){
+    return '';
   }
 }
 enum ContentType{

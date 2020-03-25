@@ -1,6 +1,5 @@
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:dio/dio.dart';
-import 'dart:async';
 import 'package:cookiej/cookiej/utils/utils.dart';
 
 class AccessInterceptor extends InterceptorsWrapper{
