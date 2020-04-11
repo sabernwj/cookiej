@@ -30,7 +30,6 @@ android {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
     compileSdkVersion 29
-
     lintOptions {
         disable 'InvalidPackage'
     }

@@ -51,19 +51,25 @@ class _MessagePageState extends State<MessagePage> {
                 ),
               ),
               SliverFixedExtentList(
-                itemExtent: 100,
+                itemExtent: 72,
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     return customListTitle(
                       leadingChild: ClipOval(child:Image(
                         image: PictureProvider.getPictureFromId(store.state.currentUser.iconId),
-                        width: 64,height: 64,
                       )),
-                      title: Text('用户$index'),
-                      subtitle: Text(
-                        '唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、',
-                        style: _theme.primaryTextTheme.overline,
-                        softWrap: false,
+                      title:Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text('用户$index'),
+                          Text(
+                            '唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、',
+                            style: _theme.primaryTextTheme.overline,
+                            softWrap: false,
+                          ),
+                        ],
                       ),
                       tralling: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
