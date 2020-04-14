@@ -1,7 +1,8 @@
 import 'package:cookiej/cookiej/page/widget/custom_button.dart';
 import 'package:flutter/material.dart';
-//import 'package:keyboard_visibility/keyboard_visibility.dart';
-
+import 'package:flutter/services.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:cookiej/cookiej/page/widget/emotion_panel.dart';
 
 class EditWeiboPage extends StatefulWidget {
   @override
@@ -26,11 +27,13 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
         isKeyboardShow=height==0;
       });
     });
-    // KeyboardVisibilityNotification().addNewListener(
-    //   onChange: (bool visible) {
-    //     print(visible.toString()+'7777777777');
-    //   },
-    // );
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          isKeyboardShow=visible??isKeyboardShow;
+        });
+      },
+    );
   }
 
   @override
@@ -122,9 +125,11 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
                 ),
               ],
             ),
+            //表情面板
             Container(
               height:emotionPanelHeight,
-              color:Colors.green
+              color:Colors.green,
+              child: EmotionPanel(),
             )
           ],
         ),
@@ -132,14 +137,8 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
       resizeToAvoidBottomInset: isResizeToAvoidBottomInset,
     );
   }
-  void changeKeyboardState(){
-    //isKeyboardShow=!isKeyboardShow;
+  void changeKeyboardState(){    
     isResizeToAvoidBottomInset=!isResizeToAvoidBottomInset;
-    _textFieldNode.hasFocus?_textFieldNode.unfocus():_textFieldNode.requestFocus();
+    isKeyboardShow?SystemChannels.textInput.invokeMethod('TextInput.hide'):_textFieldNode.requestFocus();
   }
-}
-
-enum _ShowType{
-  Emotions,
-  Keyboard
 }

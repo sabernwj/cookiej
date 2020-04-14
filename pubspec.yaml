@@ -37,7 +37,7 @@ dependencies:
   hive: ^1.4.1+1
   hive_flutter: ^0.3.0+2
   #extended_text_field: ^0.5.0
-  #keyboard_visibility: any
+  keyboard_visibility: any
 
 
 dev_dependencies:

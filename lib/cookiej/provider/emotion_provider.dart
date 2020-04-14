@@ -22,4 +22,17 @@ class EmotionProvider{
       return ProviderResult.failed();
     }
   }
+
+  //获取当前内存中的emotion分组信息
+  static ProviderResult<Map<String,List<String>>> getEmotionGroup(){
+    if(_emotionsMap.length==0) return ProviderResult.failed();
+    var returnMap=new Map<String,List<String>>();
+    _emotionsMap.values.forEach((emotion){
+      if(!returnMap.containsKey(emotion.category)) returnMap[emotion.category]=List<String>();
+      returnMap[emotion.category].add(
+        emotion.phrase
+      );
+    });
+    return ProviderResult(returnMap, true);
+  }
 }
