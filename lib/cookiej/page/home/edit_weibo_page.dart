@@ -1,3 +1,4 @@
+import 'package:cookiej/cookiej/model/emotion.dart';
 import 'package:cookiej/cookiej/page/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +17,6 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
   double emotionPanelHeight=0;
   bool isResizeToAvoidBottomInset=true;
   bool isKeyboardShow=true;
-
 
   @override
   void initState(){
@@ -128,7 +128,6 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
             //表情面板
             Container(
               height:emotionPanelHeight,
-              color:Colors.green,
               child: EmotionPanel(),
             )
           ],

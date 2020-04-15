@@ -50,36 +50,39 @@ class _MainPageState extends State<MainPage> {
             ],
             index: _currentIndex,
           ),
-          bottomNavigationBar: SizedBox(
-            height:46,
-            child:BottomNavigationBar(
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  title: Container()
-                ),
-                // BottomNavigationBarItem(
-                //   icon: Icon(IconData(0xf14e,fontFamily: CookieJTextStyle.iconFontFamily)),
-                //   title: Container()
-                // ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.local_post_office),
-                  title: Container()
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  title: Container()
-                ),
-              ],
-              currentIndex: _currentIndex,
-              type: BottomNavigationBarType.fixed,
-              iconSize: 30,
-              onTap: (int index){
-                setState(() {
-                  _currentIndex=index;
-                });
-              },
-            ),
+          bottomNavigationBar: SafeArea(
+            child: SizedBox(
+              height:46,
+              child:BottomNavigationBar(
+                elevation: 0,
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    title: Container()
+                  ),
+                  // BottomNavigationBarItem(
+                  //   icon: Icon(IconData(0xf14e,fontFamily: CookieJTextStyle.iconFontFamily)),
+                  //   title: Container()
+                  // ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.local_post_office),
+                    title: Container()
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person),
+                    title: Container()
+                  ),
+                ],
+                currentIndex: _currentIndex,
+                type: BottomNavigationBarType.fixed,
+                iconSize: 30,
+                onTap: (int index){
+                  setState(() {
+                    _currentIndex=index;
+                  });
+                },
+              ),
+            )
           )
         );
         

@@ -57,18 +57,18 @@ flutter:
   fonts:
     - family: fontawesome
       fonts:
-        - asset: fonts/fontawesome-webfont.ttf
+        - asset: res/fonts/fontawesome-webfont.ttf
     - family: 思源宋体
       fonts:
-        - asset: fonts/SourceHanSerifCN-Regular.otf
+        - asset: res/fonts/SourceHanSerifCN-Regular.otf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #  - images/a_dot_burr.jpeg
+  assets:
+   - res/images/white.jpg
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
