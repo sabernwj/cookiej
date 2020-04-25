@@ -41,5 +41,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>授权应用获取手机上的图片</string>
+    <key>NSCameraUsageDescription</key>
+    <string>授权应用使用相机</string>
 </dict>
 </plist>

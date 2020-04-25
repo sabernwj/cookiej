@@ -21,9 +21,9 @@ class _EmotionPanelState extends State<EmotionPanel> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Column( 
       children:[
-        Expanded(child:         TabBarView(
+        Expanded(child:TabBarView(
           controller: _tabController,
           children: (){
             var childList=<Widget>[];
@@ -32,11 +32,11 @@ class _EmotionPanelState extends State<EmotionPanel> with TickerProviderStateMix
                 childList.add(
                   GridView.extent(
                     shrinkWrap: true,
-                    maxCrossAxisExtent: 48,
+                    maxCrossAxisExtent: 64,
                     children: _emotionGroup.data[groupName].map((emotion){
                       return CustomButton(
                         child: Image(image: emotion.imageProvider,fit:BoxFit.fill),
-                        padding: EdgeInsets.all(4),
+                        padding: EdgeInsets.all(8),
                         shape: Border(),
                         onTap: (){
                           print('按下了${emotion.phrase}');
@@ -56,11 +56,13 @@ class _EmotionPanelState extends State<EmotionPanel> with TickerProviderStateMix
           tabs: !_emotionGroup.success?[]
           :_emotionGroup.data.keys.map((groupName)=>Padding(
             padding: EdgeInsets.symmetric(horizontal:8,vertical:6),
-            child: Text(groupName.isEmpty?'默认':groupName,style: Theme.of(context).textTheme.body1,),
+            child: Text(groupName.isEmpty?'默认':groupName),
           )).toList(),
           controller: _tabController,
           isScrollable: true,
           labelPadding: EdgeInsets.zero,
+          labelColor: Theme.of(context).primaryTextTheme.body1.color,
+          unselectedLabelColor: Theme.of(context).textTheme.body1.color,
         )
       ]
     );

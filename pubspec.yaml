@@ -38,6 +38,8 @@ dependencies:
   hive_flutter: ^0.3.0+2
   #extended_text_field: ^0.5.0
   keyboard_visibility: any
+  #image_picker: ^0.6.5
+  multi_image_picker: ^4.6.6+rc.1
 
 
 dev_dependencies:
