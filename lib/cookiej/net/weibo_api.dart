@@ -14,8 +14,14 @@ class WeiboApi{
   static const String _user='/2/statuses/user_timeline.json';
   ///转发的微博
   static const String _repost='/2/statuses/repost_timeline.json';
-  ///单挑微博内容
+  ///单条微博内容
   static const String _weibo='/2/statuses/show.json';
+
+  ///发布一条新微博
+  static const String _update='/2/statuses/update.json';
+
+  ///上传图片并发布一条新微博
+  static const String _upload='/2/statuses/upload.json';
 
 
   ///获取微博列表
@@ -79,5 +85,30 @@ class WeiboApi{
 
     return (await API.httpClientDefault.get(Utils.formatUrlParams(url, params))).data;
 
+  }
+
+  ///* `weiboRawText` 要发布的微博文本内容，必须做URLencode，内容不超过140个汉字
+  ///* `visible` 微博的可见性，0：所有人能看，1：仅自己可见，2：密友可见，3：指定分组可见，默认为0
+  ///* `listId` 微博的保护投递指定分组ID，只有当visible参数为3时生效且必选
+  static Future<bool> postWeibo(String weiboRawText,{
+    int visible,
+    String listId,
+    double lat,
+    double long,
+  }) async{
+    var url=_update;
+    var params=<String,String>{
+      'status':Uri.encodeComponent(weiboRawText),
+    };
+    if(visible!=null) params['visible']=visible.toString();
+    if(listId!=null) params['list_id']=listId;
+    if(lat!=null) params['lat']=lat.toString();
+    if(long!=null) params['long']=long.toString();
+    try{
+      await API.httpClientSend.post(Utils.formatUrlParams(url, params));
+      return true;
+    }catch(e){
+      return false;
+    }
   }
 }

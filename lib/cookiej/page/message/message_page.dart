@@ -111,7 +111,7 @@ class _MessagePageState extends State<MessagePage> {
     void Function() onTap
   }){
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(vertical:8,horizontal:14),
+      contentPadding: EdgeInsets.symmetric(vertical:8 ,horizontal:14),
       leading: ClipOval(
         child: Container(
           height: 48,width: 48,

@@ -145,7 +145,7 @@ class Video extends DataObject{
     image = json['image'] != null ? new UImage.fromJson(json['image']) : null;
     objectType = json['object_type'];
     author =
-        json['author'] != null ? new Author.fromJson(json['author']) : null;
+        (json['author'] != null && json['author'] is Map) ? new Author.fromJson(json['author']) : null;
     bizType = json['biz_type'];
     infringementStatus = json['infringement_status'];
     displayName = json['display_name'];

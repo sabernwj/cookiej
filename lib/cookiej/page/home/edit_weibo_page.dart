@@ -1,10 +1,17 @@
 import 'package:cookiej/cookiej/model/emotion.dart';
+import 'package:cookiej/cookiej/model/local/edit_special_text.dart';
+import 'package:cookiej/cookiej/net/api.dart';
+import 'package:cookiej/cookiej/net/interceptors/access_interceptor.dart';
+import 'package:cookiej/cookiej/net/weibo_api.dart';
 import 'package:cookiej/cookiej/page/widget/custom_button.dart';
+import 'package:cookiej/cookiej/provider/access_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:cookiej/cookiej/page/widget/emotion_panel.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:extended_text_field/extended_text_field.dart';
 
 
 class EditWeiboPage extends StatefulWidget {
@@ -21,12 +28,22 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
   bool isKeyboardShow=true;
 
   List<Widget> imageGridList=List();
+  TextEditingController _controller=TextEditingController();
   ///用于准备向发送接口输入的文本 
   String rawText='';
+  String displayText='';
 
   @override
   void initState(){
     super.initState();
+    ///重新读取用于Send的Access
+    API.httpClientSend.interceptors.removeWhere((interceptor)=>interceptor is AccessInterceptor);
+    AccessProvider.getAccessStateLocal().then((result){
+      if(result.success){
+        //result.data.loginAccesses.forEach((access)=>api)
+        API.httpClientSend.interceptors.add(AccessInterceptor(result.data.currentAccess));
+      }
+    }).catchError((e)=>print(e));
     KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
         setState(() {
@@ -55,17 +72,27 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
       body:CustomScrollView(
         slivers: <Widget>[
             SliverToBoxAdapter(
-              child: TextField(
+              child: ExtendedTextField(
+                controller: _controller,
+                enableSuggestions: false,
+                specialTextSpanBuilder: WeiboSpecialTextSpanBuilder(context),
+                style:_theme.textTheme.body1,
                 focusNode: _textFieldNode,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal:10,
+                    vertical:12
+                  ),
+                  hintText: '说点什么吧...'
+                ),
                 autofocus: true,
                 autocorrect: false,
                 expands: false,
                 minLines: 5,
                 maxLines: null,
-                decoration: InputDecoration(
-                  border: InputBorder.none
-                ),
                 cursorColor: _theme.accentColor,
+                onChanged:(text)=>rawText=text,
               ),
             ),
             SliverPadding(
@@ -149,7 +176,20 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
                   child: Icon(Icons.send,color: _theme.primaryColor,),
                   padding: EdgeInsets.all(0),
                   shape: Border(),
-                  onTap: (){},
+                  onTap: () async {
+                    var success=await WeiboApi.postWeibo(rawText);
+                    if(success){
+                      Fluttertoast.showToast(
+                        msg: '发布成功',
+                        gravity: ToastGravity.BOTTOM,
+                      );
+                    }else{
+                      Fluttertoast.showToast(
+                        msg: '发布失败',
+                        gravity: ToastGravity.BOTTOM,
+                      );
+                    }
+                  },
                   color: Colors.transparent,
                 ),
               ],
@@ -159,7 +199,11 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
               offstage: !isEmotionPanelShow,
               child:Container(
                 height:emotionPanelHeight,
-                child: EmotionPanel(),
+                child: EmotionPanel(
+                  onEmotionButtonTap: (emotionName){
+                    _controller.text+=emotionName;
+                  },
+                ),
               ),
               
             )

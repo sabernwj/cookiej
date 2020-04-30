@@ -35,7 +35,7 @@ class WeiboWidget extends StatelessWidget {
                 Container(
                   child: Column(
                     children: <Widget>[
-                      Text(weibo.user.name,style: _theme.primaryTextTheme.body1.merge(TextStyle(fontWeight: FontWeight.bold)),),
+                      Text(weibo.user.name,style: _theme.primaryTextTheme.body1),
                       Text(Utils.getDistanceFromNow(weibo.createdAt)+'    '+weibo.source,style: _theme.primaryTextTheme.overline),
                       // Text(weibo.source.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),''),style: TextStyle(color:Colors.grey,fontSize: 12))
                     ],

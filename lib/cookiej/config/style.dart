@@ -47,13 +47,13 @@ class CookieJColors{
   static const Color mainTextColor = primaryDarkValue;
   static const Color textColorWhite = white;
 
-  static pushTheme(Store store, String name) {
+  static void pushTheme(Store store, String name) {
     ThemeData themeData;
     themeData = getThemeData(name);
     store.dispatch(RefreshThemeState(ThemeState(name,themeData)));
   }
 
-  static getThemeData(String themeName,{bool isDarkMode=false}) {
+  static ThemeData getThemeData(String themeName,{bool isDarkMode=false}) {
     MaterialColor color=themeColors[themeName];
     //颜色的亮度，涉及夜间模式下深色主题的活动颜色设置
     double luminance=color.computeLuminance();
@@ -81,18 +81,20 @@ class CookieJColors{
       primaryTextTheme: TextTheme(
         subtitle: CookieJTextStyle.minText,
         subhead: CookieJTextStyle.middleTextWhite,
-        body1: TextStyle(
+        // body1: TextStyle(
+        //   color:luminance<0.15&&!isDarkMode?Colors.blue:color,
+        //   fontSize: CookieJTextStyle.middleTextWhiteSize,
+        //   // fontFamily: CookieJTextStyle.iconFontFamily,
+        //   fontFamilyFallback: [
+        //     CookieJTextStyle.iconFontFamily
+        //   ]
+        // ),
+        body1: CookieJTextStyle.middleText.merge(TextStyle(
           color:luminance<0.15&&!isDarkMode?Colors.blue:color,
-          fontSize: CookieJTextStyle.middleTextWhiteSize,
-          fontFamily: CookieJTextStyle.iconFontFamily,
-          // fontFamilyFallback: [
-          //   CookieJTextStyle.mainFontFamily
-          // ]
-        ),
+        )),
         body2: TextStyle(fontSize: CookieJTextStyle.middleTextWhiteSize,),
         overline: TextStyle(fontSize:CookieJTextStyle.minTextSize,color:Colors.grey[600],letterSpacing: 0)
       )
-
     );
   }
 
@@ -127,154 +129,237 @@ class CookieJTextStyle{
   static const minTextSize = 12.0;
 
   static const minText = TextStyle(
-    
     color: CookieJColors.subTextColor,
     fontSize: minTextSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const smallTextWhite = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: smallTextSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const smallText = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: smallTextSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const smallTextBold = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: smallTextSize,
     fontWeight: FontWeight.bold,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const smallSubLightText = TextStyle(
     color: CookieJColors.subLightTextColor,
     fontSize: smallTextSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const smallActionLightText = TextStyle(
     color: CookieJColors.actionBlue,
     fontSize: smallTextSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const smallMiLightText = TextStyle(
     color: CookieJColors.miWhite,
     fontSize: smallTextSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const smallSubText = TextStyle(
     color: CookieJColors.subTextColor,
     fontSize: smallTextSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const middleText = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: middleTextWhiteSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const middleTextWhite = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: middleTextWhiteSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const middleSubText = TextStyle(
     color: CookieJColors.subTextColor,
     fontSize: middleTextWhiteSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const middleSubLightText = TextStyle(
     color: CookieJColors.subLightTextColor,
     fontSize: middleTextWhiteSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const middleTextBold = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: middleTextWhiteSize,
     fontWeight: FontWeight.bold,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const middleTextWhiteBold = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: middleTextWhiteSize,
     fontWeight: FontWeight.bold,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const middleSubTextBold = TextStyle(
     color: CookieJColors.subTextColor,
     fontSize: middleTextWhiteSize,
     fontWeight: FontWeight.bold,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const normalText = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: normalTextSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const normalTextBold = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: normalTextSize,
     fontWeight: FontWeight.bold,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const normalSubText = TextStyle(
     color: CookieJColors.white,
     fontSize: normalTextSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const normalTextWhite = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: normalTextSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const normalTextMitWhiteBold = TextStyle(
     color: CookieJColors.miWhite,
     fontSize: normalTextSize,
     fontWeight: FontWeight.bold,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const normalTextActionWhiteBold = TextStyle(
     color: CookieJColors.actionBlue,
     fontSize: normalTextSize,
     fontWeight: FontWeight.bold,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const normalTextLight = TextStyle(
     color: CookieJColors.primaryLightValue,
     fontSize: normalTextSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const largeText = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: bigTextSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const largeTextBold = TextStyle(
     color: CookieJColors.mainTextColor,
     fontSize: bigTextSize,
     fontWeight: FontWeight.bold,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const largeTextWhite = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: bigTextSize,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const largeTextWhiteBold = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: bigTextSize,
     fontWeight: FontWeight.bold,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const largeLargeTextWhite = TextStyle(
     color: CookieJColors.textColorWhite,
     fontSize: lagerTextSize,
     fontWeight: FontWeight.bold,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 
   static const largeLargeText = TextStyle(
     color: CookieJColors.primaryValue,
     fontSize: lagerTextSize,
     fontWeight: FontWeight.bold,
+    fontFamilyFallback: [
+      CookieJTextStyle.iconFontFamily
+    ]
   );
 }

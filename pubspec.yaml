@@ -1,5 +1,5 @@
 name: cookiej
-description: A new Flutter project.
+description: A Weibo Client By Flutter.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -7,7 +7,7 @@ description: A new Flutter project.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 1.0.0+1
+version: 1.0.1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -18,29 +18,31 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  #必需的
+
   cupertino_icons: ^0.1.2
   dio: ^3.0.8
   dio_cookie_manager: ^1.0.0
   flutter_webview_plugin: ^0.3.11
   intl: ^0.15.7
-  photo_view: ^0.9.1
   cached_network_image: ^2.0.0
   pull_to_refresh: ^1.5.8
   font_awesome_flutter: ^8.5.0
   flutter_redux: ^0.6.0
   redux: ^4.0.0
-  sqflite: ^1.2.1
-  shared_preferences: ^0.5.6+2
-  extended_image: ^0.7.1
-  #floor: ^0.11.0
   path_provider: ^1.6.5
-  hive: ^1.4.1+1
-  hive_flutter: ^0.3.0+2
-  #extended_text_field: ^0.5.0
   keyboard_visibility: any
-  #image_picker: ^0.6.5
   multi_image_picker: ^4.6.6+rc.1
 
+  #可能会被替换的
+  extended_image: ^0.7.1
+  photo_view: ^0.9.1
+  extended_text_field: ^0.5.0
+  hive: ^1.4.1+1
+  hive_flutter: ^0.3.0+2
+  sqflite: ^1.2.1
+  shared_preferences: ^0.5.6+2
+  fluttertoast: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -60,9 +62,9 @@ flutter:
     - family: fontawesome
       fonts:
         - asset: res/fonts/fontawesome-webfont.ttf
-    - family: 思源宋体
-      fonts:
-        - asset: res/fonts/SourceHanSerifCN-Regular.otf
+    # - family: 思源宋体
+    #   fonts:
+    #     - asset: res/fonts/SourceHanSerifCN-Regular.otf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

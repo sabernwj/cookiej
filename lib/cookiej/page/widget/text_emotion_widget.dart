@@ -17,7 +17,7 @@ class WeiboTextEmotionWidget extends StatelessWidget {
         width: CookieJTextStyle.normalText.fontSize+2,
         height: CookieJTextStyle.normalText.fontSize+2,
       ),
-      margin: EdgeInsets.only(left:2,right:2),
+      margin: EdgeInsets.symmetric(horizontal: 2),
     );
   }
 }

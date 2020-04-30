@@ -2,7 +2,15 @@ import 'package:cookiej/cookiej/page/widget/custom_button.dart';
 import 'package:cookiej/cookiej/provider/emotion_provider.dart';
 import 'package:flutter/material.dart';
 
+
+typedef ButtonOnTap<T> = void Function(T value);
+
 class EmotionPanel extends StatefulWidget {
+  
+  final ButtonOnTap<String> onEmotionButtonTap;
+
+  const EmotionPanel({Key key, this.onEmotionButtonTap}) : super(key: key);
+
   @override
   _EmotionPanelState createState() => _EmotionPanelState();
 }
@@ -40,6 +48,7 @@ class _EmotionPanelState extends State<EmotionPanel> with TickerProviderStateMix
                         shape: Border(),
                         onTap: (){
                           print('按下了${emotion.phrase}');
+                          widget.onEmotionButtonTap(emotion.phrase);
                         },
                         color: Colors.transparent,
                       );
