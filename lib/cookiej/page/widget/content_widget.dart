@@ -4,6 +4,7 @@ import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/model//local/display_content.dart';
 import 'package:cookiej/cookiej/model/video.dart';
 import 'package:cookiej/cookiej/model/weibo_lite.dart';
+import 'package:cookiej/cookiej/page/public/video_page.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/model/content.dart';
 import 'package:cookiej/cookiej/page/public/user_page.dart';
@@ -103,23 +104,32 @@ class ContentWidget extends StatelessWidget {
           break;
         case ContentType.Video:
           //先展示下视频封面
+          var video=(displayContent.info.annotations[0].object as Video);
           secondDisplayWidget.add(
             Stack(
               alignment: Alignment.center,
               children: <Widget>[
-                Container(
+                Image(
                   width: imgWidth*1.8,
                   height: imgWidth*1.2,
-                  child: Image(
-                    image: PictureProvider.getPictureFromUrl((displayContent.info.annotations[0].object as Video).image.url),
-                    fit: BoxFit.cover,
-                  ),
+                  image: PictureProvider.getPictureFromUrl(video.image.url),
+                  fit: BoxFit.cover,
                 ),
                 Icon(
                   Icons.play_circle_outline,
                   size: 48,
                   color: Theme.of(context).accentColor,
                 ),
+                Positioned.fill(
+                  child: Material(
+                    color:Colors.transparent,
+                    child:InkWell(
+                      onTap:() async{
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>VideoPage(video: video)));
+                      }
+                    )
+                  )
+                )
               ],
             ),
           );

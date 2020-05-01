@@ -34,7 +34,9 @@ class PictureProvider{
 
   ///根据图片ID和size参数返回图片
   static ImageProvider getPictureFromId(String id,{String sinaImgSize=SinaImgSize.bmiddle}){
-
+    if(id==null||id.isEmpty||id=='null'){
+      return ExtendedAssetImageProvider('res/images/white.jpg');
+    }
     String url=getImgUrlFromId(id,sinaImgSize:sinaImgSize);
     return getPictureFromUrl(url);
   }
@@ -80,7 +82,9 @@ class PictureProvider{
 
   ///根据图片Url返回图片Provider
   static ImageProvider getPictureFromUrl(String url,{String sinaImgSize}){
-    url=url??getImgUrlFromId('549d0121tw1egm1kjly3jj20hs0hsq4f');
+    if(url==null){
+      return ExtendedAssetImageProvider('res/images/white.jpg');
+    }
     if(sinaImgSize!=null){
       url=url.replaceFirst(RegExp(Utils.imgSizeStrFromUrlRegStr), sinaImgSize);
     }

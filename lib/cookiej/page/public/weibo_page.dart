@@ -33,10 +33,8 @@ class _WeiboPageState extends State<WeiboPage>{
         future: weiboTask,
         builder: (BuildContext context,snapshot){
           switch (snapshot.connectionState){
-            case ConnectionState.none:
             case ConnectionState.waiting:
               return Center(child:CircularProgressIndicator());
-            case ConnectionState.active:
             case ConnectionState.done:
               if(snapshot.hasError){
                 return Text(snapshot.error.toString());
@@ -45,7 +43,7 @@ class _WeiboPageState extends State<WeiboPage>{
               return snapshot.data.success?
                 Container(child:ListView(
                   children:<Widget>[
-                    WeiboWidget(weibo),
+                    WeiboWidget(weibo,clicked: false,),
                     CommentListview(weibo.id)
                   ]
                 ))

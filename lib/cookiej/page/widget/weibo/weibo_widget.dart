@@ -15,8 +15,9 @@ import 'package:cookiej/cookiej/page/widget/content_widget.dart';
 
 class WeiboWidget extends StatelessWidget {
   final WeiboLite weibo;
-  WeiboWidget(this.weibo);
-
+  final bool clicked;
+  WeiboWidget(this.weibo,{this.clicked=true});
+  
   @override
   Widget build(BuildContext context) {
     final _theme=Theme.of(context);
@@ -84,7 +85,7 @@ class WeiboWidget extends StatelessWidget {
         color: Theme.of(context).dialogBackgroundColor,
       ),
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(weibo.id)));
+        if(clicked) Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(weibo.id)));
       },
     );
   }

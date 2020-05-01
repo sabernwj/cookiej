@@ -23,16 +23,20 @@ dependencies:
   cupertino_icons: ^0.1.2
   dio: ^3.0.8
   dio_cookie_manager: ^1.0.0
-  flutter_webview_plugin: ^0.3.11
-  intl: ^0.15.7
-  cached_network_image: ^2.0.0
-  pull_to_refresh: ^1.5.8
-  font_awesome_flutter: ^8.5.0
+  flutter_webview_plugin: ^0.3.11 #浏览器插件
+  intl: ^0.15.7 #该软件包提供国际化和本地化功能
+  cached_network_image: ^2.0.0 #带缓存的图片组件
+  pull_to_refresh: ^1.5.8 #上拉加载下拉刷新
+  font_awesome_flutter: ^8.5.0 #图标包
   flutter_redux: ^0.6.0
-  redux: ^4.0.0
-  path_provider: ^1.6.5
-  keyboard_visibility: any
-  multi_image_picker: ^4.6.6+rc.1
+  redux: ^4.0.0 
+  path_provider: ^1.6.5 #使用文件夹路径之类的
+  keyboard_visibility: any #检测软键盘状态的插件
+  multi_image_picker: ^4.6.6+rc.1 #图片选择插件
+  video_player: ^0.10.9+1 #FlutterDev提供的视频播放插件
+  auto_orientation: ^1.0.6 #控制横竖屏
+  screen: ^0.0.5  #屏幕亮度
+  flustars: ^0.2.6+1
 
   #可能会被替换的
   extended_image: ^0.7.1
@@ -43,6 +47,7 @@ dependencies:
   sqflite: ^1.2.1
   shared_preferences: ^0.5.6+2
   fluttertoast: ^4.0.0
+  chewie: ^0.9.10
 
 dev_dependencies:
   flutter_test:
@@ -51,6 +56,7 @@ dev_dependencies:
   # build_runner: ^1.7.3
   hive_generator: ^0.7.0+2
   build_runner: ^1.8.0
+  
 
 
 # For information on the generic Dart part of this file, see the
