@@ -36,6 +36,12 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
       MediaQuery.of(context).orientation == Orientation.landscape;
 
   Future<void> setProgressState() async {
+    if(controller.value==null
+    ||controller.value.position==null
+    ||controller.value.duration==null
+    ||controller.value.isPlaying==false){
+      return;
+    }
     setPosition(
       totalDuration: controller.value.duration,
       position:controller.value.position
@@ -176,18 +182,6 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
   Widget _middle() {
     return Expanded(
       child: Center(
-        // child: IconButton(
-        //   color: Colors.black45,
-        //   padding: EdgeInsets.zero,
-        //   iconSize: 64,
-          // icon: Icon(
-          //   controller.value.isPlaying?Icons.pause_circle_outline:Icons.play_circle_outline,
-          //   color: Colors.white,
-          // ),
-        //   onPressed: (){
-
-        //   },
-        // )
         child: GestureDetector(
           child:Container(
             width: 64,
@@ -264,8 +258,9 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
                     //   controller.play();
                     // });
                     if(value==controller.dataSource) return;
+                    urlChangeCallBack(value,controller.value.position);
                     setState(() {
-                      urlChangeCallBack(value,controller.value.position);
+                     
                     });
                   }
                 ), data: Theme.of(context).copyWith(

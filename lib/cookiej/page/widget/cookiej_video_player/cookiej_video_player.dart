@@ -191,10 +191,12 @@ class _CookieJVideoPlayerState extends State<CookieJVideoPlayer> {
 
   Future<void> _urlChange(dynamic url) async {
     if (url == null || url == '') return;
+    VideoPlayerController tempController;
     if (_controller != null) {
       /// 如果控制器存在，清理掉重新创建
       // _controller.removeListener(_videoListener);
-      _controller.dispose();
+      //_controller.dispose();
+      tempController=_controller;
     }
     setState(() {
       /// 重置组件参数
@@ -220,6 +222,7 @@ class _CookieJVideoPlayerState extends State<CookieJVideoPlayer> {
       _videoError = false;
       _controller.play();
     });
+    tempController?.dispose();
   }
 
 }

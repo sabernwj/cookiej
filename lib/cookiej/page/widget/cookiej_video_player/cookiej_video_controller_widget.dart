@@ -5,6 +5,7 @@ import 'video_player_control.dart';
 
 
 typedef UrlChangeCallBack<T> = void Function(T url,Duration position);
+//typedef Future<void> UrlChangeCallBack (dynamic url,Duration position);
 class CookieJVideoControllerWidget extends InheritedWidget{
 
 
