@@ -36,7 +36,7 @@ dependencies:
   video_player: ^0.10.9+1 #FlutterDev提供的视频播放插件
   auto_orientation: ^1.0.6 #控制横竖屏
   screen: ^0.0.5  #屏幕亮度
-  flustars: ^0.2.6+1
+  gallery_saver: ^2.0.1 #读写本地相册
 
   #可能会被替换的
   extended_image: ^0.7.1
@@ -45,8 +45,9 @@ dependencies:
   hive: ^1.4.1+1
   hive_flutter: ^0.3.0+2
   sqflite: ^1.2.1
-  shared_preferences: ^0.5.6+2
-  fluttertoast: ^4.0.0
+  shared_preferences: ^0.5.6+2  
+  fluttertoast: ^4.0.0 #弹出消息工具
+  flustars: ^0.2.6+1 #包含了一些通用工具类
   #chewie: ^0.9.10
 
 dev_dependencies:
@@ -79,6 +80,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
    - res/images/white.jpg
+   - res/images/icon.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -258,9 +258,8 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
                     //   controller.play();
                     // });
                     if(value==controller.dataSource) return;
-                    urlChangeCallBack(value,controller.value.position);
                     setState(() {
-                     
+                     urlChangeCallBack(value,controller.value.position);
                     });
                   }
                 ), data: Theme.of(context).copyWith(
@@ -298,7 +297,10 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
   void _playOrPause() {
     /// 同样的，点击动态播放或者暂停
     if (videoInit) {
-      controller.value.isPlaying ? controller.pause() : controller.play();
+      setState(() {
+        controller.value.isPlaying ? controller.pause() : controller.play();
+      });
+      
       _startPlayControlTimer(); // 操作控件后，重置延迟隐藏控件的timer
     }
   }
