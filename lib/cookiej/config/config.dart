@@ -6,12 +6,14 @@ class Config{
   static const appkey='1532678245';
   static const appSecret='71663753d61d39daa0cd6a7689304c64';
 
+  static const appkey_0='2200697181';
+  static const appSecret_0='d66e9e1528ef89669e3ffa22f0f8aaf4';
+  static const redirectUri_0='http://06peng.com';
+
 //网上找的appkey
-  static const appkey_1='211160679';
-  static const appSecret_1='63b64d531b98c2dbff2443816f274dd3';
 
   static const redirectUri='https://api.weibo.com/oauth2/default.html';
-  static const redirectUri_1='http://oauth.weico.cc';
+
 
   static const loginAccessesStorageKey='login_accesses';
   static const currentAccessStorageKey='current_access';

@@ -12,8 +12,8 @@ class AccessApi{
   static String getOauth2Authorize(){
     var url='$baseUrl/oauth2/authorize';
     var params={
-      "client_id":Config.appkey,
-      "redirect_uri":Config.redirectUri
+      "client_id":Config.appkey_0,
+      "redirect_uri":Config.redirectUri_0
     };
     url=Utils.formatUrlParams(url, params);
     return url;
@@ -23,10 +23,10 @@ class AccessApi{
   static Future<String> getOauth2Access(String code) async{
     var url='/oauth2/access_token';
     var params={
-      "client_id":Config.appkey,
-      "client_secret":Config.appSecret,
+      "client_id":Config.appkey_0,
+      "client_secret":Config.appSecret_0,
       "grant_type":"authorization_code",
-      "redirect_uri":Config.redirectUri,
+      "redirect_uri":Config.redirectUri_0,
       "code":code,
     };
     var httpCli=new HttpClient();

@@ -31,7 +31,7 @@ class WeiboWidget extends StatelessWidget {
                 //头像
                 GestureDetector(
                   child: CircleAvatar(backgroundImage: PictureProvider.getPictureFromId(weibo.user.iconId,sinaImgSize: SinaImgSize.thumbnail),radius: 20),
-                  onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>UserPage(screenName:weibo.user.screenName))),
+                  onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context)=>UserPage(inputUser:weibo.user))),
                 ),
                 Container(
                   child: Column(

@@ -82,7 +82,7 @@ class PictureProvider{
 
   ///根据图片Url返回图片Provider
   static ImageProvider getPictureFromUrl(String url,{String sinaImgSize}){
-    if(url==null){
+    if(url==null||url.contains('default')){
       return ExtendedAssetImageProvider('res/images/white.jpg');
     }
     if(sinaImgSize!=null){

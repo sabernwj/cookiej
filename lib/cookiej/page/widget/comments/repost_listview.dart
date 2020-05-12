@@ -35,7 +35,7 @@ class _RepostListviewState extends State<RepostListview> {
         switch (snapshot.connectionState){
           case ConnectionState.none:
           case ConnectionState.waiting:
-            return Center(child:CircularProgressIndicator());
+            return Container(margin: EdgeInsets.all(32), child:Center(child:CircularProgressIndicator()));
           case ConnectionState.active:
           case ConnectionState.done:
             if(snapshot.hasError){

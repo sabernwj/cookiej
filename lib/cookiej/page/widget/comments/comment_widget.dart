@@ -52,6 +52,7 @@ class CommentWidget extends StatelessWidget{
       color: _theme.dialogBackgroundColor,
     );
     //该条评论存在回复的话
+    if(comment.commentReplyMap==null) return returnWidget;
     if(comment.commentReplyMap.length>1){
       final displayReplyWidgetList=<Widget>[];
       comment.commentReplyMap.forEach((id,_comment){

@@ -42,10 +42,17 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
       laterComments=initialComments;
       groupCommentMap=formatComments(comments);
       //将直接回微博的-评论筛选出来
-      groupCommentMap.forEach((rootId,sameRootCommentMap){
-        //此处将同一rootId的评论扔到了和该rootId相同的评论的属性里
-        sameRootCommentMap[rootId].commentReplyMap=sameRootCommentMap;
-        displayCommentList.add(sameRootCommentMap[rootId]);
+      groupCommentMap.forEach((rootId,sameRootCommentMap){       
+        if(sameRootCommentMap[rootId]==null){
+          //这种情况是有评论，但没有该评论rootId对应的评论
+          sameRootCommentMap.forEach((_, value)=>displayCommentList.add(value));
+        }
+        else{
+          //此处将同一rootId的评论扔到了和该rootId相同的评论的属性里
+          sameRootCommentMap[rootId].commentReplyMap=sameRootCommentMap;
+          displayCommentList.add(sameRootCommentMap[rootId]);
+        }
+
       });
       displayCommentList.sort((a,b)=>b.rootid.compareTo(a.rootid));
       return comments;
@@ -64,7 +71,7 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
         switch (snapshot.connectionState){
           case ConnectionState.none:
           case ConnectionState.waiting:
-            return Center(child:CircularProgressIndicator());
+            return Container(margin: EdgeInsets.all(32), child:Center(child:CircularProgressIndicator()));
           case ConnectionState.active:
           case ConnectionState.done:
             if(snapshot.hasError){
@@ -118,13 +125,13 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
     comments.comments.forEach((comment){
       //对内容处理
       if(comment.replyComment!=null){
-        comment.text='@'+comment.user.screenName+':'+comment.text;
+        comment.text='@'+comment.user.screenName+':'+(comment.replyOriginalText??comment.text).toString();
       }
       //进行分组
-      if(commentMap.containsKey(comment.rootid)){
-        commentMap[comment.rootid][comment.id]=comment;
-      }else{
+      if(!commentMap.containsKey(comment.rootid)){
         commentMap[comment.rootid]={comment.id:comment};
+      }else{
+        commentMap[comment.rootid][comment.id]=comment;
       }
     });
     return commentMap;

@@ -39,7 +39,7 @@ dependencies:
   gallery_saver: ^2.0.1 #读写本地相册
 
   #可能会被替换的
-  extended_image: ^0.7.1
+  extended_image: ^0.7.3+1
   photo_view: ^0.9.1
   extended_text_field: ^0.5.0
   hive: ^1.4.1+1
@@ -55,7 +55,7 @@ dev_dependencies:
     sdk: flutter
   # floor_generator: ^0.11.0
   # build_runner: ^1.7.3
-  hive_generator: ^0.7.0+2
+  # hive_generator: ^0.7.0+2
   build_runner: ^1.8.0
   
 

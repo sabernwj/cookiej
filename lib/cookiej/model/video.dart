@@ -122,7 +122,7 @@ class Video extends DataObject{
     screenshots = json['screenshots'] != null
         ? new Screenshots.fromJson(json['screenshots'])
         : null;
-    duration = json['duration'];
+    duration = (json['duration'] is int)?(json['duration'] as int).toDouble():json['duration'];
     rawFileMeta = json['raw_file_meta'] != null
         ? new RawFileMeta.fromJson(json['raw_file_meta'])
         : null;

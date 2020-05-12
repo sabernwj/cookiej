@@ -9,6 +9,7 @@ import 'package:cookiej/cookiej/page/widget/weibo/weibo_widget.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
 import 'package:cookiej/cookiej/page/widget/custom_button.dart';
+import 'package:cookiej/cookiej/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_list_mixin.dart';
 import 'package:flutter/rendering.dart';
@@ -22,7 +23,7 @@ import 'package:redux/redux.dart';
 class UserPage extends StatefulWidget {
   final String userId;
   final String screenName;
-  final User inputUser;
+  final UserLite inputUser;
   UserPage({this.userId,this.screenName,this.inputUser});
 
   @override
@@ -33,10 +34,15 @@ class _UserPageState extends State<UserPage> with  WeiboListMixin,TickerProvider
   User activeUser;
   RefreshController _refreshController=RefreshController(initialRefresh:false);
   Future<WeiboListStatus> isFindUserComplete;
+  TabController _bottomTabbarController;
+  ///随滑动而遮挡的部分
+  GlobalKey _overflowWidgetKey=GlobalKey();
+  double _overflowWidgetSize;
   @override
   void initState(){
+    _bottomTabbarController= TabController(initialIndex: 1, length: 4, vsync: this);
     activeUser=User.fromUserLite(widget.inputUser??UserLite.init());
-    activeUser.screenName=widget.screenName??null;
+    activeUser.screenName=widget.screenName??activeUser.screenName;
     activeUser.idstr=widget.userId;
     super.initState();
     Map<String,String> exraParams=new Map();
@@ -46,10 +52,12 @@ class _UserPageState extends State<UserPage> with  WeiboListMixin,TickerProvider
     if(activeUser.idstr!=null){
       exraParams['uid']=activeUser.idstr;
     }
-    isFindUserComplete=UserProvider.getUserInfoFromNet(screenName: widget.screenName).then((result){
+    isFindUserComplete=UserProvider.getUserInfoFromNet(screenName: widget.screenName??activeUser.screenName).then((result){
       if(result.success) {
         setState(() {
           activeUser=result.data;
+          _overflowWidgetSize=_overflowWidgetKey.currentContext.size.height;
+          print(_overflowWidgetKey.currentContext.size.height);
         });
       }
       ///说明此时已经找到这个人的信息了，下面可以初始化拉取weiboList了
@@ -60,19 +68,12 @@ class _UserPageState extends State<UserPage> with  WeiboListMixin,TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    final TabController _bottomTabbarController= TabController(initialIndex: 1, length: 4, vsync: this);
+    
     return Scaffold(
       body: SmartRefresher(
         controller: _refreshController,
         enablePullDown: true,
         enablePullUp: true,
-        // header: ClassicHeader(
-        //   refreshingText: '刷新中',
-        //   failedText: '刷新失败',
-        //   completeText:'刷新成功' ,
-        //   releaseText: '刷新微博',
-        //   idleText: '下拉刷新',
-        // ),
         footer: ClassicFooter(
           failedText: '加载失败',
           canLoadingText: '加载更多',
@@ -85,7 +86,9 @@ class _UserPageState extends State<UserPage> with  WeiboListMixin,TickerProvider
             return[
               SliverPersistentHeader(
                 delegate: UserPageHeaderDelegate(
-                  expandedHeight: 200,
+                  overflowWidgetKey: _overflowWidgetKey,
+                  overflowWidgetSize: _overflowWidgetSize,
+                  expandedHeight: _overflowWidgetSize==null?260.0:(190.0+_overflowWidgetSize),
                   user: activeUser,
                   topPadding: MediaQuery.of(context).padding.top,
                   bottomWidget: TabBar(
@@ -159,16 +162,18 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
   final double expandedHeight;
   final double topPadding;
   final User user;
-
   final PreferredSizeWidget bottomWidget;
+  final GlobalKey overflowWidgetKey;
+  final double overflowWidgetSize;
 
   UserPageHeaderDelegate({
     this.collapsedHeight,
-    @required
     this.expandedHeight,
     this.topPadding,
     this.bottomWidget,
-    this.user
+    this.user,
+    this.overflowWidgetKey,
+    this.overflowWidgetSize
   });
 
   ///展开时渐渐显示，适用于输入不带透明度的颜色
@@ -263,13 +268,14 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
               ]
             )
           ),
+        //随着收缩会移动到顶部的按钮
         SafeArea(
           child:Column(
             crossAxisAlignment:CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children:[
               Container(
-                padding: EdgeInsets.only(left:(10+16*_percentWithExpand),right: 32),
+                padding: EdgeInsets.only(left:(10+6*_percentWithExpand),right: 16+_percentWithCollapse*32),
                 child:Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   //头像
@@ -279,7 +285,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                         SizedBox(
                           width:getIconSize(shrinkOffset,64),
                           height: getIconSize(shrinkOffset, 64),
-                          child: CircleAvatar(backgroundImage: PictureProvider.getPictureFromId(user.iconId),radius: 20),
+                          child:CircleAvatar(backgroundImage: PictureProvider.getPictureFromId(user.iconId),radius: 20),
                         ),
                         Offstage(
                           offstage: _percentWithCollapse!=1,
@@ -306,7 +312,8 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                           CustomButton(
                             color: showInExpand(_theme.primaryColor, shrinkOffset),
                             child: Text(
-                              (user.followMe&&user.following)?'互相关注'
+                              (user==null||user.followMe==null||user.following==null)?''
+                              :(user.followMe&&user.following)?'互相关注'
                               :(user.following)?'已关注'
                               :(user.followMe)?'粉丝'
                               :'关注',
@@ -321,40 +328,45 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                   ]
                 ),
               ),
+              //随着滑动而被遮盖的部分
               Container(
-                height: 64*_percentWithExpand,
-                padding: EdgeInsets.only(left: 20,right: 20),
-                child:Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        //用户名和签名
-                        Text(user.screenName,style: _theme.primaryTextTheme.subhead),
-                        Text(user.description,style:_theme.primaryTextTheme.subtitle)
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        FlatButton(onPressed: (){}, child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children:[
-                            Text(user.friendsCount.toString(),style: _theme.primaryTextTheme.subhead),
-                            Text('关注',style: _theme.primaryTextTheme.subtitle)
-                          ]
-                        )),
-                        FlatButton(onPressed: (){}, child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children:[
-                            Text(user.followersCount.toString(),style: _theme.primaryTextTheme.subhead),
-                            Text('粉丝',style: _theme.primaryTextTheme.subtitle)
-                          ]
-                        )),
-                      ],
-                    )
-                  ],
+                key: overflowWidgetKey,
+                height: overflowWidgetSize==null?null:(overflowWidgetSize*_percentWithExpand),
+                padding: EdgeInsets.only(left: 16,right: 16),
+                child:
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      //用户名和签名
+                      Text(user.screenName,style: _theme.primaryTextTheme.subtitle1),
+                      Text(user.description,style:_theme.primaryTextTheme.subtitle2,softWrap: true),
+                      Row(
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children:[
+                              Text('关注',style: _theme.primaryTextTheme.subtitle2),
+                              Container(width: 6),
+                              Text(Utils.formatNumToChineseStr(user.friendsCount),style: _theme.primaryTextTheme.subtitle2.merge(TextStyle(fontWeight: FontWeight.bold))),
+                            ]
+                          ),
+                          Container(
+                            width: 12,
+                            height: 36,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children:[
+                              Text('粉丝',style: _theme.primaryTextTheme.subtitle2),
+                              Container(width: 6),
+                              Text(Utils.formatNumToChineseStr(user.followersCount),style: _theme.primaryTextTheme.subtitle2.merge(TextStyle(fontWeight: FontWeight.bold))),
+                              
+                            ]
+                          ),
+                        ],
+                      )
+                    ],
                 )
               ),
               bottomWidget??Container()
@@ -367,7 +379,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
   }
 
   @override
-  double get maxExtent => math.max(minExtent, expandedHeight+(bottomWidget!=null? bottomWidget?.preferredSize?.height : 0.0));
+  double get maxExtent => math.max(minExtent, expandedHeight??260+(bottomWidget!=null? bottomWidget?.preferredSize?.height : 0.0));
 
   @override
   double get minExtent => 52 + topPadding +(bottomWidget!=null? bottomWidget?.preferredSize?.height : 0.0);
@@ -377,10 +389,10 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
   bool shouldRebuild(covariant UserPageHeaderDelegate oldDelegate) {
     // SliverAppbar里的是属性发生了变动再rebuild
     return collapsedHeight!=oldDelegate.collapsedHeight
-    || expandedHeight!=oldDelegate.expandedHeight
-    || topPadding!=oldDelegate.topPadding
-    || user!=oldDelegate.user
-    || bottomWidget!=oldDelegate.bottomWidget;
+    || expandedHeight!=oldDelegate.expandedHeight;
+    // || topPadding!=oldDelegate.topPadding
+    // || user!=oldDelegate.user
+    // || bottomWidget!=oldDelegate.bottomWidget;
     
   }
   
