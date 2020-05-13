@@ -51,7 +51,7 @@ class WeiboApi{
     if(extraParams!=null){
       params.addAll(extraParams);
     }
-    final result=await API.httpClientDefault.get(Utils.formatUrlParams(url, params));
+    final result=await API.get(Utils.formatUrlParams(url, params));
     return result.data;
   }
   
@@ -63,7 +63,7 @@ class WeiboApi{
       "max_id":maxId.toString(),
       'id':id.toString()
     };
-    final result=await API.httpClientDefault.get(Utils.formatUrlParams(url, params));
+    final result=await API.get(Utils.formatUrlParams(url, params));
     return result.data;
     // return result.then((result) async {
     //   final repost=Reposts.fromJson(result.data);
@@ -83,7 +83,7 @@ class WeiboApi{
       'isGetLongText':'1'
     };
 
-    return (await API.httpClientDefault.get(Utils.formatUrlParams(url, params))).data;
+    return (await API.get(Utils.formatUrlParams(url, params))).data;
 
   }
 
@@ -104,11 +104,6 @@ class WeiboApi{
     if(listId!=null) params['list_id']=listId;
     if(lat!=null) params['lat']=lat.toString();
     if(long!=null) params['long']=long.toString();
-    try{
-      await API.httpClientSend.post(Utils.formatUrlParams(url, params));
-      return true;
-    }catch(e){
-      return false;
-    }
+    return (await API.post(Utils.formatUrlParams(url, params)))==null?false:true;
   }
 }

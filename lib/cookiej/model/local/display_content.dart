@@ -24,6 +24,7 @@ class DisplayContent{
     final matchs=totalRegex.allMatches(_text).toList();
     var textsList=_text.split(totalRegex);
     var _displayContentList=<DisplayContent>[];
+    bool hasVideo=false;
     for(int i=0;i<textsList.length;i++){
       //添加普通文字
       if(textsList[i].trim().isNotEmpty){
@@ -65,8 +66,10 @@ class DisplayContent{
                   contentType=ContentType.Place;
                   break;
                 case 'video':
+                  if(hasVideo)  continue;
                   displayText='\u{f03d}'+urlInfo.annotations[0].object.displayName;
                   contentType=ContentType.Video;
+                  hasVideo=true;
                   break;
                 case 'collection':
                   displayText=urlInfo.annotations[0].object.displayName;

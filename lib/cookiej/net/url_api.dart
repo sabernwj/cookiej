@@ -10,17 +10,11 @@ class UrlApi{
 
   ///获取url短链接所包含的丰富信息
   static Future<Map> getUrlsInfo(List<String> shortUrls) async{
-    try{
-      var url=API.baseUrl+_urlInfo;
-      shortUrls.forEach((shortUrl){
-        url=Utils.formatUrlParams(url, {'url_short':shortUrl});
-      });
-      return (await API.httpClientDefault.get(url)).data;
-
-    }catch(e){
-      print(e.response.data);
-      return null;
-    }
+    var url=API.baseUrl+_urlInfo;
+    shortUrls.forEach((shortUrl){
+      url=Utils.formatUrlParams(url, {'url_short':shortUrl});
+    });
+    return (await API.get(url)).data;
   }
 
   static Future<Map> getVideoRaw(String objectId) async {
@@ -29,7 +23,7 @@ class UrlApi{
       'object_id':objectId,
     };
     url=Utils.formatUrlParams(url, params);
-    return (await API.httpClientDefault.get(url)).data;
+    return (await API.get(url)).data;
   }
 
 }

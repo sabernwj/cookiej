@@ -32,11 +32,11 @@ class ContentWidget extends StatelessWidget {
 
   final Content content;
   final List<DisplayContent> displayContentList;
-  
+  final TextStyle textStyle;
   ///轻模式，不显示多媒体信息，应用链接化
   final bool isLightMode;
   ContentWidget(this.content,{
-    this.isLightMode=false,
+    this.isLightMode=false, this.textStyle,
     }):displayContentList=DisplayContent.analysisContent(content);
   @override
   Widget build(BuildContext context) {
@@ -73,8 +73,8 @@ class ContentWidget extends StatelessWidget {
     final listInlineSpan=<InlineSpan>[];
     final secondDisplayWidget=<Widget>[];
     var imgWidth=(MediaQuery.of(context).size.width-32)/3;
-    var commonTextStyle=Theme.of(context).textTheme.body1;
-    var linkTextStyle=Theme.of(context).primaryTextTheme.body1;
+    var commonTextStyle=Theme.of(context).textTheme.bodyText2.merge(textStyle??TextStyle());
+    var linkTextStyle=Theme.of(context).primaryTextTheme.bodyText2.merge(textStyle??TextStyle());
     displayContentList.forEach((displayContent){
       switch(displayContent.type){
         case ContentType.Text:
@@ -153,8 +153,8 @@ class ContentWidget extends StatelessWidget {
   ///生成显示的内容部分，不带多媒体信息
   Widget factoryTextWidgetLight(BuildContext context,List<DisplayContent> displayContentList){
     var listInlineSpan=<InlineSpan>[];
-    var commonTextStyle=Theme.of(context).textTheme.body1;
-    var linkTextStyle=Theme.of(context).primaryTextTheme.body1;
+    var commonTextStyle=Theme.of(context).textTheme.bodyText2.merge(textStyle??TextStyle());
+    var linkTextStyle=Theme.of(context).primaryTextTheme.bodyText2.merge(textStyle??TextStyle());
     displayContentList.forEach((displayContent){
       switch(displayContent.type){
         case ContentType.Text:

@@ -72,16 +72,18 @@ class CookieJColors{
       //用于突出显示切换Widget（如Switch，Radio和Checkbox）的活动状态的颜色。
       toggleableActiveColor:color.shade500,
       unselectedWidgetColor: isDarkMode ? customBlack : customWhite,
+      backgroundColor: Colors.green,
       //cardColor:isDarkMode ? CookieJColors.customBlack : color[200],
       //主要用于内容显示部分的文字,黑白为主
       textTheme: TextTheme(
-        body1: isDarkMode?CookieJTextStyle.middleTextWhite:CookieJTextStyle.middleText,
+        //bodyText1: isDarkMode?CookieJTextStyle.middleTextWhite:CookieJTextStyle.middleText,
+        bodyText1: isDarkMode?CookieJTextStyle.middleTextWhite:CookieJTextStyle.middleText,
       ),
       //主要用于功能显示部分的文字
       primaryTextTheme: TextTheme(
-        subtitle: CookieJTextStyle.minText,
-        subhead: CookieJTextStyle.middleTextWhite,
-        // body1: TextStyle(
+        //subtitle: CookieJTextStyle.minText,
+        //subhead: CookieJTextStyle.middleTextWhite,
+        // bodyText1: TextStyle(
         //   color:luminance<0.15&&!isDarkMode?Colors.blue:color,
         //   fontSize: CookieJTextStyle.middleTextWhiteSize,
         //   // fontFamily: CookieJTextStyle.iconFontFamily,
@@ -89,11 +91,24 @@ class CookieJColors{
         //     CookieJTextStyle.iconFontFamily
         //   ]
         // ),
-        body1: CookieJTextStyle.middleText.merge(TextStyle(
-          color:luminance<0.15&&!isDarkMode?Colors.blue:color,
+        // bodyText1: CookieJTextStyle.middleText.merge(TextStyle(
+        //   color:luminance<0.15&&!isDarkMode?Colors.blue:color,
+        // )),
+        // bodyText2: TextStyle(fontSize: CookieJTextStyle.middleTextWhiteSize,),
+
+
+        overline: TextStyle(fontSize:CookieJTextStyle.minTextSize,color:Colors.grey[600],letterSpacing: 0),
+        bodyText1: CookieJTextStyle.middleTextWhite.merge(TextStyle(
+          //color:luminance<0.15&&!isDarkMode?Colors.blue:color,
         )),
-        body2: TextStyle(fontSize: CookieJTextStyle.middleTextWhiteSize,),
-        overline: TextStyle(fontSize:CookieJTextStyle.minTextSize,color:Colors.grey[600],letterSpacing: 0)
+        bodyText2: TextStyle(fontSize: CookieJTextStyle.middleTextWhiteSize,).merge(TextStyle(
+          color:luminance<0.15&&!isDarkMode?Colors.blue:color,
+          fontFamilyFallback: [
+            CookieJTextStyle.iconFontFamily
+          ]
+        )),
+        subtitle1: CookieJTextStyle.middleTextWhite,
+        subtitle2: CookieJTextStyle.minText,
       )
     );
   }
@@ -124,7 +139,7 @@ class CookieJTextStyle{
   static const lagerTextSize = 24.0;
   static const bigTextSize = 20.0;
   static const normalTextSize = 18.0;
-  static const middleTextWhiteSize = 16.0;
+  static const middleTextWhiteSize = 15.0;
   static const smallTextSize = 14.0;
   static const minTextSize = 12.0;
 

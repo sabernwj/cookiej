@@ -42,10 +42,10 @@ class _VideoPlayerSliderState extends State<VideoPlayerSlider> {
       }
       setState(() {
         progressValue = position / duration * 100;
-        labelProgress = DateUtil.formatDateMs(
-          progressValue.toInt(),
-          format: 'mm:ss',
-        );
+        // labelProgress = DateUtil.formatDateMs(
+        //   progressValue.toInt(),
+        //   format: 'mm:ss',
+        // );
       });
     }
   }
@@ -118,8 +118,9 @@ class _VideoPlayerSliderState extends State<VideoPlayerSlider> {
     if (widget.timer != null) {
       widget.timer.cancel();
     }
-    int duration = controller.value.duration.inMilliseconds;
+    
     setState(() {
+      int duration = controller.value.duration.inMilliseconds;
       progressValue = value;
       labelProgress = DateUtil.formatDateMs(
         (value / 100 * duration).toInt(),

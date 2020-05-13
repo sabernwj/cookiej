@@ -1,16 +1,19 @@
+import 'dart:async';
+
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/action/theme_state.dart';
+import 'package:cookiej/cookiej/event/string_msg_event.dart';
 import 'package:cookiej/cookiej/model/user.dart';
 import 'package:cookiej/cookiej/page/boot_page.dart';
-import 'package:cookiej/cookiej/page/main_page.dart';
 import 'package:cookiej/cookiej/reducer/app_reducer.dart';
-import 'package:cookiej/cookiej/page/login/login_page.dart';
+import 'package:cookiej/cookiej/event/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:redux/redux.dart';
-import 'package:cookiej/cookiej/config/style.dart';
+import 'package:event_bus/event_bus.dart';
 
 class CookieJAPP extends StatefulWidget {
   @override
@@ -18,6 +21,8 @@ class CookieJAPP extends StatefulWidget {
 }
 
 class _CookieJState extends State<CookieJAPP> {
+
+  StreamSubscription stream;
 
   final store=Store<AppState>(
     appReducer,
@@ -42,6 +47,17 @@ class _CookieJState extends State<CookieJAPP> {
         },
       )
     );
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    stream=eventBus.on<StringMsgEvent>().listen((event) {
+      Fluttertoast.showToast(
+        backgroundColor: store.state.themeState.themeData.primaryColor,
+        msg: event.msg
+      );
+    });
   }
 
   @override

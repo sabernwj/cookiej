@@ -76,7 +76,7 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
                 controller: _controller,
                 enableSuggestions: false,
                 specialTextSpanBuilder: WeiboSpecialTextSpanBuilder(context),
-                style:_theme.textTheme.body1,
+                style:_theme.textTheme.bodyText1,
                 focusNode: _textFieldNode,
                 decoration: InputDecoration(
                   border: InputBorder.none,
@@ -160,8 +160,9 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
                           }else{
                             isEmotionPanelShow=false;
                             isKeyboardShow=true;
-                            _textFieldNode.unfocus();
-                            _textFieldNode.requestFocus();
+                            SystemChannels.textInput.invokeMethod('TextInput.show');
+                            // _textFieldNode.unfocus();
+                            // _textFieldNode.requestFocus();
                           }
                         });
                         
@@ -184,10 +185,10 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
                         gravity: ToastGravity.BOTTOM,
                       );
                     }else{
-                      Fluttertoast.showToast(
-                        msg: '发布失败',
-                        gravity: ToastGravity.BOTTOM,
-                      );
+                      // Fluttertoast.showToast(
+                      //   msg: '发布失败',
+                      //   gravity: ToastGravity.BOTTOM,
+                      // );
                     }
                   },
                   color: Colors.transparent,
@@ -233,7 +234,7 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
         textOnNothingSelected: '没有选择图片',
         statusBarColor:  '#'+_theme.primaryColor.value.toRadixString(16),
         actionBarColor: '#'+_theme.primaryColor.value.toRadixString(16),
-        actionBarTitleColor: '#'+_theme.primaryTextTheme.body2.color.value.toRadixString(16)
+        actionBarTitleColor: '#'+_theme.primaryTextTheme.bodyText1.color.value.toRadixString(16)
       )
     ).then((assetList){
       var tumbList=assetList.map((asset){

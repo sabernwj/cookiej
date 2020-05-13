@@ -88,8 +88,14 @@ class PictureProvider{
     if(sinaImgSize!=null){
       url=url.replaceFirst(RegExp(Utils.imgSizeStrFromUrlRegStr), sinaImgSize);
     }
-
-    return CachedNetworkImageProvider(url);
+    CachedNetworkImageProvider returnImageProvider;
+    try{
+      returnImageProvider=CachedNetworkImageProvider(url);
+    }catch(e){
+      print(e);
+    }
+    
+    return returnImageProvider;
   }
 
 }

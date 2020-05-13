@@ -10,7 +10,7 @@ class WeiboSpecialTextSpanBuilder extends SpecialTextSpanBuilder{
 
   @override
   TextSpan build(String data, {TextStyle textStyle, onTap}) {
-    var textSpan = super.build(data, textStyle: Theme.of(context).textTheme.body1, onTap: onTap);
+    var textSpan = super.build(data, textStyle: Theme.of(context).textTheme.bodyText1, onTap: onTap);
     return textSpan;
   }
 
@@ -19,11 +19,11 @@ class WeiboSpecialTextSpanBuilder extends SpecialTextSpanBuilder{
     
     if(flag==null||flag=='') return null;
     if(isStart(flag, AtText.startKey)){
-      return AtText(Theme.of(context).primaryTextTheme.body1, onTap);
+      return AtText(Theme.of(context).primaryTextTheme.bodyText1, onTap);
     }else if(isStart(flag, EmotionText.startKey)){
-      return EmotionText(Theme.of(context).textTheme.body1);
+      return EmotionText(Theme.of(context).textTheme.bodyText1);
     }else if(isStart(flag, TopicText.startKey)){
-      return TopicText(Theme.of(context).primaryTextTheme.body1, onTap);
+      return TopicText(Theme.of(context).primaryTextTheme.bodyText1, onTap);
     }
     return null;
   }

@@ -13,7 +13,8 @@ class AccessApi{
     var url='$baseUrl/oauth2/authorize';
     var params={
       "client_id":Config.appkey_0,
-      "redirect_uri":Config.redirectUri_0
+      "redirect_uri":Config.redirectUri_0,
+      "scope":'friendships_groups_read,friendships_groups_write,statuses_to_me_read,direct_messages_write,direct_messages_read'
     };
     url=Utils.formatUrlParams(url, params);
     return url;

@@ -12,6 +12,6 @@ class UserApi {
     if(screenName!= null) params['screen_name']=screenName;
     if(uid!=null) params['uid']=uid;
     
-    return (await API.httpClientDefault.get(Utils.formatUrlParams(url, params))).data;
+    return (await API.get(Utils.formatUrlParams(url, params))).data;
   }
 }

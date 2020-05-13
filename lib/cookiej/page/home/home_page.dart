@@ -10,6 +10,7 @@ class HomePage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
+    final _theme=Theme.of(context);
     return StoreBuilder<AppState>(
       builder:(context,store){
         return DefaultTabController(
@@ -28,7 +29,7 @@ class HomePage extends StatelessWidget{
             ),
             floatingActionButton: FloatingActionButton(
               tooltip: '发微博',
-              child: Icon(Icons.add,size: 36,),
+              child: Icon(Icons.add,size: 36,color: _theme.primaryTextTheme.bodyText1.color,),
               onPressed:(){
                 Navigator.push(context, MaterialPageRoute(builder:(context)=> EditWeiboPage()));
               },

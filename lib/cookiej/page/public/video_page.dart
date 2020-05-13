@@ -32,7 +32,7 @@ class _VideoPageState extends State<VideoPage> {
       // appBar: AppBar(
       //   backgroundColor: Colors.black,
       //   leading: new BackButton(),
-      //   title: Text(widget.video.displayName,style: _theme.primaryTextTheme.body2),
+      //   title: Text(widget.video.displayName,style: _theme.primaryTextTheme.bodyText2),
       // ),
       body: Container(
         color: Colors.black,
@@ -49,21 +49,20 @@ class _VideoPageState extends State<VideoPage> {
                   title: widget.video.displayName,
                 );
               }catch(e){
-                return Center(
-                  child: Column(
-                    children: <Widget>[
-                      Icon(Icons.error_outline),
-                      Text('解析视频地址错误错误',style: _theme.primaryTextTheme.body2,),
-                      RaisedButton(
-                        child: Text('点击重试'),
-                        onPressed: (){
-                          setState(() {
-                            videoRawTask=UrlApi.getVideoRaw(widget.video.id);
-                          });
-                        }
-                      )
-                    ],
-                  ),
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.error_outline),
+                    Text('解析视频地址错误错误',style: _theme.primaryTextTheme.bodyText1,),
+                    RaisedButton(
+                      child: Text('点击重试'),
+                      onPressed: (){
+                        setState(() {
+                          videoRawTask=UrlApi.getVideoRaw(widget.video.id);
+                        });
+                      }
+                    )
+                  ],
                 );
               }
             }else {

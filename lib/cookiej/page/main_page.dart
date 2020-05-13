@@ -4,6 +4,7 @@ import 'package:cookiej/cookiej/page/home/home_page.dart';
 import 'package:cookiej/cookiej/page/discovery/discovery_page.dart';
 import 'package:cookiej/cookiej/page/message/message_page.dart';
 import 'package:cookiej/cookiej/page/login/login_page.dart';
+import 'package:cookiej/cookiej/page/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:cookiej/cookiej/page/personal_center/personal_center.dart';
@@ -23,6 +24,7 @@ class _MainPageState extends State<MainPage> {
   }
   @override
   Widget build(BuildContext context) {
+    final _theme=Theme.of(context);
     return StoreBuilder<AppState>(
       builder: (context,store){
         return Scaffold(
@@ -30,8 +32,7 @@ class _MainPageState extends State<MainPage> {
             title: Text('登录获取授权'),
           ):null,
           body:store.state.accessState.currentAccess==null?
-            Container(
-              child: Center(
+            Center(
                 child:RaisedButton.icon(
                   icon: Icon(IconData(0xf18a,fontFamily: CookieJTextStyle.iconFontFamily),size: 24),
                   label: Text('去登录',style: TextStyle(fontSize:18),),
@@ -39,7 +40,13 @@ class _MainPageState extends State<MainPage> {
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
                   },
                 )
-              ),
+                // child: CustomButton(
+                //   shape: Border(),
+                //   child: Text('去登录',style: _theme.textTheme.bodyText1.merge(TextStyle(fontSize:18)) ),
+                //   onTap: (){
+                //     Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
+                //   },
+                // )
             )
             :IndexedStack(
             children: <Widget>[

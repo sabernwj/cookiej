@@ -97,7 +97,7 @@ class _MessagePageState extends State<MessagePage> {
         padding: EdgeInsets.all(4),
         child: Text(
           Utils.formatNumToChineseStr(count),
-          style: _themeText.body2.copyWith(fontSize: 14,letterSpacing: count<10?8:0),
+          style: _themeText.bodyText1.copyWith(fontSize: 14,letterSpacing: count<10?8:0),
         ),
       ),
     );

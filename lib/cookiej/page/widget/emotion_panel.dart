@@ -70,8 +70,8 @@ class _EmotionPanelState extends State<EmotionPanel> with TickerProviderStateMix
           controller: _tabController,
           isScrollable: true,
           labelPadding: EdgeInsets.zero,
-          labelColor: Theme.of(context).primaryTextTheme.body1.color,
-          unselectedLabelColor: Theme.of(context).textTheme.body1.color,
+          labelColor: Theme.of(context).primaryTextTheme.bodyText2.color,
+          unselectedLabelColor: Theme.of(context).textTheme.bodyText2.color,
         )
       ]
     );

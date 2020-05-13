@@ -87,7 +87,7 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                       Text('赞(${initialComments.weibo.attitudesCount})')
                     ],
                     controller: _commentStatusController,
-                    labelColor: _theme.textTheme.body1.color,
+                    labelColor: _theme.textTheme.bodyText1.color,
                     // indicatorColor: Theme.of(context).primaryColor,
                     // labelStyle: TextStyle(fontSize:CookieJTextStyle.normalText.fontSize),
                   ),

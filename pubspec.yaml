@@ -25,7 +25,7 @@ dependencies:
   dio_cookie_manager: ^1.0.0
   flutter_webview_plugin: ^0.3.11 #浏览器插件
   intl: ^0.15.7 #该软件包提供国际化和本地化功能
-  cached_network_image: ^2.0.0 #带缓存的图片组件
+  cached_network_image: ^2.2.0+1 #带缓存的图片组件
   pull_to_refresh: ^1.5.8 #上拉加载下拉刷新
   font_awesome_flutter: ^8.5.0 #图标包
   flutter_redux: ^0.6.0
@@ -37,6 +37,9 @@ dependencies:
   auto_orientation: ^1.0.6 #控制横竖屏
   screen: ^0.0.5  #屏幕亮度
   gallery_saver: ^2.0.1 #读写本地相册
+  event_bus: ^1.1.1 #事件总线
+  connectivity: ^0.4.8+6 #检测网络状态wifi/数据/无网络
+
 
   #可能会被替换的
   extended_image: ^0.7.3+1

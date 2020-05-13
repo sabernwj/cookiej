@@ -9,18 +9,12 @@ class CommentApi{
 
   ///根据微博ID获取该微博评论列表
   static Future<Map> getCommentsShow(int id,int sinceId,int maxId) async{
-    try{
-      var url=API.baseUrl+_commentsById;
-      var params={
-        'id':id.toString(),
-        "since_id":sinceId.toString(),
-        "max_id":maxId.toString()
-      };
-      return (await API.httpClientDefault.get(Utils.formatUrlParams(url, params))).data;
-
-    }catch(e){
-      print(e.response.data);
-      return null;
-    }
+    var url=API.baseUrl+_commentsById;
+    var params={
+      'id':id.toString(),
+      "since_id":sinceId.toString(),
+      "max_id":maxId.toString()
+    };
+    return (await API.get(Utils.formatUrlParams(url, params))).data;
   }
 }

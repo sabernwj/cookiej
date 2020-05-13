@@ -5,6 +5,7 @@ import 'package:cookiej/cookiej/action/user_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/config/style.dart';
 import 'package:cookiej/cookiej/db/sql_manager.dart';
+import 'package:cookiej/cookiej/net/api.dart';
 import 'package:cookiej/cookiej/page/main_page.dart';
 import 'package:cookiej/cookiej/provider/access_provider.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
@@ -33,32 +34,27 @@ class _BootPageState extends State<BootPage> {
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     Store<AppState> store = StoreProvider.of(context);
-    Future.delayed(Duration(seconds: 1),(){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainPage()));
-    });
+
     //加载主题
     String themeName=await LocalStorage.get(Config.themeNameStorageKey);
     bool isDarkMode=await LocalStorage.get(Config.isDarkModeStorageKey)=='true';
     if(themeName!=null){
       store.dispatch(RefreshThemeState(ThemeState(themeName,CookieJColors.getThemeData(themeName,isDarkMode: isDarkMode))));
     }
-    // //初始化数据库
-    // await SqlManager.init();
-    // await Hive.initFlutter();
-    // await UrlProvider.init();
-    // await PictureProvider.init();
-    // await WeiboProvider.init();
-    // //await Hive.openBox('cookiej_hive_database');
-    // //加载本地用户信息
-    // store.dispatch(InitAccessState());
-
-    //链式初始化
+    //初始化
+    API.init();
     SqlManager.init()
       .then((_)=>Hive.initFlutter())
       .then((_)=>UrlProvider.init())
       .then((_)=>PictureProvider.init())
       .then((_)=>WeiboProvider.init())
       .then((_)=>store.dispatch(InitAccessState()))
+      .then((_) => print('初始化完成'))
+      .then((_){
+        Future.delayed(Duration(milliseconds: 500),(){
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainPage()));
+        });
+      })
       .catchError((e)=>print(e));
 
   }
@@ -83,7 +79,7 @@ class _BootPageState extends State<BootPage> {
               Container(
                 height: 12,
               ),
-              Text('饼干微博',style:Theme.of(context).primaryTextTheme.body2.merge(TextStyle(fontSize: 18))),
+              Text('饼干微博',style:Theme.of(context).primaryTextTheme.bodyText1.merge(TextStyle(fontSize: 18))),
               Container(
                 height:MediaQuery.of(context).size.height/4
               )

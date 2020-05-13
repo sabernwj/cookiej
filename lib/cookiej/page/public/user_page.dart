@@ -250,7 +250,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                         child:IconButton(
                           icon: Icon(
                             Icons.arrow_back,
-                            color: showInExpand(_theme.primaryTextTheme.subhead.color, shrinkOffset),	
+                            color: showInExpand(_theme.primaryTextTheme.subtitle1.color, shrinkOffset),	
                           ),
                           onPressed: () => Navigator.pop(context),
                         ),
@@ -258,7 +258,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                       IconButton(
                         icon: Icon(
                           Icons.more_horiz,
-                          color: _theme.primaryTextTheme.subhead.color
+                          color: _theme.primaryTextTheme.subtitle1.color
                         ),
                         onPressed: () {},
                       ),
@@ -293,7 +293,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                             margin: EdgeInsets.only(left:20),
                             child: Text(
                               user.screenName,
-                              style: _theme.primaryTextTheme.subhead,
+                              style: _theme.primaryTextTheme.subtitle1,
                             ),
                           )
                         ),
@@ -305,7 +305,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                       child: Row(
                         children: <Widget>[
                           CustomButton(
-                            child: Icon(Icons.email,color: _theme.primaryTextTheme.body2.color),
+                            child: Icon(Icons.email,color: _theme.primaryTextTheme.bodyText1.color),
                             color: showInExpand(_theme.primaryColor, shrinkOffset),
                             onTap: (){},
                           ),
@@ -317,7 +317,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                               :(user.following)?'已关注'
                               :(user.followMe)?'粉丝'
                               :'关注',
-                              style: _theme.primaryTextTheme.body2,
+                              style: _theme.primaryTextTheme.bodyText1,
                             ),
                             onTap: (){},
                           ),

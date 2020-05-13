@@ -11,7 +11,7 @@ class LoginPage extends StatelessWidget{
   Widget build(BuildContext context){
     _flutterWebviewPlugin.onUrlChanged.listen((url) async{
       _flutterWebviewPlugin.cleanCookies();
-      if(url.contains(RegExp('code'))){
+      if(url.contains('?code=')){
         _flutterWebviewPlugin.close();
         //登录成功，获取到code，下面获取access
         var provider=await AccessProvider.getAccessNet(Uri.tryParse(url).queryParameters['code']);
