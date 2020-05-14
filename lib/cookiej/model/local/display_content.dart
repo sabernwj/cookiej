@@ -59,29 +59,35 @@ class DisplayContent{
             var urlInfo=UrlProvider.getUrlInfo(_singleText).data??UrlInfo(annotations: []);
             var displayText='\u{f0c1}网页链接';
             var contentType=ContentType.Link;
-            if(urlInfo.annotations.length!=0){
-              switch(urlInfo.annotations[0].objectType){
-                case 'place':
-                  displayText='\u{f124}'+urlInfo.annotations[0].object.displayName;
-                  contentType=ContentType.Place;
-                  break;
-                case 'video':
-                  if(hasVideo)  continue;
-                  displayText='\u{f03d}'+urlInfo.annotations[0].object.displayName;
-                  contentType=ContentType.Video;
-                  hasVideo=true;
-                  break;
-                case 'collection':
-                  displayText=urlInfo.annotations[0].object.displayName;
-                  contentType=ContentType.Image;
-                  break;
-                case 'webpage':
-                  contentType=ContentType.Link;
-                  break;
-                default:
-                  displayText='\u{f18a}未知微博应用';
+            try{
+              if(urlInfo.annotations.length!=0){
+                switch(urlInfo.annotations[0].objectType){
+                  case 'place':
+                    contentType=ContentType.Place;
+                    displayText='\u{f124}'+urlInfo.annotations[0].object.displayName;
+                    break;
+                  case 'video':
+                    contentType=ContentType.Video;
+                    if(hasVideo)  continue;
+                    displayText='\u{f03d}'+urlInfo.annotations[0].object.displayName;
+                    hasVideo=true;
+                    break;
+                  case 'collection':
+                    contentType=ContentType.Image;
+                    displayText=urlInfo.annotations[0].object.displayName;
+                    break;
+                  case 'webpage':
+                    contentType=ContentType.Link;
+                    break;
+                  default:
+                    displayText='\u{f18a}未知微博应用';
+                }
               }
+            }catch(e){
+              print('解析url发生异常($_singleText),${contentType.toString()}类型,错误${e.toString()}');
+              contentType=ContentType.Link;
             }
+
             _displayContentList.add(DisplayContent(contentType,displayText,info: urlInfo));
           }
         }

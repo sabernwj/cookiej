@@ -1,4 +1,5 @@
 import 'package:cookiej/cookiej/model/weibo_lite.dart';
+import 'package:cookiej/cookiej/page/public/user_page.dart';
 import 'package:cookiej/cookiej/page/widget/content_widget.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
@@ -20,17 +21,14 @@ class RepostWidget extends StatelessWidget {
           Container(
             child: Row(
               children: <Widget>[
-                // ExtendedImage.network(
-                //   PictureProvider.getImgUrlFromId(repost.user.iconId),
-                //   shape:BoxShape.circle,
-                //   width:36,
-                //   height: 36,
-                // ),
-                SizedBox(child: CircleAvatar(backgroundImage:PictureProvider.getPictureFromId(repost.user.iconId)),width: 36,height: 36,),
+                GestureDetector(
+                  onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context)=>UserPage(inputUser:repost.user))),
+                  child: SizedBox(child: CircleAvatar(backgroundImage:PictureProvider.getPictureFromId(repost.user.iconId)),width: 36,height: 36,),
+                ),  
                 Container(
                   child: Column(
                     children: <Widget>[
-                      Text(repost.user.name,style: _theme.textTheme.subhead,),
+                      Text(repost.user.name,style: _theme.primaryTextTheme.bodyText2.merge(TextStyle(fontSize: _theme.primaryTextTheme.bodyText2.fontSize-2))),
                       Text(Utils.getDistanceFromNow(repost.createdAt),style: _theme.primaryTextTheme.overline),
                     ],
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +41,7 @@ class RepostWidget extends StatelessWidget {
           ),
           //转发内容正文
           Container(
-            child: ContentWidget(repost),
+            child: ContentWidget(repost,textStyle: TextStyle(fontSize:_theme.textTheme.bodyText2.fontSize-1.5),),
             margin: EdgeInsets.only(left:46),
           ),
           

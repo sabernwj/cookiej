@@ -30,11 +30,12 @@ class BootPage extends StatefulWidget {
 
 class _BootPageState extends State<BootPage> {
 
+  bool isLoad=false;
   @override
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     Store<AppState> store = StoreProvider.of(context);
-
+    if(isLoad) return;
     //加载主题
     String themeName=await LocalStorage.get(Config.themeNameStorageKey);
     bool isDarkMode=await LocalStorage.get(Config.isDarkModeStorageKey)=='true';
@@ -56,7 +57,7 @@ class _BootPageState extends State<BootPage> {
         });
       })
       .catchError((e)=>print(e));
-
+    isLoad=true;
   }
 
   @override

@@ -78,6 +78,9 @@ class CookieJColors{
       textTheme: TextTheme(
         //bodyText1: isDarkMode?CookieJTextStyle.middleTextWhite:CookieJTextStyle.middleText,
         bodyText1: isDarkMode?CookieJTextStyle.middleTextWhite:CookieJTextStyle.middleText,
+        subtitle1: isDarkMode?CookieJTextStyle.middleTextWhite:CookieJTextStyle.middleText,
+        subtitle2: isDarkMode?CookieJTextStyle.minText:CookieJTextStyle.minText.merge(TextStyle(color: Colors.grey[700])),
+        
       ),
       //主要用于功能显示部分的文字
       primaryTextTheme: TextTheme(
@@ -101,11 +104,8 @@ class CookieJColors{
         bodyText1: CookieJTextStyle.middleTextWhite.merge(TextStyle(
           //color:luminance<0.15&&!isDarkMode?Colors.blue:color,
         )),
-        bodyText2: TextStyle(fontSize: CookieJTextStyle.middleTextWhiteSize,).merge(TextStyle(
+        bodyText2: CookieJTextStyle.middleText.merge(TextStyle(
           color:luminance<0.15&&!isDarkMode?Colors.blue:color,
-          fontFamilyFallback: [
-            CookieJTextStyle.iconFontFamily
-          ]
         )),
         subtitle1: CookieJTextStyle.middleTextWhite,
         subtitle2: CookieJTextStyle.minText,

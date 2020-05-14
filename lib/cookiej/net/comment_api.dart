@@ -6,6 +6,7 @@ import 'package:cookiej/cookiej/utils/utils.dart';
 class CommentApi{
   ///根据微博ID返回某条微博的评论列表
   static const String _commentsById='/2/comments/show.json';
+  static const String _attitudesId='/2/attitudes/show.json';
 
   ///根据微博ID获取该微博评论列表
   static Future<Map> getCommentsShow(int id,int sinceId,int maxId) async{
@@ -14,6 +15,16 @@ class CommentApi{
       'id':id.toString(),
       "since_id":sinceId.toString(),
       "max_id":maxId.toString()
+    };
+    return (await API.get(Utils.formatUrlParams(url, params))).data;
+  }
+
+  static Future<Map> getAttitudesShow(int id,int page,int count) async {
+    var url=API.baseUrl+_attitudesId;
+    var params={
+      'id':id.toString(),
+      'page':page.toString(),
+      'count':count.toString()
     };
     return (await API.get(Utils.formatUrlParams(url, params))).data;
   }

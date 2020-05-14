@@ -1,3 +1,4 @@
+import 'package:cookiej/cookiej/page/public/user_page.dart';
 import 'package:cookiej/cookiej/page/widget/content_widget.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
@@ -18,13 +19,11 @@ class CommentWidget extends StatelessWidget{
           Container(
             child: Row(
               children: <Widget>[
-                // ExtendedImage.network(
-                //   PictureProvider.getImgUrlFromId(comment.user.iconId),
-                //   shape:BoxShape.circle,
-                //   width:36,
-                //   height: 36,
-                // ),
-                SizedBox(child: CircleAvatar(backgroundImage:PictureProvider.getPictureFromId(comment.user.iconId)),width: 36,height: 36,),
+                GestureDetector(
+                  child: SizedBox(child: CircleAvatar(backgroundImage:PictureProvider.getPictureFromId(comment.user.iconId)),width: 36,height: 36,),
+                  onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context)=>UserPage(inputUser:comment.user))),
+                ),
+                
                 Container(
                   child: Column(
                     children: <Widget>[

@@ -27,6 +27,7 @@ dependencies:
   intl: ^0.15.7 #该软件包提供国际化和本地化功能
   cached_network_image: ^2.2.0+1 #带缓存的图片组件
   pull_to_refresh: ^1.5.8 #上拉加载下拉刷新
+  extended_nested_scroll_view: ^0.4.0 #扩展的NestedScrollView配合pull_to_refersh 使用
   font_awesome_flutter: ^8.5.0 #图标包
   flutter_redux: ^0.6.0
   redux: ^4.0.0 
@@ -43,7 +44,7 @@ dependencies:
 
   #可能会被替换的
   extended_image: ^0.7.3+1
-  photo_view: ^0.9.1
+  photo_view: ^0.9.2
   extended_text_field: ^0.5.0
   hive: ^1.4.1+1
   hive_flutter: ^0.3.0+2
@@ -51,6 +52,7 @@ dependencies:
   shared_preferences: ^0.5.6+2  
   fluttertoast: ^4.0.0 #弹出消息工具
   flustars: ^0.2.6+1 #包含了一些通用工具类
+  waterfall_flow: any
   #chewie: ^0.9.10
 
 dev_dependencies:

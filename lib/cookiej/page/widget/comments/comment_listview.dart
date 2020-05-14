@@ -57,7 +57,7 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
       displayCommentList.sort((a,b)=>b.rootid.compareTo(a.rootid));
       return comments;
     });
-    _commentStatusController=TabController(initialIndex: 1,length: 3,vsync: this);
+    _commentStatusController=TabController(initialIndex: 1,length: 2,vsync: this);
     _commentStatusController.addListener(()=>_commentStatusController.indexIsChanging?setState((){}):(){});
     super.initState();
   }
@@ -80,11 +80,13 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
             return snapshot.data==null?Text('未知状态'):Container(
               child:Column(children: <Widget>[
                 Container(
+                  alignment: AlignmentDirectional.centerStart,
                   child:TabBar(
+                    isScrollable: true,
                     tabs: <Widget>[
                       Text('转发(${initialComments.weibo.repostsCount})'),
                       Text('评论(${initialComments.weibo.commentsCount})'),
-                      Text('赞(${initialComments.weibo.attitudesCount})')
+                      //Text('赞(${initialComments.weibo.attitudesCount})')
                     ],
                     controller: _commentStatusController,
                     labelColor: _theme.textTheme.bodyText1.color,
@@ -94,8 +96,21 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                   height: 42,
                   color: _theme.dialogBackgroundColor,
                 ),
-                Container(
-                  child: [
+                Offstage(
+                  offstage: groupCommentMap.length==0,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical:4),
+                    child:Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Text('按时间',style: _theme.textTheme.subtitle2,)
+                      ],
+                    ),
+                  ),
+                ),
+                
+                IndexedStack(
+                  children: [
                     RepostListview(widget.id),
                     ListView.builder(
                       itemBuilder: (context,index){
@@ -105,8 +120,9 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                     ),
-                    Text('点赞')
-                  ][_commentStatusController.index],
+                    //Text('点赞')
+                  ],
+                  index: _commentStatusController.index,
                 )
               ]),
               constraints: BoxConstraints(minHeight:300),

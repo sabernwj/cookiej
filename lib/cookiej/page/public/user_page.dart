@@ -2,10 +2,9 @@
 import 'dart:ui';
 
 import 'package:cookiej/cookiej/action/app_state.dart';
-import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/model/user.dart';
 import 'package:cookiej/cookiej/model/user_lite.dart';
-import 'package:cookiej/cookiej/page/widget/weibo/weibo_widget.dart';
+import 'package:cookiej/cookiej/page/widget/weibo/user_weibo_listview.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
 import 'package:cookiej/cookiej/page/widget/custom_button.dart';
@@ -17,9 +16,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:redux/redux.dart';
-
 class UserPage extends StatefulWidget {
   final String userId;
   final String screenName;
@@ -30,17 +26,16 @@ class UserPage extends StatefulWidget {
   _UserPageState createState() => _UserPageState();
 }
 
-class _UserPageState extends State<UserPage> with  WeiboListMixin,TickerProviderStateMixin{
+class _UserPageState extends State<UserPage> with TickerProviderStateMixin{
   User activeUser;
-  RefreshController _refreshController=RefreshController(initialRefresh:false);
-  Future<WeiboListStatus> isFindUserComplete;
+  Future<bool> isFindUserComplete;
   TabController _bottomTabbarController;
   ///随滑动而遮挡的部分
   GlobalKey _overflowWidgetKey=GlobalKey();
   double _overflowWidgetSize;
   @override
   void initState(){
-    _bottomTabbarController= TabController(initialIndex: 1, length: 4, vsync: this);
+    _bottomTabbarController= TabController(initialIndex: 2, length: 5, vsync: this);
     activeUser=User.fromUserLite(widget.inputUser??UserLite.init());
     activeUser.screenName=widget.screenName??activeUser.screenName;
     activeUser.idstr=widget.userId;
@@ -59,10 +54,10 @@ class _UserPageState extends State<UserPage> with  WeiboListMixin,TickerProvider
           _overflowWidgetSize=_overflowWidgetKey.currentContext.size.height;
           print(_overflowWidgetKey.currentContext.size.height);
         });
+        return true;
       }
+      return false;
       ///说明此时已经找到这个人的信息了，下面可以初始化拉取weiboList了
-      weiboListInit(WeiboTimelineType.User,extraParams: exraParams);
-      return startLoadData();
     }).catchError((e)=>false);
   }
 
@@ -70,25 +65,14 @@ class _UserPageState extends State<UserPage> with  WeiboListMixin,TickerProvider
   Widget build(BuildContext context) {
     
     return Scaffold(
-      body: SmartRefresher(
-        controller: _refreshController,
-        enablePullDown: true,
-        enablePullUp: true,
-        footer: ClassicFooter(
-          failedText: '加载失败',
-          canLoadingText: '加载更多',
-          idleText: '加载更多',
-          loadingText: '加载中',
-          noDataText: '已无更多数据'
-        ),
-        child: NestedScrollView(
+      body:NestedScrollView(
           headerSliverBuilder: (context,_){
             return[
               SliverPersistentHeader(
                 delegate: UserPageHeaderDelegate(
                   overflowWidgetKey: _overflowWidgetKey,
                   overflowWidgetSize: _overflowWidgetSize,
-                  expandedHeight: _overflowWidgetSize==null?260.0:(190.0+_overflowWidgetSize),
+                  expandedHeight: _overflowWidgetSize==null?260.0:(220.0+_overflowWidgetSize),
                   user: activeUser,
                   topPadding: MediaQuery.of(context).padding.top,
                   bottomWidget: TabBar(
@@ -96,6 +80,7 @@ class _UserPageState extends State<UserPage> with  WeiboListMixin,TickerProvider
                     controller: _bottomTabbarController,
                     tabs: [
                       Tab(text: '关于'),
+                      Tab(text: '原创'),
                       Tab(text: '微博'),
                       Tab(text: '相册'),
                       Tab(text: '视频'),
@@ -106,51 +91,66 @@ class _UserPageState extends State<UserPage> with  WeiboListMixin,TickerProvider
               ),
             ];
           },
-          body: TabBarView(
-            controller: _bottomTabbarController,
-            children: [
-              Container(),
-              FutureBuilder(
-                future: isFindUserComplete,
-                builder: (context,snaphot){
-                  if(snaphot.data!=WeiboListStatus.complete){
-                    return Center(child:  CircularProgressIndicator());
-                  }
-                  return ListView.builder(
-                    itemCount: weiboList.length,
-                    itemBuilder: (context,index){
-                      return Container(
-                        child:WeiboWidget(weiboList[index]),
-                        margin: EdgeInsets.only(bottom:12),
-                      );
-                    }
-                  );
-                }
-              ),
-              Container(),
-              Container()
-            ]
+          body:FutureBuilder(
+            future: isFindUserComplete,
+            builder: (context,snaphot){
+              if(snaphot.data!=true){
+                return Center(child:  CircularProgressIndicator());
+              }
+              return TabBarView(
+                controller: _bottomTabbarController,
+                children: [
+                  //关于
+                  Container(
+                    child: ListView(
+                      children:[
+                        (activeUser.verifiedReason==null||activeUser.verifiedReason.isEmpty)?Container():aboutItemWidget(context,activeUser.verifiedReason,title: '微博认证'),
+                        aboutItemWidget(context,activeUser.location,title: '所在地'),
+                        aboutItemWidget(context,(activeUser.gender==null||activeUser.gender=='n')?'未知':activeUser.gender=='m'?'男':'女',title: '性别'),
+                        (activeUser.url==null||activeUser.url.isEmpty)?Container():aboutItemWidget(context,activeUser.url,title: '博客地址'),
+                        (activeUser.domain==null||activeUser.domain.isEmpty)?Container():aboutItemWidget(context,activeUser.domain,title: '个性域名'),
+                        aboutItemWidget(context,Utils.getDistanceFromNow(Utils.parseWeiboTimeStrToUtc(activeUser.createdAt)),title: '注册时间')
+                      ]
+                    ),
+                  ),
+                  //原创
+                  UserWeiboListView(screenName: activeUser.screenName,feature: 1),
+                  //微博
+                  UserWeiboListView(screenName: activeUser.screenName,),
+                  //相册
+                  UserWeiboListView(screenName: activeUser.screenName,feature: 2),
+                  //视频
+                  UserWeiboListView(screenName: activeUser.screenName,feature: 3),
+                ]
+              );
+            }
           ),
         ),
-        onRefresh: (){
-          refreshData()
-            .then((isComplete){
-              if(isComplete==WeiboListStatus.complete) setState(() {
-                _refreshController.refreshCompleted();
-              });
-              else _refreshController.refreshFailed();
-            }).catchError((e)=>_refreshController.refreshFailed());
-        },
-        onLoading: (){
-          loadMoreData()
-            .then((isComplete){
-              setState(() {
-                if(isComplete==WeiboListStatus.nodata) _refreshController.loadNoData();
-                if(isComplete==WeiboListStatus.complete) _refreshController.loadComplete();
-                if(isComplete==WeiboListStatus.failed) _refreshController.loadFailed();
-              });
-            }).catchError((e)=>_refreshController.loadFailed());
-        },
+    );
+  }
+  Widget aboutItemWidget(BuildContext context,String text, {String title,Function onTap}){
+    return Container(
+      alignment: AlignmentDirectional.centerStart,
+      padding: EdgeInsets.symmetric(vertical:6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal:12),
+            child: Text(title,style:Theme.of(context).textTheme.subtitle2),
+          ),
+          InkWell(
+            onTap: onTap??(){},
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 12,horizontal: 12),
+              child:Row(
+                children: <Widget>[
+                  Text(text,style:Theme.of(context).textTheme.bodyText2)
+                ],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -332,14 +332,16 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
               Container(
                 key: overflowWidgetKey,
                 height: overflowWidgetSize==null?null:(overflowWidgetSize*_percentWithExpand),
-                padding: EdgeInsets.only(left: 16,right: 16),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child:
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      Container(height: 16,),
                       //用户名和签名
                       Text(user.screenName,style: _theme.primaryTextTheme.subtitle1),
+                      Container(height: 8,),
                       Text(user.description,style:_theme.primaryTextTheme.subtitle2,softWrap: true),
                       Row(
                         children: <Widget>[
@@ -353,7 +355,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                           ),
                           Container(
                             width: 12,
-                            height: 36,
+                            height: 48,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -365,6 +367,9 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                             ]
                           ),
                         ],
+                      ),
+                      Container(
+                        height:24
                       )
                     ],
                 )

@@ -11,7 +11,7 @@ mixin WeiboListMixin{
   Weibos newHomeTimeline;
   ///即当前显示在页面上的weiboList
   var weiboList=<WeiboLite>[];
-
+  Future<WeiboListStatus> isStartLoadDataComplete;
   WeiboTimelineType timelineType;
   Map<String,String> extraParams;
   String groupId;

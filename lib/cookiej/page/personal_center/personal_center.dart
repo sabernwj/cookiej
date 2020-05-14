@@ -194,18 +194,17 @@ class PersonalCenter extends StatelessWidget {
       });
     }
     itemList.add(PopupMenuItem(
-      child: Row(
-        children:[
-          IconButton(
-            padding: EdgeInsets.all(0),
-            icon: Icon(Icons.add_circle,color: Colors.green), 
-            onPressed: (){
-              Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
-            }
-          )
-        ],
-        mainAxisAlignment:MainAxisAlignment.center
+      child: InkWell(
+        child:Row(
+          children:[
+            Icon(Icons.add_circle,color: Colors.green), 
+          ],
+          mainAxisAlignment:MainAxisAlignment.center
+        ),
+        onTap: (){
+          Navigator.pop(context);
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
+        },
       ),
     ));
 

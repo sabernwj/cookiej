@@ -22,7 +22,6 @@ class CookieJAPP extends StatefulWidget {
 
 class _CookieJState extends State<CookieJAPP> {
 
-  StreamSubscription stream;
 
   final store=Store<AppState>(
     appReducer,
@@ -52,7 +51,7 @@ class _CookieJState extends State<CookieJAPP> {
   @override
   void initState(){
     super.initState();
-    stream=eventBus.on<StringMsgEvent>().listen((event) {
+    eventBus.on<StringMsgEvent>().listen((event) {
       Fluttertoast.showToast(
         backgroundColor: store.state.themeState.themeData.primaryColor,
         msg: event.msg

@@ -15,7 +15,7 @@ class RepostListview extends StatefulWidget {
   _RepostListviewState createState() => _RepostListviewState();
 }
 
-class _RepostListviewState extends State<RepostListview> {
+class _RepostListviewState extends State<RepostListview> with AutomaticKeepAliveClientMixin {
   var _weiboList=<WeiboLite>[];
   Future<Reposts> repostsTask;
 
@@ -29,6 +29,7 @@ class _RepostListviewState extends State<RepostListview> {
   }
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return FutureBuilder(
       future: repostsTask, 
       builder: (context, snapshot) {
@@ -62,4 +63,7 @@ class _RepostListviewState extends State<RepostListview> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
