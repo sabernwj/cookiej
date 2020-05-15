@@ -24,7 +24,7 @@ class _MainPageState extends State<MainPage> {
   }
   @override
   Widget build(BuildContext context) {
-    final _theme=Theme.of(context);
+    //final _theme=Theme.of(context);
     return StoreBuilder<AppState>(
       builder: (context,store){
         return Scaffold(

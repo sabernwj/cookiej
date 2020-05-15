@@ -11,7 +11,7 @@ class CommentProvider{
     result=CommentApi.getCommentsShow(id, sinceId, maxId)
       .then((json)=>Comments.fromJson(json))
       .then((comments) async {
-        //UrlProvider.saveUrlInfoToRAM(comments.comments);
+        //await UrlProvider.saveUrlInfoToRAM(comments.comments);
         await UrlProvider.saveUrlInfoToHive(comments.comments);
         return ProviderResult(comments,true);
       })

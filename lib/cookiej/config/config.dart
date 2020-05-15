@@ -92,3 +92,7 @@ class CookieJHiveType{
   static const LocalState=6;
   static const User=7;
 }
+
+enum FunctionCallBack{
+  UserPageRefresh
+}

@@ -83,9 +83,10 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                   alignment: AlignmentDirectional.centerStart,
                   child:TabBar(
                     isScrollable: true,
+                    labelPadding: EdgeInsets.symmetric(vertical:10,horizontal:12),
                     tabs: <Widget>[
-                      Text('转发(${initialComments.weibo.repostsCount})'),
-                      Text('评论(${initialComments.weibo.commentsCount})'),
+                      Text('转发(${initialComments.weibo.repostsCount})',style: _theme.textTheme.bodyText2,),
+                      Text('评论(${initialComments.weibo.commentsCount})',style: _theme.textTheme.bodyText2),
                       //Text('赞(${initialComments.weibo.attitudesCount})')
                     ],
                     controller: _commentStatusController,
@@ -93,13 +94,12 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                     // indicatorColor: Theme.of(context).primaryColor,
                     // labelStyle: TextStyle(fontSize:CookieJTextStyle.normalText.fontSize),
                   ),
-                  height: 42,
                   color: _theme.dialogBackgroundColor,
                 ),
                 Offstage(
                   offstage: groupCommentMap.length==0,
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical:4),
+                    padding: EdgeInsets.symmetric(vertical:12,horizontal: 16),
                     child:Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[

@@ -2,15 +2,19 @@
 import 'dart:ui';
 
 import 'package:cookiej/cookiej/action/app_state.dart';
+import 'package:cookiej/cookiej/config/config.dart';
+import 'package:cookiej/cookiej/event/event_bus.dart';
 import 'package:cookiej/cookiej/model/user.dart';
 import 'package:cookiej/cookiej/model/user_lite.dart';
+import 'package:cookiej/cookiej/page/widget/custom_tabbarview.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/user_weibo_listview.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
 import 'package:cookiej/cookiej/page/widget/custom_button.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:cookiej/cookiej/page/widget/weibo/weibo_list_mixin.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
+    as extended;
 import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'dart:async';
@@ -30,12 +34,16 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin{
   User activeUser;
   Future<bool> isFindUserComplete;
   TabController _bottomTabbarController;
+  PageController _bottomPageController;
+  ScrollController _scrollController;
   ///随滑动而遮挡的部分
   GlobalKey _overflowWidgetKey=GlobalKey();
   double _overflowWidgetSize;
   @override
   void initState(){
+    _bottomPageController=PageController(initialPage: 2);
     _bottomTabbarController= TabController(initialIndex: 2, length: 5, vsync: this);
+    _scrollController=ScrollController();
     activeUser=User.fromUserLite(widget.inputUser??UserLite.init());
     activeUser.screenName=widget.screenName??activeUser.screenName;
     activeUser.idstr=widget.userId;
@@ -65,14 +73,19 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin{
   Widget build(BuildContext context) {
     
     return Scaffold(
-      body:NestedScrollView(
+      body:extended.NestedScrollViewRefreshIndicator(
+        onRefresh: () async{
+          eventBus.fire(FunctionCallBack.UserPageRefresh);
+        },
+        child: extended.NestedScrollView(
+          controller: _scrollController,
           headerSliverBuilder: (context,_){
             return[
               SliverPersistentHeader(
                 delegate: UserPageHeaderDelegate(
                   overflowWidgetKey: _overflowWidgetKey,
                   overflowWidgetSize: _overflowWidgetSize,
-                  expandedHeight: _overflowWidgetSize==null?260.0:(220.0+_overflowWidgetSize),
+                  expandedHeight: _overflowWidgetSize==null?355.9:(220.0+_overflowWidgetSize),
                   user: activeUser,
                   topPadding: MediaQuery.of(context).padding.top,
                   bottomWidget: TabBar(
@@ -84,48 +97,75 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin{
                       Tab(text: '微博'),
                       Tab(text: '相册'),
                       Tab(text: '视频'),
-                    ]
+                    ],
+                    onTap: (index)=>_bottomPageController.jumpToPage(index),
                   )
                 ),
                 pinned: true,
               ),
             ];
           },
+          //body: Container(),
           body:FutureBuilder(
             future: isFindUserComplete,
             builder: (context,snaphot){
               if(snaphot.data!=true){
                 return Center(child:  CircularProgressIndicator());
               }
-              return TabBarView(
-                controller: _bottomTabbarController,
+              return CustomTabBarView(
+                pageController: _bottomPageController,
+                tabController: _bottomTabbarController,
                 children: [
                   //关于
-                  Container(
-                    child: ListView(
-                      children:[
-                        (activeUser.verifiedReason==null||activeUser.verifiedReason.isEmpty)?Container():aboutItemWidget(context,activeUser.verifiedReason,title: '微博认证'),
-                        aboutItemWidget(context,activeUser.location,title: '所在地'),
-                        aboutItemWidget(context,(activeUser.gender==null||activeUser.gender=='n')?'未知':activeUser.gender=='m'?'男':'女',title: '性别'),
-                        (activeUser.url==null||activeUser.url.isEmpty)?Container():aboutItemWidget(context,activeUser.url,title: '博客地址'),
-                        (activeUser.domain==null||activeUser.domain.isEmpty)?Container():aboutItemWidget(context,activeUser.domain,title: '个性域名'),
-                        aboutItemWidget(context,Utils.getDistanceFromNow(Utils.parseWeiboTimeStrToUtc(activeUser.createdAt)),title: '注册时间')
-                      ]
+                  extended.NestedScrollViewInnerScrollPositionKeyWidget(
+                    Key('Tab0'),
+                    Container(
+                      child: ListView(
+                        children:[
+                          (activeUser.verifiedReason==null||activeUser.verifiedReason.isEmpty)?Container():aboutItemWidget(context,activeUser.verifiedReason,title: '微博认证'),
+                          aboutItemWidget(context,activeUser.location,title: '所在地'),
+                          aboutItemWidget(context,(activeUser.gender==null||activeUser.gender=='n')?'未知':activeUser.gender=='m'?'男':'女',title: '性别'),
+                          (activeUser.url==null||activeUser.url.isEmpty)?Container():aboutItemWidget(context,activeUser.url,title: '博客地址'),
+                          (activeUser.domain==null||activeUser.domain.isEmpty)?Container():aboutItemWidget(context,activeUser.domain,title: '个性域名'),
+                          aboutItemWidget(context,Utils.getDistanceFromNow(Utils.parseWeiboTimeStrToUtc(activeUser.createdAt)),title: '注册时间')
+                        ]
+                      ),
                     ),
                   ),
+                  //引入这些Tab0,Tab1为的是解决不同tabview在切换的时候会使用同一个滑动位置
+                  //看了一圈原理大概还没看懂T_T
                   //原创
-                  UserWeiboListView(screenName: activeUser.screenName,feature: 1),
+                  extended.NestedScrollViewInnerScrollPositionKeyWidget(
+                    Key('Tab1'),
+                    UserWeiboListView(screenName: activeUser.screenName,feature: 1),
+                  ),
                   //微博
-                  UserWeiboListView(screenName: activeUser.screenName,),
+                  extended.NestedScrollViewInnerScrollPositionKeyWidget(
+                    Key('Tab2'),
+                    UserWeiboListView(screenName: activeUser.screenName),
+                  ),
                   //相册
-                  UserWeiboListView(screenName: activeUser.screenName,feature: 2),
+                  extended.NestedScrollViewInnerScrollPositionKeyWidget(
+                    Key('Tab3'),
+                    UserWeiboListView(screenName: activeUser.screenName,feature: 2),
+                  ),
                   //视频
-                  UserWeiboListView(screenName: activeUser.screenName,feature: 3),
+                  extended.NestedScrollViewInnerScrollPositionKeyWidget(
+                    Key('Tab4'),
+                    UserWeiboListView(screenName: activeUser.screenName,feature: 3),
+                  ),
+                  
                 ]
               );
             }
           ),
+          innerScrollPositionKeyBuilder: () {
+            var index = "Tab";
+            index +=(_bottomTabbarController.index.toString());
+            return Key(index);
+          },
         ),
+      ),
     );
   }
   Widget aboutItemWidget(BuildContext context,String text, {String title,Function onTap}){

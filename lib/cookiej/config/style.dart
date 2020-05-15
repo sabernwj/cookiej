@@ -67,6 +67,8 @@ class CookieJColors{
       accentColorBrightness: Brightness.dark,
       //选中文本时的背景颜色,
       textSelectionHandleColor:color.shade300,
+      //画布颜色(背景色)
+      canvasColor: isDarkMode?Colors.grey[900]:Colors.grey[100],
       //前景色
       accentColor: color.shade600,
       //用于突出显示切换Widget（如Switch，Radio和Checkbox）的活动状态的颜色。
@@ -77,29 +79,13 @@ class CookieJColors{
       //主要用于内容显示部分的文字,黑白为主
       textTheme: TextTheme(
         //bodyText1: isDarkMode?CookieJTextStyle.middleTextWhite:CookieJTextStyle.middleText,
-        bodyText1: isDarkMode?CookieJTextStyle.middleTextWhite:CookieJTextStyle.middleText,
+        bodyText2: isDarkMode?CookieJTextStyle.middleTextWhite:CookieJTextStyle.middleText,
         subtitle1: isDarkMode?CookieJTextStyle.middleTextWhite:CookieJTextStyle.middleText,
         subtitle2: isDarkMode?CookieJTextStyle.minText:CookieJTextStyle.minText.merge(TextStyle(color: Colors.grey[700])),
         
       ),
       //主要用于功能显示部分的文字
       primaryTextTheme: TextTheme(
-        //subtitle: CookieJTextStyle.minText,
-        //subhead: CookieJTextStyle.middleTextWhite,
-        // bodyText1: TextStyle(
-        //   color:luminance<0.15&&!isDarkMode?Colors.blue:color,
-        //   fontSize: CookieJTextStyle.middleTextWhiteSize,
-        //   // fontFamily: CookieJTextStyle.iconFontFamily,
-        //   fontFamilyFallback: [
-        //     CookieJTextStyle.iconFontFamily
-        //   ]
-        // ),
-        // bodyText1: CookieJTextStyle.middleText.merge(TextStyle(
-        //   color:luminance<0.15&&!isDarkMode?Colors.blue:color,
-        // )),
-        // bodyText2: TextStyle(fontSize: CookieJTextStyle.middleTextWhiteSize,),
-
-
         overline: TextStyle(fontSize:CookieJTextStyle.minTextSize,color:Colors.grey[600],letterSpacing: 0),
         bodyText1: CookieJTextStyle.middleTextWhite.merge(TextStyle(
           //color:luminance<0.15&&!isDarkMode?Colors.blue:color,
@@ -139,7 +125,7 @@ class CookieJTextStyle{
   static const lagerTextSize = 24.0;
   static const bigTextSize = 20.0;
   static const normalTextSize = 18.0;
-  static const middleTextWhiteSize = 15.0;
+  static const middleTextWhiteSize = 16.0;
   static const smallTextSize = 14.0;
   static const minTextSize = 12.0;
 

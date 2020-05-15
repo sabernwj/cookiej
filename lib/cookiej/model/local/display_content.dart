@@ -84,7 +84,7 @@ class DisplayContent{
                 }
               }
             }catch(e){
-              print('解析url发生异常($_singleText),${contentType.toString()}类型,错误${e.toString()}');
+              print('解析url发生异常($_singleText),${contentType.toString()}类型,错误 ${e.toString()}');
               contentType=ContentType.Link;
             }
 

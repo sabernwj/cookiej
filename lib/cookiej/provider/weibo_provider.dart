@@ -57,12 +57,13 @@ class WeiboProvider{
     }
     result= WeiboApi.getTimeLine(sinceId,maxId,timelineType,extraParams)
       .then((json)=>Weibos.fromJson(json))
-      .then((weibos) {
+      .then((weibos) async {
         //如果uid不为空，说明此次调用是由StartloadData发起的，刷新缓存
         if(localUid!=null){
           putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid), weibos.statuses);
         }
-        UrlProvider.saveUrlInfoToHive(weibos.statuses);
+        //await UrlProvider.saveUrlInfoToRAM(weibos.statuses);
+        await UrlProvider.saveUrlInfoToHive(weibos.statuses);
         return ProviderResult(weibos,true);
       })
       .catchError((e)=>ProviderResult(null,false));
@@ -75,6 +76,7 @@ class WeiboProvider{
     result=WeiboApi.getReposts(id,sinceId,maxId)
       .then((json)=>Reposts.fromJson(json))
       .then((repost) async {
+        //await UrlProvider.saveUrlInfoToRAM(repost.reposts);
         await UrlProvider.saveUrlInfoToHive(repost.reposts);
         return ProviderResult(repost, true);
       })
@@ -88,6 +90,7 @@ class WeiboProvider{
     result=WeiboApi.getStatusesShow(id)
       .then((json)=>Weibo.fromJson(json))
       .then((weibo) async {
+        //await UrlProvider.saveUrlInfoToRAM([weibo]);
         await UrlProvider.saveUrlInfoToHive([weibo]);
         return ProviderResult(weibo,true);
       })

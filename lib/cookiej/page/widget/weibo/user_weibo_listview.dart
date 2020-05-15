@@ -1,10 +1,13 @@
 import 'dart:ui';
 
 import 'package:cookiej/cookiej/config/config.dart';
+import 'package:cookiej/cookiej/event/event_bus.dart';
 import 'package:cookiej/cookiej/model/local/display_content.dart';
 import 'package:cookiej/cookiej/model/video.dart';
 import 'package:cookiej/cookiej/page/public/video_page.dart';
 import 'package:cookiej/cookiej/page/public/weibo_page.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
+    as extended;
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_list_mixin.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_widget.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
@@ -32,7 +35,6 @@ class UserWeiboListView extends StatefulWidget {
 class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMixin,AutomaticKeepAliveClientMixin {
 
   RefreshController _refreshController=RefreshController(initialRefresh:false);
-
   @override
   void initState() {
     weiboListInit(WeiboTimelineType.User,extraParams: {
@@ -40,6 +42,12 @@ class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMix
       'feature':widget.feature.toString()
     });
     isStartLoadDataComplete=startLoadData();
+    eventBus.on<FunctionCallBack>().listen((event) {
+      if(event==FunctionCallBack.UserPageRefresh){
+        onRefreshCallBack();
+        print('刷新成功');
+      }
+    });
     super.initState();
   }
   @override
@@ -49,59 +57,61 @@ class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMix
       future: isStartLoadDataComplete,
       builder: (context,snaphot){
         if(snaphot.data!=WeiboListStatus.complete) return Center(child:CircularProgressIndicator());
-        return SmartRefresher(
-          controller: _refreshController,
-          enablePullDown: true,
-          enablePullUp: true,
-          footer: ClassicFooter(
-            failedText: '加载失败',
-            canLoadingText: '加载更多',
-            idleText: '加载更多',
-            loadingText: '加载中',
-            noDataText: '已无更多数据'
-          ),
-          onRefresh: (){
-            refreshData()
-              .then((isComplete){
-                if(isComplete==WeiboListStatus.complete) setState(() {
-                  _refreshController.refreshCompleted();
-                });
-                else _refreshController.refreshFailed();
-              }).catchError((e)=>_refreshController.refreshFailed());
-          },
-          onLoading: (){
-            loadMoreData()
-              .then((isComplete){
-                setState(() {
-                  if(isComplete==WeiboListStatus.nodata) _refreshController.loadNoData();
-                  if(isComplete==WeiboListStatus.complete) _refreshController.loadComplete();
-                  if(isComplete==WeiboListStatus.failed) _refreshController.loadFailed();
-                });
-              }).catchError((e)=>_refreshController.loadFailed());
-          },
-          child:(){
-            switch (widget.feature) {
-              case 2:
-                return pictureWaterfall();
-                break;
-              case 3:
-                return videoWaterFall();
-                break;
-              default:
-                return listViewWidget();
-                break;
-            }
-          }()
+        return RefreshConfiguration(
+          child:SmartRefresher(
+            controller: _refreshController,
+            enablePullDown: false,
+            enablePullUp: true,
+            footer: ClassicFooter(
+              failedText: '加载失败',
+              canLoadingText: '加载更多',
+              idleText: '加载更多',
+              loadingText: '加载中',
+              noDataText: '已无更多数据'
+            ),
+            onRefresh: onRefreshCallBack,
+            onLoading: (){
+              loadMoreData()
+                .then((isComplete){
+                  setState(() {
+                    if(isComplete==WeiboListStatus.nodata) _refreshController.loadNoData();
+                    if(isComplete==WeiboListStatus.complete) _refreshController.loadComplete();
+                    if(isComplete==WeiboListStatus.failed) _refreshController.loadFailed();
+                  });
+                }).catchError((e)=>_refreshController.loadFailed());
+            },
+            child:(){
+              switch (widget.feature) {
+                case 2:
+                  return pictureWaterfall();
+                  break;
+                case 3:
+                  return videoWaterFall();
+                  break;
+                default:
+                  return listViewWidget();
+                  break;
+              }
+            }()
+          )
         );
       },
     );
   }
 
   Widget listViewWidget(){
+    if(weiboList.isEmpty){
+      return Center(
+        child:Text('没有找到微博')
+      );
+    }
     return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: weiboList.length,
       itemBuilder: (context,index){
         return Container(
+          //child: Container(height:100,color:Colors.green),
           child:WeiboWidget(weiboList[index]),
           margin: EdgeInsets.only(bottom:12),
         );
@@ -111,6 +121,11 @@ class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMix
   }
 
   Widget pictureWaterfall(){
+    if(weiboList.isEmpty){
+      return Center(
+        child:Text('没有找到照片')
+      );
+    }
     return Container(
       padding: EdgeInsets.all(8),
       child:WaterfallFlow.builder(
@@ -121,6 +136,7 @@ class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMix
           crossAxisSpacing: 8,
           mainAxisSpacing: 8
         ),
+        itemCount: weiboList.length,
         itemBuilder: (context,index){
           String imgUrl;
           try{
@@ -129,7 +145,7 @@ class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMix
             try{
               imgUrl=weiboList[index].retweetedWeibo.picUrls[0];
             }catch(e){
-              return null;
+              return Container();
             }
           }
           return GestureDetector(
@@ -138,6 +154,7 @@ class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMix
                 maxHeight:300
               ),
               child:ClipRRect(
+                borderRadius: BorderRadius.circular(8),
                 child: Image(
                   fit: BoxFit.cover,
                   image: PictureProvider.getPictureFromUrl(imgUrl,sinaImgSize: SinaImgSize.bmiddle)
@@ -154,109 +171,140 @@ class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMix
   }
 
   Widget videoWaterFall(){
-    print(weiboList.length);
-    return Container(
+    var videoElementList=<VideoElement>[];
+    weiboList.forEach((weibo){
+      bool hasVideo=false;
+      String text='';
+      Video video;
+      DisplayContent.analysisContent(weibo).forEach((content) {
+        if(content.type==ContentType.Text) text+=content.text;
+        if(content.type==ContentType.Video&&!hasVideo){
+          video=(content.info.annotations[0].object as Video);
+          hasVideo=true;
+        }
+      });
+      if(hasVideo){
+        videoElementList.add(VideoElement(text,video,onTap: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(weibo.id)));
+        }));
+      }
+    });
+    print(videoElementList.length);
+    if(videoElementList.isEmpty){
+      return Center(
+        child:Text('没有找到视频')
+      );
+    }
+    Widget returnWidget;
+    returnWidget= Container(
       padding: EdgeInsets.symmetric(vertical: 8,horizontal: 24),
-      child:WaterfallFlow.builder(
+      child:ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        gridDelegate: SliverWaterfallFlowDelegate(
-          crossAxisCount: 1,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 24
-        ),
+        itemCount: videoElementList.length,
         itemBuilder:(context,index){
-          try{
-            var displayContentList=DisplayContent.analysisContent(weiboList[index]);
-            bool hasVideo=false;
-            var returnWidget;
-            displayContentList.forEach((displayContent){
-              if(displayContent.type==ContentType.Video&&!hasVideo){
-                hasVideo=true;
-                var video=(displayContent.info.annotations[0].object as Video);
-                returnWidget=Container(
-                  height: MediaQuery.of(context).size.width*2/3,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      Image(
-                        width: double.infinity,
-                        height: double.infinity,
-                        image: PictureProvider.getPictureFromUrl(video.image.url),
-                        fit: BoxFit.cover,
-                      ),
-                      Column(
-                        children:[
-                          Expanded(
-                            child: Icon(
+          var videoElement=videoElementList[index];
+          return Container(
+            margin: EdgeInsets.symmetric(vertical:12),
+            height: MediaQuery.of(context).size.width*2/3,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child:Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Image(
+                    width: double.infinity,
+                    height: double.infinity,
+                    image: PictureProvider.getPictureFromUrl(videoElement.video.image.url),
+                    fit: BoxFit.cover,
+                  ),
+                  Column(
+                    children:[
+                      Expanded(
+                        child:Stack(
+                          fit: StackFit.expand,
+                          children: <Widget>[
+                            Icon(
                               Icons.play_circle_outline,
                               size: 64,
                               color: Colors.white,
                             ),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            height: MediaQuery.of(context).size.width/5,
-                            child: Stack(
-                              fit: StackFit.expand,
-                              children: <Widget>[
-                                Container(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  child: ClipRect(
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                                      child: Container(
-                                        color: Colors.black26
-                                      ),
+                            Material(
+                              color:Colors.transparent,
+                              child:InkWell(
+                                onTap:(){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>VideoPage(video: videoElement.video)));
+                                },
+                              )
+                            ),
+                            
+                          ],
+                        ),
+                      ),
+                      //模糊遮罩
+                      GestureDetector(
+                        onTap: videoElement.onTap,
+                        child: Container(
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.width/5,
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: <Widget>[
+                              Container(
+                                width: double.infinity,
+                                height: double.infinity,
+                                child: ClipRect(
+                                  child: BackdropFilter(
+                                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                    child: Container(
+                                      color: Colors.black26
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  child:Text(
-                                    (){
-                                      var text='';
-                                      displayContentList.forEach((element) => text+=element.text);
-                                      return text;
-                                    }(),
-                                    style: TextStyle(color: Colors.white,fontFamilyFallback: ['fontawesome']),
-                                  ),
-                                  padding:EdgeInsets.all(8)
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                        mainAxisAlignment:MainAxisAlignment.end
-                      ),
-                      Positioned.fill(
-                        child: Material(
-                          color:Colors.transparent,
-                          child:InkWell(
-                            onTap:() async{
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(weiboList[index].id)));
-                            }
-                          )
-                        )
+                              ),
+                              //文字
+                              Container(
+                                alignment: AlignmentDirectional.centerStart,
+                                child: Text(
+                                  videoElement.text,
+                                  overflow: TextOverflow.fade,
+                                  style: TextStyle(color:Colors.white,fontSize: 14),
+                                ),
+                                padding:EdgeInsets.all(8)
+                              )
+                            ],
+                          ),
+                        ),
                       )
                     ],
+                    mainAxisAlignment:MainAxisAlignment.end
                   ),
-                );
-              }
-            });
-            if(returnWidget!=null) returnWidget=ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: returnWidget,
-            );
-            return returnWidget;
-          }catch(e){
-            return null;
-          }
+                ],
+              )
+            ),
+          );
         },
       )
     );
+    return returnWidget;
   }
-
+  void onRefreshCallBack (){
+    refreshData()
+      .then((isComplete){
+        if(isComplete==WeiboListStatus.complete) setState(() {
+          _refreshController.refreshCompleted();
+        });
+        else _refreshController.refreshFailed();
+      }).catchError((e)=>_refreshController.refreshFailed());
+  }
   @override
   bool get wantKeepAlive => true;
+}
+
+class VideoElement{
+  final String text;
+  final Function onTap;
+  final Video video;
+
+  VideoElement(this.text, this.video,{this.onTap});
 }
