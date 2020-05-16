@@ -126,47 +126,45 @@ class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMix
         child:Text('没有找到照片')
       );
     }
-    return Container(
+    return WaterfallFlow.builder(
       padding: EdgeInsets.all(8),
-      child:WaterfallFlow.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: SliverWaterfallFlowDelegate(
-          crossAxisCount: 2,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8
-        ),
-        itemCount: weiboList.length,
-        itemBuilder: (context,index){
-          String imgUrl;
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: SliverWaterfallFlowDelegate(
+        crossAxisCount: 2,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8
+      ),
+      itemCount: weiboList.length,
+      itemBuilder: (context,index){
+        String imgUrl;
+        try{
+          imgUrl=weiboList[index].picUrls[0];
+        }catch(e){
           try{
-            imgUrl=weiboList[index].picUrls[0];
+            imgUrl=weiboList[index].retweetedWeibo.picUrls[0];
           }catch(e){
-            try{
-              imgUrl=weiboList[index].retweetedWeibo.picUrls[0];
-            }catch(e){
-              return Container();
-            }
+            return Container();
           }
-          return GestureDetector(
-            child:Container(
-              constraints: BoxConstraints(
-                maxHeight:300
-              ),
-              child:ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image(
-                  fit: BoxFit.cover,
-                  image: PictureProvider.getPictureFromUrl(imgUrl,sinaImgSize: SinaImgSize.bmiddle)
-                ),
-              )
-            ),
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(weiboList[index].id)));
-            },
-          );
         }
-      )
+        return GestureDetector(
+          child:Container(
+            constraints: BoxConstraints(
+              maxHeight:300
+            ),
+            child:ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image(
+                fit: BoxFit.cover,
+                image: PictureProvider.getPictureFromUrl(imgUrl,sinaImgSize: SinaImgSize.bmiddle)
+              ),
+            )
+          ),
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(weiboList[index].id)));
+          },
+        );
+      }
     );
   }
 
@@ -177,7 +175,9 @@ class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMix
       String text='';
       Video video;
       DisplayContent.analysisContent(weibo).forEach((content) {
-        if(content.type==ContentType.Text) text+=content.text;
+        if(content.type==ContentType.Text
+        ||content.type==ContentType.Topic
+        ||content.type==ContentType.User) text+=content.text;
         if(content.type==ContentType.Video&&!hasVideo){
           video=(content.info.annotations[0].object as Video);
           hasVideo=true;
@@ -196,95 +196,93 @@ class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMix
       );
     }
     Widget returnWidget;
-    returnWidget= Container(
+    returnWidget=ListView.builder(
       padding: EdgeInsets.symmetric(vertical: 8,horizontal: 24),
-      child:ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: videoElementList.length,
-        itemBuilder:(context,index){
-          var videoElement=videoElementList[index];
-          return Container(
-            margin: EdgeInsets.symmetric(vertical:12),
-            height: MediaQuery.of(context).size.width*2/3,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child:Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
-                  Image(
-                    width: double.infinity,
-                    height: double.infinity,
-                    image: PictureProvider.getPictureFromUrl(videoElement.video.image.url),
-                    fit: BoxFit.cover,
-                  ),
-                  Column(
-                    children:[
-                      Expanded(
-                        child:Stack(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: videoElementList.length,
+      itemBuilder:(context,index){
+        var videoElement=videoElementList[index];
+        return Container(
+          margin: EdgeInsets.symmetric(vertical:12),
+          height: MediaQuery.of(context).size.width*2/3,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child:Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Image(
+                  width: double.infinity,
+                  height: double.infinity,
+                  image: PictureProvider.getPictureFromUrl(videoElement.video.image.url),
+                  fit: BoxFit.cover,
+                ),
+                Column(
+                  children:[
+                    Expanded(
+                      child:Stack(
+                        fit: StackFit.expand,
+                        children: <Widget>[
+                          Icon(
+                            Icons.play_circle_outline,
+                            size: 64,
+                            color: Colors.white,
+                          ),
+                          Material(
+                            color:Colors.transparent,
+                            child:InkWell(
+                              onTap:(){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>VideoPage(video: videoElement.video)));
+                              },
+                            )
+                          ),
+                          
+                        ],
+                      ),
+                    ),
+                    //模糊遮罩
+                    GestureDetector(
+                      onTap: videoElement.onTap,
+                      child: Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.width/5+2,
+                        child: Stack(
                           fit: StackFit.expand,
                           children: <Widget>[
-                            Icon(
-                              Icons.play_circle_outline,
-                              size: 64,
-                              color: Colors.white,
-                            ),
-                            Material(
-                              color:Colors.transparent,
-                              child:InkWell(
-                                onTap:(){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>VideoPage(video: videoElement.video)));
-                                },
-                              )
-                            ),
-                            
-                          ],
-                        ),
-                      ),
-                      //模糊遮罩
-                      GestureDetector(
-                        onTap: videoElement.onTap,
-                        child: Container(
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.width/5,
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: <Widget>[
-                              Container(
-                                width: double.infinity,
-                                height: double.infinity,
-                                child: ClipRect(
-                                  child: BackdropFilter(
-                                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                                    child: Container(
-                                      color: Colors.black26
-                                    ),
+                            Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              child: ClipRect(
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                  child: Container(
+                                    color: Colors.black26
                                   ),
                                 ),
                               ),
-                              //文字
-                              Container(
-                                alignment: AlignmentDirectional.centerStart,
-                                child: Text(
-                                  videoElement.text,
-                                  overflow: TextOverflow.fade,
-                                  style: TextStyle(color:Colors.white,fontSize: 14),
-                                ),
-                                padding:EdgeInsets.all(8)
-                              )
-                            ],
-                          ),
+                            ),
+                            //文字
+                            Container(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: Text(
+                                videoElement.text,
+                                overflow: TextOverflow.fade,
+                                style: TextStyle(color:Colors.white,fontSize: 14),
+                              ),
+                              padding:EdgeInsets.all(8)
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                    mainAxisAlignment:MainAxisAlignment.end
-                  ),
-                ],
-              )
-            ),
-          );
-        },
-      )
+                      ),
+                    )
+                  ],
+                  mainAxisAlignment:MainAxisAlignment.end
+                ),
+              ],
+            )
+          ),
+        );
+      },
     );
     return returnWidget;
   }

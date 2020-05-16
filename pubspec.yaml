@@ -53,6 +53,7 @@ dependencies:
   fluttertoast: ^4.0.0 #弹出消息工具
   flustars: ^0.2.6+1 #包含了一些通用工具类
   waterfall_flow: any
+  #flutter_staggered_grid_view: ^0.3.0
   #chewie: ^0.9.10
 
 dev_dependencies:

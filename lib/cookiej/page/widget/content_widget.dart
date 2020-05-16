@@ -201,10 +201,10 @@ class ContentWidget extends StatelessWidget {
       return GestureDetector(
         child:ConstrainedBox(
           child: Padding(
-              child:Image(
-              image: PictureProvider.getPictureFromUrl(imgUrls[0],sinaImgSize: sinaImgSize),
-              fit:BoxFit.cover,
-            ),
+              child:Hero(
+                tag: imgUrls[0],
+                child: Image(image: PictureProvider.getPictureFromUrl(imgUrls[0],sinaImgSize: sinaImgSize),fit:BoxFit.cover),
+              ),
             padding: EdgeInsets.only(bottom:6),
           ),
           constraints: BoxConstraints(
@@ -221,9 +221,9 @@ class ContentWidget extends StatelessWidget {
       for(var i=0;i<imgUrls.length;i++){
         imgWidgetList.add(
           GestureDetector(
-            child:Image(
-              image: PictureProvider.getPictureFromUrl(imgUrls[i],sinaImgSize: sinaImgSize),
-              fit: BoxFit.cover,
+            child:Hero(
+              tag: imgUrls[i],
+              child: Image(image: PictureProvider.getPictureFromUrl(imgUrls[i],sinaImgSize: sinaImgSize),fit: BoxFit.cover),
             ),
             onTap: (){
               imgOnTap(context,imgUrls,index:i);
