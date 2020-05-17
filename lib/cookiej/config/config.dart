@@ -49,6 +49,11 @@ class SinaImgSize{
   static const String thumbnail='thumbnail';
   static const String bmiddle='bmiddle';
   static const String large='large';
+  static const String small='small';
+  static const String mw690='mw690';
+  static const String mw1024='mw1024';
+  static const String mw2048='mw2048';
+
 }
 
 

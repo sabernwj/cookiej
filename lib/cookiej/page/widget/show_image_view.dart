@@ -3,6 +3,7 @@ import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 import 'package:photo_view/photo_view_gallery.dart';
 
 ///封装好，全屏查看一批图片的组件
@@ -21,10 +22,13 @@ class ShowImagesView extends StatefulWidget {
   _ShowImagesViewState createState() => _ShowImagesViewState();
 }
 
-class _ShowImagesViewState extends State<ShowImagesView> {
+class _ShowImagesViewState extends State<ShowImagesView>  with TickerProviderStateMixin{
   int currentIndex;
   bool isInPop=false;
 
+  AnimationController _doubleClickAnimationController;
+  Animation<double> _doubleClickAnimation;
+  Function _doubleClickAnimationListener;
   @override
   void initState(){
     // widget.imgUlrs.forEach((url){
@@ -35,6 +39,9 @@ class _ShowImagesViewState extends State<ShowImagesView> {
     //   ));
     // });
     currentIndex=widget.currentIndex;
+
+    _doubleClickAnimationController = AnimationController(
+        duration: const Duration(milliseconds: 150), vsync: this);
     super.initState();
   }
   void onPageChanged(int index) {
@@ -53,67 +60,155 @@ class _ShowImagesViewState extends State<ShowImagesView> {
       )
     )
     :ExtendedImageGesturePageView.builder(
+      physics: BouncingScrollPhysics(),
       itemCount: widget.imgUrls.length,
       itemBuilder: (context,index){
         var item=widget.imgUrls[index];
+        Size rawImageSize;
+        bool isLongPicture=false;
         Widget image = ExtendedImage(
           image: PictureProvider.getPictureFromUrl(item,sinaImgSize:SinaImgSize.large),
-          fit: BoxFit.fitWidth,
+          fit: BoxFit.contain,
+          enableSlideOutPage: true,
           mode: ExtendedImageMode.gesture,
           initGestureConfigHandler:(state){
-            // state.imageProvider.resolve((ImageConfiguration())).addListener(ImageStreamListener((ImageInfo info, bool _){
-              
-            // }));
+            rawImageSize=Size(state.extendedImageInfo.image.width.toDouble(), state.extendedImageInfo.image.height.toDouble());
+            if((rawImageSize.width/rawImageSize.height)<(9/21)) isLongPicture=true;
+
+            double scaleWithScreen=MediaQuery.of(context).size.height/((rawImageSize.height/rawImageSize.width)*MediaQuery.of(context).size.width);
+            double realScale=rawImageSize.width/MediaQuery.of(context).size.width;
             return GestureConfig(
               minScale: 1.0,
-              maxScale: 4.0
+              maxScale: math.max(scaleWithScreen,realScale),
+              inPageView: true,
             );
           },
           onDoubleTap: (state){
+            double begin = state.gestureDetails.totalScale;
+            double scaleWithScreen=MediaQuery.of(context).size.height/((rawImageSize.height/rawImageSize.width)*MediaQuery.of(context).size.width);
+            double realScale=rawImageSize.width/MediaQuery.of(context).size.width;
+            double end=begin;
+            bool needRealScale=realScale>scaleWithScreen;
+            Offset pointerDownPosition = isLongPicture?Offset.zero:state.pointerDownPosition;
+            if(isLongPicture) {
+              needRealScale=false;
+              scaleWithScreen=MediaQuery.of(context).size.width/((rawImageSize.width/rawImageSize.height)*MediaQuery.of(context).size.height);
+            }
+            if(needRealScale){
+              if(begin<scaleWithScreen){
+                end=scaleWithScreen;
+              }else if(begin>=scaleWithScreen && begin<realScale){
+                end=realScale+0.01;
+              }else if(begin>=realScale){
+                end=1.0;
+              }
+            }else{
+              if(begin<scaleWithScreen){
+                end=scaleWithScreen;
+              }else if(begin>=scaleWithScreen){
+                end=1.0;
+              }
+            }
+            //remove old
+            _doubleClickAnimation
+                ?.removeListener(_doubleClickAnimationListener);
 
+            //stop pre
+            _doubleClickAnimationController.stop();
+
+            //reset to use
+            _doubleClickAnimationController.reset();
+
+            _doubleClickAnimationListener = () {
+              //print(_animation.value);
+              state.handleDoubleTap(
+                scale: _doubleClickAnimation.value,
+                doubleTapPosition: pointerDownPosition
+              );
+            };
+            _doubleClickAnimation = _doubleClickAnimationController
+                .drive(Tween<double>(begin: begin, end: end));
+
+            _doubleClickAnimation
+                .addListener(_doubleClickAnimationListener);
+
+            _doubleClickAnimationController.forward();
+          },
+          heroBuilderForSlidingPage: (result){
+            if (index == currentIndex) {
+              return Hero(
+                tag: item,
+                child: result,
+                flightShuttleBuilder: (BuildContext flightContext,
+                    Animation<double> animation,
+                    HeroFlightDirection flightDirection,
+                    BuildContext fromHeroContext,
+                    BuildContext toHeroContext) {
+                  final Hero hero =
+                      flightDirection == HeroFlightDirection.pop
+                          ? fromHeroContext.widget
+                          : toHeroContext.widget;
+                  return hero.child;
+                },
+              );
+            } else {
+              return result;
+            }
           },
         );
-        
-        image = Container(
-          child: image,
-        );
-        if (index == currentIndex) {
-          return Hero(
-            tag: item,
-            child: image,
-          );
-        } else {
-          return image;
-        }
+        return image;
       },
       onPageChanged: (int index) {
         setState(() {
           currentIndex = index;
         });
       },
-      
+      canMovePage: (gestureDetails){
+        if(gestureDetails.totalScale>1.0){
+          return false;
+        }
+        else return  true;
+      },
       controller: PageController(
         initialPage: currentIndex,
       ),
       scrollDirection: Axis.horizontal,
     );
     
-    Widget returnWidget=Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        alignment: Alignment.bottomCenter,
-        children: <Widget>[
-          showWidget,
-          //
-          Container(
-            padding: const EdgeInsets.all(30.0),
-            child: Text(
-              "${currentIndex + 1}/${widget.imgUrls.length}",
-              style: Theme.of(context).primaryTextTheme.bodyText1,
-            ),
-          )
-        ],
+    Widget returnWidget=ExtendedImageSlidePage(
+      slideAxis: SlideAxis.both,
+      slideType: SlideType.onlyImage,
+      child:Material(
+        color:Colors.transparent,
+        shadowColor: Colors.transparent,
+        child: Stack(
+          fit: StackFit.expand,
+          alignment: Alignment.bottomCenter,
+          children: <Widget>[
+            showWidget,
+            Positioned(
+              bottom: 30,
+              child: Text(
+                "${currentIndex + 1}/${widget.imgUrls.length}",
+                style: Theme.of(context).primaryTextTheme.bodyText1,
+              ),
+            )
+          ],
+        )
       ),
+      slidePageBackgroundHandler: (offset,size){
+        Color color=Colors.black;
+        double opacity = 0.0;
+        opacity = offset.distance / (Offset(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height).distance / 2.0);
+        return color.withOpacity(math.min(1.0, math.max(1.0 - opacity, 0.0)));
+      },
+      slideOffsetHandler: (offset,{state}){
+        if (state != null &&
+            state.imageGestureState.gestureDetails.totalScale > 1.0) {
+          return Offset.zero;
+        }
+        return null;
+      },
     );
     returnWidget=WillPopScope(
       child: returnWidget, 

@@ -94,7 +94,8 @@ class _MessagePageState extends State<MessagePage> {
       shape:StadiumBorder(),
       color: Theme.of(context).primaryColor,
       child: Container(
-        padding: EdgeInsets.all(4),
+        //padding: EdgeInsets.symmetric(4),
+        padding: EdgeInsets.symmetric(horizontal:4,vertical:2),
         child: Text(
           Utils.formatNumToChineseStr(count),
           style: _themeText.bodyText1.copyWith(fontSize: 14,letterSpacing: count<10?8:0),

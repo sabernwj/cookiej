@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/model//local/display_content.dart';
@@ -11,6 +12,7 @@ import 'package:cookiej/cookiej/page/public/user_page.dart';
 import 'package:cookiej/cookiej/page/public/webview_with_title.dart';
 import 'package:cookiej/cookiej/provider/emotion_provider.dart';
 import 'package:cookiej/cookiej/model/collection.dart';
+import 'package:extended_image/extended_image.dart';
 
 // import 'package:cookiej/controller/apiController.dart';
 // import 'package:cookiej/controller/cacheController.dart';
@@ -100,7 +102,7 @@ class ContentWidget extends StatelessWidget {
           ));
           break;
         case ContentType.Image:
-          secondDisplayWidget.add(factoryImagesWidget(context, PictureProvider.getImgUrlsFromIds((displayContent.info.annotations[0].object as Collection).picIds),sinaImgSize: SinaImgSize.thumbnail));
+          secondDisplayWidget.add(factoryImagesWidget(context, PictureProvider.getImgUrlsFromIds((displayContent.info.annotations[0].object as Collection).picIds),sinaImgSize: SinaImgSize.bmiddle));
           break;
         case ContentType.Video:
           //先展示下视频封面
@@ -195,7 +197,13 @@ class ContentWidget extends StatelessWidget {
     var imgWidth=(MediaQuery.of(context).size.width-32)/3;
     
     var imgOnTap=(BuildContext context,List<String> imgUrls,{int index=0}){
-      Navigator.push(context,MaterialPageRoute(builder:(context)=>ShowImagesView(imgUrls,currentIndex: index,)));
+      //Navigator.push(context,MaterialPageRoute(builder:(context)=>ShowImagesView(imgUrls,currentIndex: index,)));
+      Navigator.push(
+        context,
+        Platform.isAndroid
+            ? TransparentMaterialPageRoute(builder: (_) => ShowImagesView(imgUrls,currentIndex: index,))
+            : TransparentCupertinoPageRoute(builder: (_) => ShowImagesView(imgUrls,currentIndex: index,)),
+      );
     };
     if(imgUrls.length==1){
       return GestureDetector(

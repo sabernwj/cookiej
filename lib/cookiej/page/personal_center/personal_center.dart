@@ -174,7 +174,7 @@ class PersonalCenter extends StatelessWidget {
             //   width:36,
             //   height: 36,
             // ),
-            leading: CircleAvatar(backgroundImage:PictureProvider.getPictureFromId(user.iconId,sinaImgSize: SinaImgSize.thumbnail)),
+            leading: CircleAvatar(backgroundImage:PictureProvider.getPictureFromId(user.iconId,sinaImgSize: SinaImgSize.small)),
             title: Text(user.screenName),
             trailing: IconButton(padding: EdgeInsets.all(0), icon: Icon(Icons.remove_circle,color: Colors.red,), onPressed: (){
               Navigator.pop(context);
