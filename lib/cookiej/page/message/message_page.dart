@@ -63,9 +63,9 @@ class _MessagePageState extends State<MessagePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('用户$index'),
+                          Text('开发者'),
                           Text(
-                            '唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、唧唧复唧唧、',
+                            '暂时没有获取私信接口的权限，敬请期待',
                             style: _theme.primaryTextTheme.overline,
                             softWrap: false,
                           ),
@@ -75,11 +75,12 @@ class _MessagePageState extends State<MessagePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Text('03/16',style: _theme.primaryTextTheme.overline),
-                          countNoticeWidget(index, context)
+                          countNoticeWidget(99, context)
                         ],
                       )
                     );
-                  }
+                  },
+                  childCount: 1
                 ),
               ),
             ]

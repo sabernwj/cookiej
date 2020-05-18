@@ -55,19 +55,51 @@ class WeiboProvider{
         return ProviderResult(_weibos,true);
       }
     }
-    result= WeiboApi.getTimeLine(sinceId,maxId,timelineType,extraParams)
-      .then((json)=>Weibos.fromJson(json))
-      .then((weibos) async {
-        //如果uid不为空，说明此次调用是由StartloadData发起的，刷新缓存
+    //特殊处理，刷新模式
+    if(maxId==0&&sinceId!=0){
+      ///保存sinceId，此模式目的是sinceId时间之后的微博,即最老的时间点微博的id
+      var firstSinceId=sinceId;
+      ///当从sinceId时间之后有超过20条微博时，[firsGetJson]得到的[weibos]是最新时间开始的微博20条
+      var firstGetJson= await WeiboApi.getTimeLine(sinceId,maxId,timelineType,extraParams);
+      var returnWeibos=Weibos.fromJson(firstGetJson);
+      while(returnWeibos.sinceId>firstSinceId){
+        var json=await WeiboApi.getTimeLine(firstSinceId,returnWeibos.maxId,timelineType,extraParams);
+        var weibos=Weibos.fromJson(json);
+        returnWeibos
+          ..sinceId=weibos.sinceId
+          ..previousCursor=weibos.previousCursor
+          ..maxId=weibos.maxId
+          ..nextCursor=weibos.nextCursor
+          ..statuses.addAll(weibos.statuses);
+      }
         if(localUid!=null){
-          putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid), weibos.statuses);
+          putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid), returnWeibos.statuses);
         }
-        //await UrlProvider.saveUrlInfoToRAM(weibos.statuses);
-        await UrlProvider.saveUrlInfoToHive(weibos.statuses);
-        return ProviderResult(weibos,true);
-      })
-      .catchError((e)=>ProviderResult(null,false));
-    return result;
+        await UrlProvider.saveUrlInfoToHive(returnWeibos.statuses);
+        return ProviderResult(returnWeibos,true);
+    }else{
+      var jsonRes=await WeiboApi.getTimeLine(sinceId,maxId,timelineType,extraParams);
+      var weibos=Weibos.fromJson(jsonRes);
+      if(localUid!=null){
+        putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid), weibos.statuses);
+      }
+      //await UrlProvider.saveUrlInfoToRAM(weibos.statuses);
+      await UrlProvider.saveUrlInfoToHive(weibos.statuses);
+      return ProviderResult(weibos,true);
+    }
+    // result= WeiboApi.getTimeLine(sinceId,maxId,timelineType,extraParams)
+    //   .then((json)=>Weibos.fromJson(json))
+    //   .then((weibos) async {
+    //     //如果uid不为空，说明此次调用是由StartloadData发起的，刷新缓存
+    //     if(localUid!=null){
+    //       putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid), weibos.statuses);
+    //     }
+    //     //await UrlProvider.saveUrlInfoToRAM(weibos.statuses);
+    //     await UrlProvider.saveUrlInfoToHive(weibos.statuses);
+    //     return ProviderResult(weibos,true);
+    //   })
+    //   .catchError((e)=>ProviderResult(null,false));
+    // return result;
   }
 
   //获取转发的微博
@@ -80,7 +112,7 @@ class WeiboProvider{
         await UrlProvider.saveUrlInfoToHive(repost.reposts);
         return ProviderResult(repost, true);
       })
-      .catchError((e)=> ProviderResult(null, false));
+      .catchError((e)=> throw e);
     return result;
   }
 
@@ -94,7 +126,10 @@ class WeiboProvider{
         await UrlProvider.saveUrlInfoToHive([weibo]);
         return ProviderResult(weibo,true);
       })
-      .catchError((e)=>ProviderResult(null,false));
+      .catchError((e){
+          throw e;
+        }
+      );
     return result;
   }
 

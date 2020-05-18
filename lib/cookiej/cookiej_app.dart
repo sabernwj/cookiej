@@ -53,7 +53,8 @@ class _CookieJState extends State<CookieJAPP> {
     super.initState();
     eventBus.on<StringMsgEvent>().listen((event) {
       Fluttertoast.showToast(
-        backgroundColor: store.state.themeState.themeData.primaryColor,
+        backgroundColor: Colors.black87,
+        textColor: Colors.white,
         msg: event.msg
       );
     });

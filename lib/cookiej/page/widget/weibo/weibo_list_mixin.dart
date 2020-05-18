@@ -1,4 +1,6 @@
 import 'package:cookiej/cookiej/config/config.dart';
+import 'package:cookiej/cookiej/event/event_bus.dart';
+import 'package:cookiej/cookiej/event/string_msg_event.dart';
 import 'package:cookiej/cookiej/model/weibo_lite.dart';
 import 'package:cookiej/cookiej/model/weibos.dart';
 import 'package:cookiej/cookiej/provider/weibo_provider.dart';
@@ -18,6 +20,7 @@ mixin WeiboListMixin{
   ///本地uid，仅用于需要通过该uid缓存微博时使用
   String localUid;
   
+  ///必须在mix此类的widget中首先执行
   void weiboListInit(WeiboTimelineType timelineType,{Map<String,String> extraParams,String groupId,String uid}){
     this.timelineType=timelineType;
     this.extraParams=extraParams;
@@ -50,8 +53,9 @@ mixin WeiboListMixin{
     return WeiboProvider.getTimeLine(maxId: oldHomeTimeline.maxId??0,timelineType: timelineType,extraParams: extraParams).then((timeline){
       oldHomeTimeline=timeline.data;
       if(oldHomeTimeline!=null){
+        var ids= weiboList.map((weiboLite) => weiboLite.id);
         for(var weibo in oldHomeTimeline.statuses){
-          weiboList.add(weibo);
+          if(!ids.contains(weibo.id)) weiboList.add(weibo);
         }
         //刷新成功，更新本地缓存
         //这里考虑把homeTimeline维护成本地缓存的
@@ -71,13 +75,17 @@ mixin WeiboListMixin{
     return WeiboProvider.getTimeLine(sinceId: weiboList[0].id??0,timelineType: timelineType,extraParams: extraParams).then((timeline){
       newHomeTimeline=timeline.data;
       if(newHomeTimeline!=null){
+        var ids= weiboList.map((weiboLite) => weiboLite.id);
         for(var weibo in newHomeTimeline.statuses){
-          tempList.add(weibo);
+          if(!ids.contains(weibo.id)) tempList.add(weibo);
         }
         weiboList.insertAll(0, tempList);
         //刷新成功，更新本地缓存
         //这里考虑把homeTimeline维护成本地缓存的
-        if(localUid!=null)  WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid), weiboList);
+        if(localUid!=null){
+          eventBus.fire(StringMsgEvent('${newHomeTimeline.statuses.length}条新的微博'));
+          WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid), weiboList);
+        }
       }
       return WeiboListStatus.complete;
     }).catchError((err){

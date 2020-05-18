@@ -67,7 +67,7 @@ class _ShowImagesViewState extends State<ShowImagesView>  with TickerProviderSta
         Size rawImageSize;
         bool isLongPicture=false;
         Widget image = ExtendedImage(
-          image: PictureProvider.getPictureFromUrl(item,sinaImgSize:SinaImgSize.large),
+          image: PictureProvider.getPictureFromUrl(item,sinaImgSize:SinaImgSize.mw2048),
           fit: BoxFit.contain,
           enableSlideOutPage: true,
           mode: ExtendedImageMode.gesture,

@@ -39,7 +39,7 @@ class Annotations {
     activateStatus = json['activate_status'];
     safeStatus = json['safe_status'];
     objectId = json['object_id'];
-    uuid = json['uuid'];
+    uuid = (json['uuid'] is String)?int.parse(json['uuid']):json['uuid'];
     actStatus = json['act_status'];
     objectDomainId = json['object_domain_id'];
     containerid = json['containerid'];

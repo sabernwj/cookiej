@@ -40,6 +40,7 @@ dependencies:
   gallery_saver: ^2.0.1 #读写本地相册
   event_bus: ^1.1.1 #事件总线
   connectivity: ^0.4.8+6 #检测网络状态wifi/数据/无网络
+  flutter_staggered_animations: ^0.1.2
 
 
   #可能会被替换的

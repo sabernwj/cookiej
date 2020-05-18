@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 import 'dart:async';
 
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+
 class CommentListview extends StatefulWidget {
 
   final CommentsType commentsType;
@@ -112,14 +114,32 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                 IndexedStack(
                   children: [
                     RepostListview(widget.id),
-                    ListView.builder(
-                      itemBuilder: (context,index){
-                        return CommentWidget(displayCommentList[index]);
-                      },
-                      itemCount: groupCommentMap.length,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                    AnimationLimiter(
+                      child: ListView.builder(
+                        itemCount: groupCommentMap.length,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 700),
+                            child: SlideAnimation(
+                              child: FadeInAnimation(
+                                child: CommentWidget(displayCommentList[index]),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
+                    // ListView.builder(
+                    //   itemBuilder: (context,index){
+                    //     return CommentWidget(displayCommentList[index]);
+                    //   },
+                    //   itemCount: groupCommentMap.length,
+                    //   shrinkWrap: true,
+                    //   physics: NeverScrollableScrollPhysics(),
+                    // ),
                     //Text('点赞')
                   ],
                   index: _commentStatusController.index,

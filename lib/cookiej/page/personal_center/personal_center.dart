@@ -5,12 +5,16 @@ import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/action/theme_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/config/style.dart';
+import 'package:cookiej/cookiej/event/event_bus.dart';
+import 'package:cookiej/cookiej/event/string_msg_event.dart';
 import 'package:cookiej/cookiej/model/weibos.dart';
 import 'package:cookiej/cookiej/page/login/login_page.dart';
 import 'package:cookiej/cookiej/page/personal_center/switch_theme.dart/theme_style.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
+import 'package:cookiej/cookiej/provider/weibo_provider.dart';
 import 'package:cookiej/cookiej/utils/local_storage.dart';
+import 'package:cookiej/cookiej/utils/utils.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -140,9 +144,15 @@ class PersonalCenter extends StatelessWidget {
                   ListTile(
                     leading: Icon(Icons.delete),
                     title: Text('清除缓存'),
-                    onTap: (){
-                      Hive.lazyBox<Weibos>('weibos_box').delete(store.state.accessState.currentAccess.uid);
-                      //print(Hive.lazyBox<Weibos>('weibos_box').path);
+                    onTap: () async {
+                      eventBus.fire(StringMsgEvent('这个功能暂时失效'));
+                      //取出最后一条微博
+                      // var weibos=await Hive.lazyBox<Weibos>('weibos_box').get(Utils.generateHiveWeibosKey(WeiboTimelineType.Statuses, store.state.accessState.currentAccess.uid));
+                      // var lastWeibo=weibos.statuses[weibos.statuses.length-1];
+                      // Hive.lazyBox<Weibos>('weibos_box').delete(store.state.accessState.currentAccess.uid);
+                      // WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(WeiboTimelineType.Statuses, store.state.accessState.currentAccess.uid), [lastWeibo]);
+                      // print(Hive.lazyBox<Weibos>('weibos_box').keys);
+                      // eventBus.fire(StringMsgEvent('重新加载微博'));
                     },
                     // trailing: FutureBuilder(
                     //   future: Hive.lazyBox<Weibos>('weibos_box').get(store.state.accessState.currentAccess.uid).then((weibos)=>weibos.statuses.length.toString()),
