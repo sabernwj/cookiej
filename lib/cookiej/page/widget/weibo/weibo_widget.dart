@@ -21,6 +21,9 @@ class WeiboWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _theme=Theme.of(context);
+    if(weibo.retweetedWeibo!=null) {
+      weibo.retweetedWeibo.heroTag=weibo.idstr+weibo.retweetedWeibo.idstr;
+    }
     return GestureDetector(
       child:Container(
         child:Column(
@@ -49,8 +52,8 @@ class WeiboWidget extends StatelessWidget {
             //微博正文
             ContentWidget(weibo),
             //是否有转发的微博
-            weibo.retweetedWeibo!=null?
-              GestureDetector(
+            weibo.retweetedWeibo!=null
+              ?GestureDetector(
                 child: Container(
                   child: ContentWidget(weibo.retweetedWeibo),
                   alignment: Alignment.topLeft,
@@ -61,8 +64,8 @@ class WeiboWidget extends StatelessWidget {
                 onTap:(){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(weibo.retweetedWeibo.id)));
                 },
-              ):
-              Container(),
+              )
+              :Container(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[

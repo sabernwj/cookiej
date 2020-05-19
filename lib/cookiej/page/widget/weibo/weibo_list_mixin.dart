@@ -5,6 +5,7 @@ import 'package:cookiej/cookiej/model/weibo_lite.dart';
 import 'package:cookiej/cookiej/model/weibos.dart';
 import 'package:cookiej/cookiej/provider/weibo_provider.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
+import 'dart:math' as math;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 mixin WeiboListMixin{
@@ -19,6 +20,7 @@ mixin WeiboListMixin{
   String groupId;
   ///本地uid，仅用于需要通过该uid缓存微博时使用
   String localUid;
+  int readCursor=0;
   
   ///必须在mix此类的widget中首先执行
   void weiboListInit(WeiboTimelineType timelineType,{Map<String,String> extraParams,String groupId,String uid}){
@@ -76,10 +78,15 @@ mixin WeiboListMixin{
       newHomeTimeline=timeline.data;
       if(newHomeTimeline!=null){
         var ids= weiboList.map((weiboLite) => weiboLite.id);
+        if(newHomeTimeline.statuses.length==0) {
+          readCursor=0;
+          return WeiboListStatus.nodata;
+        }
         for(var weibo in newHomeTimeline.statuses){
           if(!ids.contains(weibo.id)) tempList.add(weibo);
         }
         weiboList.insertAll(0, tempList);
+        readCursor= math.max(0, tempList.length);
         //刷新成功，更新本地缓存
         //这里考虑把homeTimeline维护成本地缓存的
         if(localUid!=null){

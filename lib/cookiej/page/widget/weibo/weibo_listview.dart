@@ -1,6 +1,7 @@
 import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/event/event_bus.dart';
+import 'package:cookiej/cookiej/event/notice_audio_event.dart';
 import 'package:cookiej/cookiej/event/string_msg_event.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_list_mixin.dart';
 import 'package:cookiej/cookiej/provider/weibo_provider.dart';
@@ -29,6 +30,8 @@ class WeiboListview extends StatefulWidget {
 //后面会有热门微博，推荐微博之类的非时间线微博，可在此组件上复用也可考虑再开一个组件
 class _WeiboListviewState extends State<WeiboListview> with WeiboListMixin,AutomaticKeepAliveClientMixin{
   RefreshController _refreshController=RefreshController(initialRefresh:false);
+  
+
 
   @override
   bool get wantKeepAlive => true;
@@ -81,18 +84,41 @@ class _WeiboListviewState extends State<WeiboListview> with WeiboListMixin,Autom
                 controller: _refreshController,
                 child: ListView.builder(
                   itemBuilder: (BuildContext context,int index){
+                    if(index==readCursor){
+                      if(readCursor==0) return Container();
+                      return Container(
+                        margin: EdgeInsets.only(bottom:12),
+                        padding: EdgeInsets.symmetric(vertical:4,horizontal: 12),
+                        alignment: Alignment.center,
+                        child:Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children:[
+                            Expanded(child: Divider(color: Theme.of(context).primaryColor,thickness: 1.5,)),
+                            Text('上次阅读到这里',style: Theme.of(context).primaryTextTheme.bodyText2),
+                             Expanded(child: Divider(color: Theme.of(context).primaryColor,thickness: 1.5,)),
+                          ]
+                        )
+                      );
+                    }
+                    if(index>readCursor) index=index-1;
                     return Container(
                       child:WeiboWidget(weiboList[index]),
                       margin: EdgeInsets.only(bottom:12),
                     );
                   },
-                  itemCount: weiboList.length,
+                  itemCount: weiboList.length+1,
                   physics: const AlwaysScrollableScrollPhysics(),
                 ),
                 onRefresh: (){
                   refreshData()
                     .then((isComplete){
-                      if(isComplete==WeiboListStatus.complete) setState(() {
+                      if(isComplete==WeiboListStatus.complete) {
+                        eventBus.fire(NoticeAudioEvent('refresh.mp3'));
+                        setState(() {
+                          _refreshController.refreshCompleted();
+                        });
+                      }
+                      else if(isComplete==WeiboListStatus.nodata) setState(() {
                         _refreshController.refreshCompleted();
                       });
                       else _refreshController.refreshFailed();

@@ -73,7 +73,7 @@ class _BootPageState extends State<BootPage> {
                 width: 72,
                 height: 72,
                 decoration:BoxDecoration(
-                  image: DecorationImage(image: ExtendedAssetImageProvider('res/images/icon.png')),
+                  image: DecorationImage(image: ExtendedAssetImageProvider('assets/images/icon.png')),
                   shape: BoxShape.circle
                 )
               ),

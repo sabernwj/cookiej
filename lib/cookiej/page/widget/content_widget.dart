@@ -201,8 +201,8 @@ class ContentWidget extends StatelessWidget {
       Navigator.push(
         context,
         Platform.isAndroid
-            ? TransparentMaterialPageRoute(builder: (_) => ShowImagesView(imgUrls,currentIndex: index,))
-            : TransparentCupertinoPageRoute(builder: (_) => ShowImagesView(imgUrls,currentIndex: index,)),
+            ? TransparentMaterialPageRoute(builder: (_) => ShowImagesView(imgUrls,currentIndex: index,heroTag: content.heroTag,))
+            : TransparentCupertinoPageRoute(builder: (_) => ShowImagesView(imgUrls,currentIndex: index,heroTag: content.heroTag,)),
       );
     };
     if(imgUrls.length==1){
@@ -210,7 +210,7 @@ class ContentWidget extends StatelessWidget {
         child:ConstrainedBox(
           child: Padding(
               child:Hero(
-                tag: imgUrls[0],
+                tag: imgUrls[0]+(content.heroTag??''),
                 child: Image(image: PictureProvider.getPictureFromUrl(imgUrls[0],sinaImgSize: sinaImgSize),fit:BoxFit.cover),
               ),
             padding: EdgeInsets.only(bottom:6),
@@ -230,7 +230,7 @@ class ContentWidget extends StatelessWidget {
         imgWidgetList.add(
           GestureDetector(
             child:Hero(
-              tag: imgUrls[i],
+              tag: imgUrls[i]+(content.heroTag??''),
               child: Image(image: PictureProvider.getPictureFromUrl(imgUrls[i],sinaImgSize: sinaImgSize),fit: BoxFit.cover),
             ),
             onTap: (){

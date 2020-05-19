@@ -9,4 +9,5 @@ abstract class Content{
 	String mid;
 	String idstr;
   LongText longText;
+  String heroTag;
 }

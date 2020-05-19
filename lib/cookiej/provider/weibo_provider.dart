@@ -62,8 +62,14 @@ class WeiboProvider{
       ///当从sinceId时间之后有超过20条微博时，[firsGetJson]得到的[weibos]是最新时间开始的微博20条
       var firstGetJson= await WeiboApi.getTimeLine(sinceId,maxId,timelineType,extraParams);
       var returnWeibos=Weibos.fromJson(firstGetJson);
-      while(returnWeibos.sinceId>firstSinceId){
+      int requestCount=0;
+      //经过多次测试，最多获取最近数量150条以内微博,添加多条限制防止无限请求
+      while(returnWeibos.sinceId>firstSinceId
+        && returnWeibos.maxId>0
+        && requestCount<=10
+        && returnWeibos.statuses.length<=150){
         var json=await WeiboApi.getTimeLine(firstSinceId,returnWeibos.maxId,timelineType,extraParams);
+        requestCount=requestCount+1;
         var weibos=Weibos.fromJson(json);
         returnWeibos
           ..sinceId=weibos.sinceId

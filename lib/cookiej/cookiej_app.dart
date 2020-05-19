@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/action/theme_state.dart';
+import 'package:cookiej/cookiej/event/notice_audio_event.dart';
 import 'package:cookiej/cookiej/event/string_msg_event.dart';
 import 'package:cookiej/cookiej/model/user.dart';
 import 'package:cookiej/cookiej/page/boot_page.dart';
@@ -22,7 +25,7 @@ class CookieJAPP extends StatefulWidget {
 
 class _CookieJState extends State<CookieJAPP> {
 
-
+  AudioCache noticeAudioPlayer;
   final store=Store<AppState>(
     appReducer,
     middleware: middleware,
@@ -51,6 +54,10 @@ class _CookieJState extends State<CookieJAPP> {
   @override
   void initState(){
     super.initState();
+    noticeAudioPlayer= AudioCache(prefix:'audios/', fixedPlayer: AudioPlayer(mode:PlayerMode.LOW_LATENCY));
+    eventBus.on<NoticeAudioEvent>().listen((event) {
+      noticeAudioPlayer.play(event.assetPath);
+    });
     eventBus.on<StringMsgEvent>().listen((event) {
       Fluttertoast.showToast(
         backgroundColor: Colors.black87,
@@ -62,6 +69,7 @@ class _CookieJState extends State<CookieJAPP> {
 
   @override
   void dispose(){
+    
     Hive.close();
     super.dispose();
   }

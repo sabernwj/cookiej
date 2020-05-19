@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
@@ -12,10 +13,11 @@ class ShowImagesView extends StatefulWidget {
   final List<String> imgUrls;
   final int currentIndex;
   final PageController pageController;
+  final String heroTag;
   ShowImagesView(
     this.imgUrls,
     {
-      this.currentIndex=0
+      this.currentIndex=0,this.heroTag
     }
   ):pageController=PageController(initialPage: currentIndex);//imageList=<PhotoViewGalleryPageOptions>[];
   @override
@@ -55,7 +57,7 @@ class _ShowImagesViewState extends State<ShowImagesView>  with TickerProviderSta
     showWidget=isInPop?
     Center(
       child:Hero(
-        tag: widget.imgUrls[widget.currentIndex],
+        tag: widget.imgUrls[widget.currentIndex]+(widget.heroTag??''),
         child:Image(image: PictureProvider.getPictureFromUrl(widget.imgUrls[widget.currentIndex],sinaImgSize:SinaImgSize.bmiddle))
       )
     )
@@ -63,99 +65,8 @@ class _ShowImagesViewState extends State<ShowImagesView>  with TickerProviderSta
       physics: BouncingScrollPhysics(),
       itemCount: widget.imgUrls.length,
       itemBuilder: (context,index){
-        var item=widget.imgUrls[index];
-        Size rawImageSize;
-        bool isLongPicture=false;
-        Widget image = ExtendedImage(
-          image: PictureProvider.getPictureFromUrl(item,sinaImgSize:SinaImgSize.mw2048),
-          fit: BoxFit.contain,
-          enableSlideOutPage: true,
-          mode: ExtendedImageMode.gesture,
-          initGestureConfigHandler:(state){
-            rawImageSize=Size(state.extendedImageInfo.image.width.toDouble(), state.extendedImageInfo.image.height.toDouble());
-            if((rawImageSize.width/rawImageSize.height)<(9/21)) isLongPicture=true;
-
-            double scaleWithScreen=MediaQuery.of(context).size.height/((rawImageSize.height/rawImageSize.width)*MediaQuery.of(context).size.width);
-            double realScale=rawImageSize.width/MediaQuery.of(context).size.width;
-            return GestureConfig(
-              minScale: 1.0,
-              maxScale: math.max(scaleWithScreen,realScale),
-              inPageView: true,
-            );
-          },
-          onDoubleTap: (state){
-            double begin = state.gestureDetails.totalScale;
-            double scaleWithScreen=MediaQuery.of(context).size.height/((rawImageSize.height/rawImageSize.width)*MediaQuery.of(context).size.width);
-            double realScale=rawImageSize.width/MediaQuery.of(context).size.width;
-            double end=begin;
-            bool needRealScale=realScale>scaleWithScreen;
-            Offset pointerDownPosition = isLongPicture?Offset.zero:state.pointerDownPosition;
-            if(isLongPicture) {
-              needRealScale=false;
-              scaleWithScreen=MediaQuery.of(context).size.width/((rawImageSize.width/rawImageSize.height)*MediaQuery.of(context).size.height);
-            }
-            if(needRealScale){
-              if(begin<scaleWithScreen){
-                end=scaleWithScreen;
-              }else if(begin>=scaleWithScreen && begin<realScale){
-                end=realScale+0.01;
-              }else if(begin>=realScale){
-                end=1.0;
-              }
-            }else{
-              if(begin<scaleWithScreen){
-                end=scaleWithScreen;
-              }else if(begin>=scaleWithScreen){
-                end=1.0;
-              }
-            }
-            //remove old
-            _doubleClickAnimation
-                ?.removeListener(_doubleClickAnimationListener);
-
-            //stop pre
-            _doubleClickAnimationController.stop();
-
-            //reset to use
-            _doubleClickAnimationController.reset();
-
-            _doubleClickAnimationListener = () {
-              //print(_animation.value);
-              state.handleDoubleTap(
-                scale: _doubleClickAnimation.value,
-                doubleTapPosition: pointerDownPosition
-              );
-            };
-            _doubleClickAnimation = _doubleClickAnimationController
-                .drive(Tween<double>(begin: begin, end: end));
-
-            _doubleClickAnimation
-                .addListener(_doubleClickAnimationListener);
-
-            _doubleClickAnimationController.forward();
-          },
-          heroBuilderForSlidingPage: (result){
-            if (index == currentIndex) {
-              return Hero(
-                tag: item,
-                child: result,
-                flightShuttleBuilder: (BuildContext flightContext,
-                    Animation<double> animation,
-                    HeroFlightDirection flightDirection,
-                    BuildContext fromHeroContext,
-                    BuildContext toHeroContext) {
-                  final Hero hero =
-                      flightDirection == HeroFlightDirection.pop
-                          ? fromHeroContext.widget
-                          : toHeroContext.widget;
-                  return hero.child;
-                },
-              );
-            } else {
-              return result;
-            }
-          },
-        );
+        var url=widget.imgUrls[index];
+        Widget image = buildImage(url, index,sinaImgSize: SinaImgSize.mw1024);
         return image;
       },
       onPageChanged: (int index) {
@@ -220,32 +131,143 @@ class _ShowImagesViewState extends State<ShowImagesView>  with TickerProviderSta
       }
     );
     return returnWidget;
-    // return Container(
-    //   child: Stack(
-    //     alignment: Alignment.bottomCenter,
-    //     children: <Widget>[
-    //       PhotoViewGallery(
-    //         pageOptions: widget.imageList,
-    //         loadingChild: Container(
-    //           child: Center(
-    //             child: CircularProgressIndicator(),
-    //           ),
-    //           decoration: BoxDecoration(color: Colors.black87),
-    //         ),
-    //         backgroundDecoration: BoxDecoration(color: Colors.black87),
-    //         pageController: widget.pageController,
-    //         onPageChanged: onPageChanged,
-    //       ),
-    //       Container(
-    //         padding: const EdgeInsets.all(30.0),
-    //         child: Text(
-    //           "${currentIndex + 1}/${widget.imageList.length}",
-    //           style: const TextStyle(
-    //               color: Colors.white70, fontSize: 18, decoration: null),
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
+  }
+  Widget buildImage (String url ,int index ,{String sinaImgSize=SinaImgSize.bmiddle}){
+    url=PictureProvider.changeUrlImgSize(url, sinaImgSize);
+    Size rawImageSize;
+    bool isLongPicture=false;
+    bool isShowLoadingProgress=false;
+    Future.delayed(Duration(milliseconds: 750),(){
+      isShowLoadingProgress=true;
+    });
+    var _initGestureConfigHandler=(ExtendedImageState state){
+      rawImageSize=Size(state.extendedImageInfo.image.width.toDouble(), state.extendedImageInfo.image.height.toDouble());
+      if((rawImageSize.width/rawImageSize.height)<(9/21)) isLongPicture=true;
+      double scaleWithScreen=MediaQuery.of(context).size.height/((rawImageSize.height/rawImageSize.width)*MediaQuery.of(context).size.width);
+      double realScale=rawImageSize.width/MediaQuery.of(context).size.width;
+      if(isLongPicture) {
+        scaleWithScreen=MediaQuery.of(context).size.width/((rawImageSize.width/rawImageSize.height)*MediaQuery.of(context).size.height);
+      }
+      return GestureConfig(
+        minScale: 1.0,
+        maxScale: math.max(scaleWithScreen,realScale),
+        inPageView: true,
+      );
+    };
+    var _onDoubleTap=(state){
+      if(sinaImgSize==SinaImgSize.bmiddle) return;
+      double begin = state.gestureDetails.totalScale;
+      double scaleWithScreen=MediaQuery.of(context).size.height/((rawImageSize.height/rawImageSize.width)*MediaQuery.of(context).size.width);
+      double realScale=rawImageSize.width/MediaQuery.of(context).size.width;
+      double end=begin;
+      bool needRealScale=realScale>scaleWithScreen;
+      Offset pointerDownPosition = isLongPicture?Offset.zero:state.pointerDownPosition;
+      if(isLongPicture) {
+        needRealScale=false;
+        scaleWithScreen=MediaQuery.of(context).size.width/((rawImageSize.width/rawImageSize.height)*MediaQuery.of(context).size.height);
+      }
+      if(needRealScale){
+        if(begin<scaleWithScreen){
+          end=scaleWithScreen;
+        }else if(begin>=scaleWithScreen && begin<realScale){
+          end=realScale+0.01;
+        }else if(begin>=realScale){
+          end=1.0;
+        }
+      }else{
+        if(begin<scaleWithScreen){
+          end=scaleWithScreen;
+        }else if(begin>=scaleWithScreen){
+          end=1.0;
+        }
+      }
+      //remove old
+      _doubleClickAnimation
+          ?.removeListener(_doubleClickAnimationListener);
+
+      //stop pre
+      _doubleClickAnimationController.stop();
+
+      //reset to use
+      _doubleClickAnimationController.reset();
+
+      _doubleClickAnimationListener = () {
+        //print(_animation.value);
+        state.handleDoubleTap(
+          scale: _doubleClickAnimation.value,
+          doubleTapPosition: pointerDownPosition
+        );
+      };
+      _doubleClickAnimation = _doubleClickAnimationController
+          .drive(Tween<double>(begin: begin, end: end));
+
+      _doubleClickAnimation
+          .addListener(_doubleClickAnimationListener);
+
+      _doubleClickAnimationController.forward();
+    };
+    Function _heroBuilderForSlidingPage=(Widget result){
+      if (index == currentIndex) {
+        return Hero(
+          tag: url+(widget.heroTag??''),
+          child: result,
+          flightShuttleBuilder: (BuildContext flightContext,
+              Animation<double> animation,
+              HeroFlightDirection flightDirection,
+              BuildContext fromHeroContext,
+              BuildContext toHeroContext) {
+            final Hero hero =
+                flightDirection == HeroFlightDirection.pop
+                    ? fromHeroContext.widget
+                    : toHeroContext.widget;
+            return hero.child;
+          },
+        );
+      } else {
+        return result;
+      }
+    };
+    Function _loadStateChanged=(ExtendedImageState state){
+      if(state.extendedImageLoadState==LoadState.loading){
+        var preImg= ExtendedImage(
+          image: PictureProvider.getPictureFromUrl(url,sinaImgSize: SinaImgSize.bmiddle),
+          initGestureConfigHandler: _initGestureConfigHandler,
+          heroBuilderForSlidingPage: _heroBuilderForSlidingPage,
+          fit: BoxFit.contain,
+          enableSlideOutPage: true,
+          mode: ExtendedImageMode.gesture,
+        );
+        return Stack(
+          fit:StackFit.expand,
+          children: <Widget>[
+            preImg,
+            Center(
+              child:(state.loadingProgress==null||!isShowLoadingProgress)?Container():CircularProgressIndicator(
+                value: state.loadingProgress.expectedTotalBytes != null
+                  ? state.loadingProgress.cumulativeBytesLoaded / state.loadingProgress.expectedTotalBytes
+                  : null,
+                //背景颜色
+                backgroundColor: Colors.black54,
+                //进度颜色
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.white54)
+              ),
+            )
+          ],
+        );
+      }
+      return null;
+    };
+    return ExtendedImage.network(
+      url,
+      fit: BoxFit.contain,
+      enableSlideOutPage: true,
+      mode: ExtendedImageMode.gesture,
+      initGestureConfigHandler:_initGestureConfigHandler,
+      loadStateChanged: _loadStateChanged,
+      onDoubleTap: _onDoubleTap,
+      heroBuilderForSlidingPage: _heroBuilderForSlidingPage,
+      handleLoadingProgress: true,
+      cache: true,
+    );
   }
 }

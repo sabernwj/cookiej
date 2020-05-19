@@ -145,14 +145,16 @@ class PersonalCenter extends StatelessWidget {
                     leading: Icon(Icons.delete),
                     title: Text('清除缓存'),
                     onTap: () async {
-                      eventBus.fire(StringMsgEvent('这个功能暂时失效'));
-                      //取出最后一条微博
-                      // var weibos=await Hive.lazyBox<Weibos>('weibos_box').get(Utils.generateHiveWeibosKey(WeiboTimelineType.Statuses, store.state.accessState.currentAccess.uid));
-                      // var lastWeibo=weibos.statuses[weibos.statuses.length-1];
-                      // Hive.lazyBox<Weibos>('weibos_box').delete(store.state.accessState.currentAccess.uid);
-                      // WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(WeiboTimelineType.Statuses, store.state.accessState.currentAccess.uid), [lastWeibo]);
-                      // print(Hive.lazyBox<Weibos>('weibos_box').keys);
-                      // eventBus.fire(StringMsgEvent('重新加载微博'));
+                      assert((){
+                        Hive.lazyBox<Weibos>('weibos_box').get(Utils.generateHiveWeibosKey(WeiboTimelineType.Statuses, store.state.accessState.currentAccess.uid)).then((weibos){
+                          var lastWeibo=weibos.statuses[weibos.statuses.length-1];
+                          Hive.lazyBox<Weibos>('weibos_box').delete(store.state.accessState.currentAccess.uid);
+                          WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(WeiboTimelineType.Statuses, store.state.accessState.currentAccess.uid), [lastWeibo]);
+                          print(Hive.lazyBox<Weibos>('weibos_box').keys);
+                          eventBus.fire(StringMsgEvent('重新加载微博'));
+                        });
+                        return true;
+                      }());
                     },
                     // trailing: FutureBuilder(
                     //   future: Hive.lazyBox<Weibos>('weibos_box').get(store.state.accessState.currentAccess.uid).then((weibos)=>weibos.statuses.length.toString()),

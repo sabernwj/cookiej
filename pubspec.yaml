@@ -7,7 +7,7 @@ description: A Weibo Client By Flutter.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 1.0.1
+version: 1.0.2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -40,7 +40,8 @@ dependencies:
   gallery_saver: ^2.0.1 #读写本地相册
   event_bus: ^1.1.1 #事件总线
   connectivity: ^0.4.8+6 #检测网络状态wifi/数据/无网络
-  flutter_staggered_animations: ^0.1.2
+  flutter_staggered_animations: ^0.1.2 #listview,gridview等加载动画
+  audioplayers: ^0.15.1 #音频播放
 
 
   #可能会被替换的
@@ -75,7 +76,7 @@ flutter:
   fonts:
     - family: fontawesome
       fonts:
-        - asset: res/fonts/fontawesome-webfont.ttf
+        - asset: assets/fonts/fontawesome-webfont.ttf
     # - family: 思源宋体
     #   fonts:
     #     - asset: res/fonts/SourceHanSerifCN-Regular.otf
@@ -86,8 +87,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - res/images/white.jpg
-   - res/images/icon.png
+   - assets/images/icon.png
+   - assets/images/white.jpg
+   - assets/audios/refresh.mp3
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

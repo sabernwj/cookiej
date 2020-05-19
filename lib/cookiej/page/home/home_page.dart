@@ -17,58 +17,69 @@ class HomePage extends StatelessWidget{
       builder:(context,store){
       Widget returnWidget= DefaultTabController(
         length:getTabItems().length,
-          child: Scaffold(
-            appBar: PreferredSize(
-              child: Container(
-                alignment: Alignment.topLeft,
-                padding: EdgeInsets.only(top:MediaQueryData.fromWindow(window).padding.top,left: 8,right: 8),
-                color:_theme.primaryColor,
-                child:Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: TabBar(
-                        labelPadding: EdgeInsets.symmetric(vertical:6,horizontal:12),
-                        tabs: getTabItems().values.toList(),
-                        isScrollable: true,
-                        indicatorColor: Theme.of(context).selectedRowColor,
-                      )
-                    ),
-                    //搜索按钮
-                    InkWell(
-                      child:Container(
-                        height: 36,
-                        width: 36,
-                        child:Icon(Icons.search,color: _theme.primaryTextTheme.bodyText1.color),
-                      ),
-                      onTap: (){
+          child:AnnotatedRegion<SystemUiOverlayStyle>(
+          value: _theme.primaryColorBrightness==Brightness.dark
+            ?SystemUiOverlayStyle.light
+            :SystemUiOverlayStyle.dark,
+          child: Material(
+            color: _theme.primaryColor,
+            child: Semantics(
+              explicitChildNodes: true,
+              child: Scaffold(
+                appBar: PreferredSize(
+                  child: Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(top:MediaQueryData.fromWindow(window).padding.top,left: 8,right: 8),
+                    color:_theme.primaryColor,
+                    child:Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TabBar(
+                            labelPadding: EdgeInsets.symmetric(vertical:6,horizontal:12),
+                            tabs: getTabItems().values.toList(),
+                            isScrollable: true,
+                            indicatorColor: Theme.of(context).selectedRowColor,
+                          )
+                        ),
+                        //搜索按钮
+                        InkWell(
+                          child:Container(
+                            height: 36,
+                            width: 36,
+                            child:Icon(Icons.search,color: _theme.primaryTextTheme.bodyText1.color),
+                          ),
+                          onTap: (){
 
-                      },
+                          },
+                        )
+                      ],
                     )
-                  ],
-                )
+                  ),
+                  preferredSize: Size.fromHeight(42)
+                ),
+                body: TabBarView(
+                  children: getTabViews(getTabItems()),
+                ),
+                floatingActionButton: FloatingActionButton(
+                  tooltip: '发微博',
+                  child: Icon(Icons.add,size: 36,color: _theme.primaryTextTheme.bodyText1.color,),
+                  onPressed:(){
+                    Navigator.push(context, MaterialPageRoute(builder:(context)=> EditWeiboPage()));
+                  },
+                ),
               ),
-              preferredSize: Size.fromHeight(42)
             ),
-            body: TabBarView(
-              children: getTabViews(getTabItems()),
-            ),
-            floatingActionButton: FloatingActionButton(
-              tooltip: '发微博',
-              child: Icon(Icons.add,size: 36,color: _theme.primaryTextTheme.bodyText1.color,),
-              onPressed:(){
-                Navigator.push(context, MaterialPageRoute(builder:(context)=> EditWeiboPage()));
-              },
-            ),
-          )
+          ),
+        ), 
         );
         // returnWidget= AnnotatedRegion<SystemUiOverlayStyle>(
         //   child: returnWidget, 
         //   value: _theme.brightness==Brightness.light?SystemUiOverlayStyle.dark:SystemUiOverlayStyle.light
         // );
-        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-          statusBarColor: _theme.accentColor,
-          statusBarBrightness: _theme.brightness,
-        ));
+        // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        //   statusBarColor: _theme.accentColor,
+        //   statusBarBrightness: _theme.brightness,
+        // ));
         return returnWidget;
       },
     );
