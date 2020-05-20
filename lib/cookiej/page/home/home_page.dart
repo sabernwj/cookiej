@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget{
                       children: <Widget>[
                         Expanded(
                           child: TabBar(
-                            labelPadding: EdgeInsets.symmetric(vertical:6,horizontal:12),
+                            labelPadding: EdgeInsets.symmetric(vertical:8,horizontal:12),
                             tabs: getTabItems().values.toList(),
                             isScrollable: true,
                             indicatorColor: Theme.of(context).selectedRowColor,
@@ -55,7 +55,7 @@ class HomePage extends StatelessWidget{
                       ],
                     )
                   ),
-                  preferredSize: Size.fromHeight(42)
+                  preferredSize: Size.fromHeight(46)
                 ),
                 body: TabBarView(
                   children: getTabViews(getTabItems()),

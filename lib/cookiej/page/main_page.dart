@@ -8,6 +8,7 @@ import 'package:cookiej/cookiej/page/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:cookiej/cookiej/page/personal_center/personal_center.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainPage extends StatefulWidget {
   static final String routePath = "main";  
@@ -51,7 +52,7 @@ class _MainPageState extends State<MainPage> {
             :IndexedStack(
             children: <Widget>[
               HomePage(),
-              //DiscoveryPage(),
+              DiscoveryPage(),
               MessagePage(),
               PersonalCenter()
             ],
@@ -64,19 +65,19 @@ class _MainPageState extends State<MainPage> {
                 elevation: 0,
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    title: Container()
-                  ),
-                  // BottomNavigationBarItem(
-                  //   icon: Icon(IconData(0xf14e,fontFamily: CookieJTextStyle.iconFontFamily)),
-                  //   title: Container()
-                  // ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.local_post_office),
+                    icon: Icon(IconData(0xf2da,fontFamily: CookieJTextStyle.iconFontFamily),size: 27,),
                     title: Container()
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.person),
+                    icon: Icon(IconData(0xf2dd,fontFamily: CookieJTextStyle.iconFontFamily),size: 25,),
+                    title: Container()
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(FontAwesomeIcons.facebookMessenger,size: 26,),
+                    title: Container()
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(FontAwesomeIcons.userAlt,size: 24,),
                     title: Container()
                   ),
                 ],

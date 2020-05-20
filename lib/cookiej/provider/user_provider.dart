@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/model/user.dart';
 import 'package:cookiej/cookiej/model/user_lite.dart';
+import 'package:cookiej/cookiej/net/friendships_api.dart';
 import 'package:cookiej/cookiej/net/user_api.dart';
 import 'package:cookiej/cookiej/provider/provider_result.dart';
 import 'package:cookiej/cookiej/config/config.dart';
@@ -101,6 +102,21 @@ class UserProvider{
     }
     return ProviderResult(false, false);
     //如果已存在，则更新
+  }
 
+  static Future<ProviderResult<List<User>>> getFriends({String uid,String screenName}) async {
+    var jsonRes=await FriendshipsApi.getFriends(uid: uid,screenName: screenName);
+    List<User> userList=[];
+    jsonRes['users'].forEach((user)=>userList.add(User.fromJson(user)));
+    if(userList.isNotEmpty) return ProviderResult(userList, true);
+    return ProviderResult(null, false);
+  }
+
+  static Future<ProviderResult<List<User>>> getFollowers({String uid,String screenName}) async {
+    var jsonRes=await FriendshipsApi.getFollowers(uid: uid,screenName: screenName);
+    List<User> userList=[];
+    jsonRes['users'].forEach((user)=>userList.add(User.fromJson(user)));
+    if(userList.isNotEmpty) return ProviderResult(userList, true);
+    return ProviderResult(null, false);
   }
 }

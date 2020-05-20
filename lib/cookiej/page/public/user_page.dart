@@ -75,7 +75,8 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin{
     return Scaffold(
       body:extended.NestedScrollViewRefreshIndicator(
         onRefresh: () async{
-          eventBus.fire(FunctionCallBack.UserPageRefresh);
+          //暂时禁用刷新功能，因为未找到识别主页中置顶微博的特征
+          //eventBus.fire(FunctionCallBack.UserPageRefresh);
         },
         child: extended.NestedScrollView(
           controller: _scrollController,

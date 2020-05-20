@@ -13,6 +13,7 @@ class ShowImagesView extends StatefulWidget {
   final List<String> imgUrls;
   final int currentIndex;
   final PageController pageController;
+  ///注意！仅用于微博列表中有多个转发微博使用了同一张图的情况
   final String heroTag;
   ShowImagesView(
     this.imgUrls,
@@ -58,7 +59,7 @@ class _ShowImagesViewState extends State<ShowImagesView>  with TickerProviderSta
     Center(
       child:Hero(
         tag: widget.imgUrls[widget.currentIndex]+(widget.heroTag??''),
-        child:Image(image: PictureProvider.getPictureFromUrl(widget.imgUrls[widget.currentIndex],sinaImgSize:SinaImgSize.bmiddle))
+        child:Image(image: PictureProvider.getPictureFromUrl(widget.imgUrls[widget.currentIndex],sinaImgSize:SinaImgSize.bmiddle),)
       )
     )
     :ExtendedImageGesturePageView.builder(
@@ -209,7 +210,7 @@ class _ShowImagesViewState extends State<ShowImagesView>  with TickerProviderSta
     Function _heroBuilderForSlidingPage=(Widget result){
       if (index == currentIndex) {
         return Hero(
-          tag: url+(widget.heroTag??''),
+          tag: widget.imgUrls[index]+(widget.heroTag??''),
           child: result,
           flightShuttleBuilder: (BuildContext flightContext,
               Animation<double> animation,

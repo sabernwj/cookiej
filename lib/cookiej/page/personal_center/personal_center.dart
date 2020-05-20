@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
@@ -10,6 +11,9 @@ import 'package:cookiej/cookiej/event/string_msg_event.dart';
 import 'package:cookiej/cookiej/model/weibos.dart';
 import 'package:cookiej/cookiej/page/login/login_page.dart';
 import 'package:cookiej/cookiej/page/personal_center/switch_theme.dart/theme_style.dart';
+import 'package:cookiej/cookiej/page/public/user_list_page.dart';
+import 'package:cookiej/cookiej/page/public/user_page.dart';
+import 'package:cookiej/cookiej/page/widget/show_image_view.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
 import 'package:cookiej/cookiej/provider/weibo_provider.dart';
@@ -31,6 +35,8 @@ class PersonalCenter extends StatelessWidget {
       builder:(context,store){
         final _theme=store.state.themeState.themeData;
         var _isDarkMode=_theme.brightness==Brightness.dark;
+        var iconUrl=PictureProvider.getImgUrlFromId(store.state.currentUser.iconId);
+        var user=store.state.currentUser;
         return Scaffold(
           appBar: AppBar(
             // actions: <Widget>[
@@ -49,9 +55,20 @@ class PersonalCenter extends StatelessWidget {
                     Container(
                       child:Row(
                         children: <Widget>[
-                          SizedBox(
-                            child: CircleAvatar(backgroundImage: PictureProvider.getPictureFromId(store.state.currentUser.iconId),radius: 20),
-                            width: 64,height: 64,
+                          GestureDetector(
+                            onTap: ()=>Navigator.push(
+                              context,
+                              Platform.isAndroid
+                                  ? TransparentMaterialPageRoute(builder: (_) => ShowImagesView([iconUrl],))
+                                  : TransparentCupertinoPageRoute(builder: (_) => ShowImagesView([iconUrl],))
+                            ),
+                            child:Hero(
+                              tag: iconUrl,
+                                child: SizedBox(
+                                child: CircleAvatar(backgroundImage: PictureProvider.getPictureFromUrl(iconUrl),radius: 20),
+                                width: 64,height: 64,
+                              ),
+                            )
                           ),
                           Expanded(
                             child:ListTile(
@@ -73,7 +90,7 @@ class PersonalCenter extends StatelessWidget {
                               ),
                               subtitle: Text(store.state.currentUser.description.isEmpty?'\u{3000}':store.state.currentUser.description,key: _displayUserNameKey,style: _theme.primaryTextTheme.subtitle),
                               trailing: IconButton(icon: Icon(IconData(0xf105,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subhead.color,size: 28,), onPressed: (){
-
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>UserPage(inputUser:store.state.currentUser)));
                               }),
                             ),
                           )
@@ -91,13 +108,17 @@ class PersonalCenter extends StatelessWidget {
                               Text('微博',style: _theme.primaryTextTheme.subtitle)
                             ]
                           )),
-                          FlatButton(onPressed: (){}, child: Column(
+                          FlatButton(onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>UserListPage(type: FriendShipsType.Friends,screenName:user.screenName)));
+                          }, child: Column(
                             children:[
                               Text(store.state.currentUser.friendsCount.toString(),style: _theme.primaryTextTheme.subhead),
                               Text('关注',style: _theme.primaryTextTheme.subtitle)
                             ]
                           )),
-                          FlatButton(onPressed: (){}, child: Column(
+                          FlatButton(onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>UserListPage(type: FriendShipsType.Followers,screenName:user.screenName)));
+                          }, child: Column(
                             children:[
                               Text(store.state.currentUser.followersCount.toString(),style: _theme.primaryTextTheme.subhead),
                               Text('粉丝',style: _theme.primaryTextTheme.subtitle)

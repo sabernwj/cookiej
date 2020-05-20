@@ -122,7 +122,7 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                         itemBuilder: (BuildContext context, int index) {
                           return AnimationConfiguration.staggeredList(
                             position: index,
-                            duration: const Duration(milliseconds: 700),
+                            duration: const Duration(milliseconds: 350),
                             child: SlideAnimation(
                               child: FadeInAnimation(
                                 child: CommentWidget(displayCommentList[index]),
@@ -132,15 +132,6 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                         },
                       ),
                     ),
-                    // ListView.builder(
-                    //   itemBuilder: (context,index){
-                    //     return CommentWidget(displayCommentList[index]);
-                    //   },
-                    //   itemCount: groupCommentMap.length,
-                    //   shrinkWrap: true,
-                    //   physics: NeverScrollableScrollPhysics(),
-                    // ),
-                    //Text('点赞')
                   ],
                   index: _commentStatusController.index,
                 )

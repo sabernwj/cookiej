@@ -10,7 +10,10 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:Text('发现')
+        title:Container(
+          child:Text('发现'),
+          alignment:Alignment.center
+        )
       ),
     );
   }

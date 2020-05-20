@@ -46,7 +46,6 @@ class WeiboProvider{
       Map<String,String> extraParams
     }
   ) async {
-    var result;
     //读取本地缓存的微博
     if(localUid!=null){
       var _weibos=await _weibosBox.get(Utils.generateHiveWeibosKey(timelineType, localUid));
@@ -62,9 +61,11 @@ class WeiboProvider{
       ///当从sinceId时间之后有超过20条微博时，[firsGetJson]得到的[weibos]是最新时间开始的微博20条
       var firstGetJson= await WeiboApi.getTimeLine(sinceId,maxId,timelineType,extraParams);
       var returnWeibos=Weibos.fromJson(firstGetJson);
+      if(returnWeibos.statuses.isEmpty) return ProviderResult(null, false);
       int requestCount=0;
       //经过多次测试，最多获取最近数量150条以内微博,添加多条限制防止无限请求
-      while(returnWeibos.sinceId>firstSinceId
+      while(returnWeibos.sinceId!=null
+        && returnWeibos.sinceId>firstSinceId
         && returnWeibos.maxId>0
         && requestCount<=10
         && returnWeibos.statuses.length<=150){
