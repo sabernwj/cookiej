@@ -76,7 +76,7 @@ extension WeiboTimelineExtesnsion on WeiboTimelineType{
     '公共',
     '朋友',
     '全部关注',
-    '朋友圈',
+    '好友圈',
     '转发',
     '用户'
   ][this.index];

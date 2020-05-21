@@ -42,6 +42,7 @@ dependencies:
   connectivity: ^0.4.8+6 #检测网络状态wifi/数据/无网络
   flutter_staggered_animations: ^0.1.2 #listview,gridview等加载动画
   audioplayers: ^0.15.1 #音频播放
+  flutter_swiper: ^1.1.6 #轮播图
 
 
   #可能会被替换的

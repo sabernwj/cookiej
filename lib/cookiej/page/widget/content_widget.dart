@@ -35,10 +35,11 @@ class ContentWidget extends StatelessWidget {
   final Content content;
   final List<DisplayContent> displayContentList;
   final TextStyle textStyle;
+  final int maxLines;
   ///轻模式，不显示多媒体信息，应用链接化
   final bool isLightMode;
   ContentWidget(this.content,{
-    this.isLightMode=false, this.textStyle,
+    this.isLightMode=false, this.textStyle, this.maxLines,
     }):displayContentList=DisplayContent.analysisContent(content);
   @override
   Widget build(BuildContext context) {
@@ -142,6 +143,7 @@ class ContentWidget extends StatelessWidget {
     });
     returnWidgets.add(Container(
       child: RichText(
+        maxLines: maxLines,
         text: TextSpan(
           children: listInlineSpan
         ),
@@ -185,6 +187,7 @@ class ContentWidget extends StatelessWidget {
     });
     return Container(
       child: RichText(
+        maxLines: maxLines,
         text: TextSpan(
           children: listInlineSpan
         ),

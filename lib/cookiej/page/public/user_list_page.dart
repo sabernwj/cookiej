@@ -3,7 +3,7 @@ import 'package:cookiej/cookiej/model/user_lite.dart';
 import 'package:cookiej/cookiej/page/public/user_page.dart';
 import 'package:cookiej/cookiej/page/widget/custom_button.dart';
 import 'package:cookiej/cookiej/page/widget/user_icon.dart';
-import 'package:cookiej/cookiej/page/widget/weibo/user_name_span.dart';
+import 'package:cookiej/cookiej/page/widget/user_name_span.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/provider/provider_result.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';

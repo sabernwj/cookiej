@@ -74,7 +74,6 @@ class CookieJColors{
       //用于突出显示切换Widget（如Switch，Radio和Checkbox）的活动状态的颜色。
       toggleableActiveColor:color.shade500,
       unselectedWidgetColor: isDarkMode ? customBlack : customWhite,
-      backgroundColor: Colors.green,
       //cardColor:isDarkMode ? CookieJColors.customBlack : color[200],
       //主要用于内容显示部分的文字,黑白为主
       textTheme: TextTheme(

@@ -35,7 +35,7 @@ class PictureProvider{
   ///根据图片ID和size参数返回图片
   static ImageProvider getPictureFromId(String id,{String sinaImgSize=SinaImgSize.bmiddle}){
     if(id==null||id.isEmpty||id=='null'){
-      return ExtendedAssetImageProvider('images/white.jpg');
+      return ExtendedAssetImageProvider('assets/images/white.jpg');
     }
     String url=getImgUrlFromId(id,sinaImgSize:sinaImgSize);
     return getPictureFromUrl(url);

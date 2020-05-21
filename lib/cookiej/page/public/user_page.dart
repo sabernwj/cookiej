@@ -86,7 +86,7 @@ class _UserPageState extends State<UserPage> with TickerProviderStateMixin{
                 delegate: UserPageHeaderDelegate(
                   overflowWidgetKey: _overflowWidgetKey,
                   overflowWidgetSize: _overflowWidgetSize,
-                  expandedHeight: _overflowWidgetSize==null?355.9:(220.0+_overflowWidgetSize),
+                  expandedHeight: _overflowWidgetSize==null?356:(220.0+_overflowWidgetSize),
                   user: activeUser,
                   topPadding: MediaQuery.of(context).padding.top,
                   bottomWidget: TabBar(
@@ -435,10 +435,10 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
   bool shouldRebuild(covariant UserPageHeaderDelegate oldDelegate) {
     // SliverAppbar里的是属性发生了变动再rebuild
     return collapsedHeight!=oldDelegate.collapsedHeight
-    || expandedHeight!=oldDelegate.expandedHeight;
-    // || topPadding!=oldDelegate.topPadding
-    // || user!=oldDelegate.user
-    // || bottomWidget!=oldDelegate.bottomWidget;
+    || expandedHeight!=oldDelegate.expandedHeight
+    || topPadding!=oldDelegate.topPadding
+    || user!=oldDelegate.user
+    || bottomWidget!=oldDelegate.bottomWidget;
     
   }
   
