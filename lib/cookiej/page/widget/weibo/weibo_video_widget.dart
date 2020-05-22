@@ -34,10 +34,16 @@ class WeiboVideoWidget extends StatelessWidget {
                   child:Stack(
                     fit: StackFit.expand,
                     children: <Widget>[
-                      Icon(
-                        Icons.play_circle_outline,
-                        size: 64,
-                        color: Colors.white,
+                      Stack(
+                        children: <Widget>[
+                          //这部分是图标的阴影
+                          Positioned(
+                            left: 1.0,
+                            top: 1.0,
+                            child: Icon(Icons.play_circle_outline,size: 64, color: Colors.black54),
+                          ),
+                          Icon(Icons.play_circle_outline,size: 64, color: Colors.white),
+                        ],
                       ),
                       Material(
                         color:Colors.transparent,

@@ -76,8 +76,8 @@ class ContentWidget extends StatelessWidget {
     final listInlineSpan=<InlineSpan>[];
     final secondDisplayWidget=<Widget>[];
     var imgWidth=(MediaQuery.of(context).size.width-32)/3;
-    var commonTextStyle=Theme.of(context).textTheme.bodyText2.merge(textStyle??TextStyle());
-    var linkTextStyle=Theme.of(context).primaryTextTheme.bodyText2.merge(textStyle??TextStyle());
+    var commonTextStyle=(textStyle??Theme.of(context).textTheme.bodyText2);
+    var linkTextStyle=(textStyle??Theme.of(context).primaryTextTheme.bodyText2).copyWith(color:Theme.of(context).primaryTextTheme.bodyText2.color);
     displayContentList.forEach((displayContent){
       switch(displayContent.type){
         case ContentType.Text:
@@ -162,8 +162,8 @@ class ContentWidget extends StatelessWidget {
   ///生成显示的内容部分，不带多媒体信息
   Widget factoryTextWidgetLight(BuildContext context,List<DisplayContent> displayContentList){
     var listInlineSpan=<InlineSpan>[];
-    var commonTextStyle=Theme.of(context).textTheme.bodyText2.merge(textStyle??TextStyle());
-    var linkTextStyle=Theme.of(context).primaryTextTheme.bodyText2.merge(textStyle??TextStyle());
+    var commonTextStyle=(textStyle??Theme.of(context).textTheme.bodyText2);
+    var linkTextStyle=(textStyle??Theme.of(context).primaryTextTheme.bodyText2).copyWith(color:Theme.of(context).primaryTextTheme.bodyText2.color);
     displayContentList.forEach((displayContent){
       switch(displayContent.type){
         case ContentType.Text:

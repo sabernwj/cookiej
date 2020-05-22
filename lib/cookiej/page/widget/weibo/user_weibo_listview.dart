@@ -23,11 +23,14 @@ class UserWeiboListView extends StatefulWidget {
   ///过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0。
   final int feature;
 
+  final WeiboTimelineType type;
+
   const UserWeiboListView({
     Key key,
     @required
     this.screenName,
-    this.feature=0
+    this.feature=0,
+    this.type=WeiboTimelineType.User
   }) : super(key: key);
 
   @override
@@ -39,7 +42,7 @@ class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMix
   RefreshController _refreshController=RefreshController(initialRefresh:false);
   @override
   void initState() {
-    weiboListInit(WeiboTimelineType.User,extraParams: {
+    weiboListInit(widget.type,extraParams: {
       'screen_name':widget.screenName,
       'feature':widget.feature.toString()
     });

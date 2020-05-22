@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'show_message/show_message_page.dart';
+
 class MessagePage extends StatefulWidget {
   @override
   _MessagePageState createState() => _MessagePageState();
@@ -37,17 +39,21 @@ class _MessagePageState extends State<MessagePage> {
                   children: <Widget>[
                     customListTitle(
                       leadingChild:Icon(Icons.alternate_email,color: _theme.primaryTextTheme.subtitle1.color),
-                      title: Text('@我的微博和评论')
+                      title: Text('@我的微博和评论'),
+                      onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>ShowMessagePage()))
                     ),
                     customListTitle(
                       leadingChild:Icon(Icons.message,color: _theme.primaryTextTheme.subtitle1.color),
-                      title:Text('收到的评论')
+                      title:Text('收到的评论'),
+                      onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>ShowMessagePage(initialIndex: 2,)))
                     ),
                     customListTitle(
                       leadingChild:Icon(FontAwesomeIcons.telegramPlane,color: _theme.primaryTextTheme.subtitle1.color),
-                      title: Text('我发出的评论')
+                      title: Text('我发出的评论'),
+                      onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>ShowMessagePage(initialIndex: 3,)))
                     ),
                     customListTitle(
+                      onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>ShowMessagePage())),
                       leadingChild: Icon(Icons.favorite,color: _theme.primaryTextTheme.subtitle1.color),
                       title: Text('收到的赞'),
                       tralling: countNoticeWidget(99, context)

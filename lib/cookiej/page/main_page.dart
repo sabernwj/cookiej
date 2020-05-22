@@ -25,7 +25,7 @@ class _MainPageState extends State<MainPage> {
   }
   @override
   Widget build(BuildContext context) {
-    //final _theme=Theme.of(context);
+    final _theme=Theme.of(context);
     return StoreBuilder<AppState>(
       builder: (context,store){
         return Scaffold(
@@ -50,18 +50,19 @@ class _MainPageState extends State<MainPage> {
                 // )
             )
             :IndexedStack(
-            children: <Widget>[
-              HomePage(),
-              DiscoveryPage(),
-              MessagePage(),
-              PersonalCenter()
-            ],
+              children: <Widget>[
+                HomePage(),
+                DiscoveryPage(),
+                MessagePage(),
+                PersonalCenter()
+              ],
             index: _currentIndex,
           ),
           bottomNavigationBar: SafeArea(
             child: SizedBox(
               height:46,
               child:BottomNavigationBar(
+                backgroundColor: _theme.dialogBackgroundColor,
                 elevation: 0,
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(

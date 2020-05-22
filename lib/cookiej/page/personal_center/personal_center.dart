@@ -23,6 +23,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:redux/redux.dart';
 
@@ -102,7 +103,9 @@ class PersonalCenter extends StatelessWidget {
                       child:Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children:[
-                          FlatButton(onPressed: (){}, child: Column(
+                          FlatButton(onPressed: (){
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>UserPage(inputUser:store.state.currentUser)));
+                          }, child: Column(
                             children:[
                               Text(store.state.currentUser.statusesCount.toString(),style: _theme.primaryTextTheme.subhead),
                               Text('微博',style: _theme.primaryTextTheme.subtitle)
@@ -134,63 +137,88 @@ class PersonalCenter extends StatelessWidget {
             ),
           ),
           //菜单
-          body: Container(
-            margin: EdgeInsets.only(top:24,bottom: 0),
-            child: Ink(
-              color: _theme.cardColor,
-              child:Column(
-                children:[
-                  ListTile(
-                    leading: Icon(Icons.wb_sunny),
-                    title: Text('夜间模式'),
-                    trailing: CupertinoSwitch(
-                      value: _isDarkMode,
-                      activeColor: store.state.themeState.themeData.primaryColor,
-                      onChanged: (value){
-                        store.dispatch(SwitchDarkMode(value));
-                        //存储夜间模式配置
-                        LocalStorage.save(Config.isDarkModeStorageKey, value.toString());
-                      },
-                    ),
-                  ),
-                  Divider(),
-                  ListTile(
-                    leading: Icon(Icons.palette,color:CookieJColors.themeColors[store.state.themeState.themeName]),
-                    title: Text('切换主题'),
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ThemeStyle()));
-                    },
-                  ),
-                  Divider(),
-                  ListTile(
-                    leading: Icon(Icons.delete),
-                    title: Text('清除缓存'),
-                    onTap: () async {
-                      assert((){
-                        Hive.lazyBox<Weibos>('weibos_box').get(Utils.generateHiveWeibosKey(WeiboTimelineType.Statuses, store.state.accessState.currentAccess.uid)).then((weibos){
-                          var lastWeibo=weibos.statuses[weibos.statuses.length-1];
-                          Hive.lazyBox<Weibos>('weibos_box').delete(store.state.accessState.currentAccess.uid);
-                          WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(WeiboTimelineType.Statuses, store.state.accessState.currentAccess.uid), [lastWeibo]);
-                          print(Hive.lazyBox<Weibos>('weibos_box').keys);
-                          eventBus.fire(StringMsgEvent('重新加载微博'));
-                        });
-                        return true;
-                      }());
-                    },
-                    // trailing: FutureBuilder(
-                    //   future: Hive.lazyBox<Weibos>('weibos_box').get(store.state.accessState.currentAccess.uid).then((weibos)=>weibos.statuses.length.toString()),
-                    //   builder: (context,snaphot)=>Text('已缓存数量${snaphot.data??'0'}',style: _theme.primaryTextTheme.overline)
-                    // )
+          body: Column(
+            children:[
+              Container(
+                margin: EdgeInsets.only(top:24,bottom: 0),
+                child: Material(
+                  color:_theme.dialogBackgroundColor,
+                  child:GridView.count(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    crossAxisCount: 4,
+                    children: <Widget>[
+                    _buildExpandedItem(Icons.star, Colors.yellow[700], '收藏', _theme),
+                    _buildExpandedItem(Icons.supervised_user_circle, Colors.blue[400], '我的好友', _theme),
+                    _buildExpandedItem(IconData(0x23), Colors.orange[700], '关注的话题', _theme),
+                    _buildExpandedItem(FontAwesomeIcons.qrcode, Colors.blue[400], '扫一扫', _theme,size: 28),
+                    _buildExpandedItem(Icons.history, Colors.teal[300], '浏览历史', _theme),
+                    _buildExpandedItem(FontAwesomeIcons.envelopeOpen, Colors.purple, '草稿箱', _theme,size: 24),
+                     _buildExpandedItem(Icons.location_on, Colors.red[400], '附近的微博', _theme),
+                    _buildExpandedItem(Icons.more_horiz, Colors.blueGrey, '更多', _theme),
+                    
+                    ],
                   )
-                ]
+                ),
               ),
-            )
+              Container(
+                margin: EdgeInsets.only(top:24,bottom: 0),
+                child: Ink(
+                  color: _theme.dialogBackgroundColor,
+                  child:Column(
+                    children:[
+                      ListTile(
+                        leading: Icon(Icons.wb_sunny),
+                        title: Text('夜间模式'),
+                        trailing: CupertinoSwitch(
+                          value: _isDarkMode,
+                          activeColor: store.state.themeState.themeData.primaryColor,
+                          onChanged: (value){
+                            store.dispatch(SwitchDarkMode(value));
+                            //存储夜间模式配置
+                            LocalStorage.save(Config.isDarkModeStorageKey, value.toString());
+                          },
+                        ),
+                      ),
+                      Divider(height: 1,),
+                      ListTile(
+                        leading: Icon(Icons.palette,color:CookieJColors.themeColors[store.state.themeState.themeName]),
+                        title: Text('主题样式'),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ThemeStyle()));
+                        },
+                      ),
+                      Divider(height: 1,),
+                      ListTile(
+                        leading: Icon(Icons.settings),
+                        title: Text('更多设置'),
+                        onTap: () async {
+                          assert((){
+                            Hive.lazyBox<Weibos>('weibos_box').get(Utils.generateHiveWeibosKey(WeiboTimelineType.Statuses, store.state.accessState.currentAccess.uid)).then((weibos){
+                              var lastWeibo=weibos.statuses[weibos.statuses.length-1];
+                              Hive.lazyBox<Weibos>('weibos_box').delete(store.state.accessState.currentAccess.uid);
+                              WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(WeiboTimelineType.Statuses, store.state.accessState.currentAccess.uid), [lastWeibo]);
+                              print(Hive.lazyBox<Weibos>('weibos_box').keys);
+                              eventBus.fire(StringMsgEvent('重新加载微博'));
+                            });
+                            return true;
+                          }());
+                        },
+                        // trailing: FutureBuilder(
+                        //   future: Hive.lazyBox<Weibos>('weibos_box').get(store.state.accessState.currentAccess.uid).then((weibos)=>weibos.statuses.length.toString()),
+                        //   builder: (context,snaphot)=>Text('已缓存数量${snaphot.data??'0'}',style: _theme.primaryTextTheme.overline)
+                        // )
+                      )
+                    ]
+                  ),
+                )
+              )
+            ]
           )
         );
       }
     );
   }
-
   Future<List<PopupMenuEntry>> getLocalUsersItems(Store<AppState> store,BuildContext context) async{
     var state=store.state;
     var itemList=<PopupMenuEntry>[];
@@ -243,6 +271,31 @@ class PersonalCenter extends StatelessWidget {
 
     return itemList;
   }
-
+  Widget _buildExpandedItem(IconData iconData,Color color,String text, ThemeData theme,{double size}){
+    return SizedBox.expand(
+      child:InkWell(
+        onTap:(){},
+        child:SizedBox.expand(
+          child:Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ClipRRect(
+                child:SizedBox(
+                  width:42,
+                  height:42,
+                    child:Icon(
+                    iconData,
+                    color: color,
+                    size: size??30,
+                  )
+                )
+              ),
+              Text(text,style:theme.textTheme.subtitle2)
+            ],
+          )
+        )
+      )
+    );
+  }
 
 }

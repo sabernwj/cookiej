@@ -64,13 +64,14 @@ class _DiscoveryPageState extends State<DiscoveryPage> with SingleTickerProvider
             SliverPersistentHeader(
               pinned: true,
               delegate: DiscoveryPageHeaderDelegate(
-                minHeight: 46,
-                maxHeight: 46,
+                minHeight: 24+MediaQuery.of(context).padding.top,
+                maxHeight: 24+MediaQuery.of(context).padding.top,
                 child: Container(
+                  padding: EdgeInsets.only(bottom:2),
                   color:_theme.primaryColor,
-                  alignment:Alignment.center,
+                  alignment:Alignment.bottomCenter,
                   child:TabBar(
-                    labelPadding: EdgeInsets.symmetric(vertical:8,horizontal:12),
+                    labelPadding: EdgeInsets.symmetric(vertical:4,horizontal:12),
                     isScrollable: true,
                     indicatorColor: Theme.of(context).selectedRowColor,
                     controller: _tabController,

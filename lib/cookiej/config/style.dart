@@ -6,6 +6,7 @@ class CookieJColors{
   
 
   static final Map<String,MaterialColor> themeColors= {
+    //'默认白':CookieJColors.customWhite,
     '薄荷绿':Colors.teal,
     '经典黑':CookieJColors.customBlack,
     '谷歌蓝':Colors.blue,
@@ -18,7 +19,7 @@ class CookieJColors{
     '杏黄色':CookieJColors.apricot,
     '少女粉':CookieJColors.girlPink,
   };
-  static const int customWhiteValue=0xFFFEFEFEF;
+  static const int customWhiteValue=0xFFFFFFFF;
   static const int customBlackValue = 0xFF363636;
   static const int salmonPinkValue=0xFFFA8072;
   static const int apricotValue=0xFFF8B878;
@@ -58,7 +59,7 @@ class CookieJColors{
     //颜色的亮度，涉及夜间模式下深色主题的活动颜色设置
     double luminance=color.computeLuminance();
     color=luminance<0.15&&isDarkMode?Colors.teal:color;
-    return ThemeData(
+    var theme= ThemeData(
       fontFamily: null,
       primarySwatch: color,
       brightness: isDarkMode?Brightness.dark:Brightness.light,
@@ -72,6 +73,7 @@ class CookieJColors{
       //前景色
       accentColor: color.shade600,
       //用于突出显示切换Widget（如Switch，Radio和Checkbox）的活动状态的颜色。
+      dialogBackgroundColor: isDarkMode?Colors.grey[850]:Colors.white,
       toggleableActiveColor:color.shade500,
       unselectedWidgetColor: isDarkMode ? customBlack : customWhite,
       //cardColor:isDarkMode ? CookieJColors.customBlack : color[200],
@@ -96,6 +98,25 @@ class CookieJColors{
         subtitle2: CookieJTextStyle.minText,
       )
     );
+    if(color==CookieJColors.customWhite){
+      theme=theme.copyWith(
+        primaryColorBrightness: Brightness.light,
+        toggleableActiveColor:Colors.red,
+        primaryTextTheme: TextTheme(
+          overline: TextStyle(fontSize:CookieJTextStyle.minTextSize,color:Colors.grey[600],letterSpacing: 0),
+          bodyText1: CookieJTextStyle.middleTextWhite.merge(TextStyle(
+            //color:luminance<0.15&&!isDarkMode?Colors.blue:color,
+            color:Colors.blue
+          )),
+          bodyText2: CookieJTextStyle.middleText.merge(TextStyle(
+            color:Colors.blue,
+          )),
+          subtitle1: CookieJTextStyle.middleTextWhite.copyWith(color:Colors.blue),
+          subtitle2: CookieJTextStyle.minText.copyWith(color:Colors.blue),
+        ),
+      );
+    }
+    return theme;
   }
 
   static MaterialColor getMaterialColor(int colorValue){

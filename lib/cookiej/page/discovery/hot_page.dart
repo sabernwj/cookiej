@@ -8,7 +8,7 @@ class HotPgae extends StatefulWidget {
   _HotPgaeState createState() => _HotPgaeState();
 }
 
-class _HotPgaeState extends State<HotPgae> with WeiboListMixin {
+class _HotPgaeState extends State<HotPgae> with WeiboListMixin,AutomaticKeepAliveClientMixin {
 
 
   @override
@@ -20,7 +20,7 @@ class _HotPgaeState extends State<HotPgae> with WeiboListMixin {
 
   @override
   Widget build(BuildContext context) {
-
+    super.build(context);
     return FutureBuilder(
       future: isStartLoadDataComplete,
       builder: (context,snaphot){
@@ -41,4 +41,8 @@ class _HotPgaeState extends State<HotPgae> with WeiboListMixin {
     );
     
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

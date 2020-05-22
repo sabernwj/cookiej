@@ -13,6 +13,7 @@ class Comment extends Content{
 	String rootidstr;
 	int floorNumber;
 	String text;
+  String source;
 	int disableReply;
 	UserLite user;
 	String mid;
@@ -51,6 +52,7 @@ class Comment extends Content{
     if(replyOriginalText!=null&&user.id==replyComment.user.id){
       text=replyOriginalText;
     }
+    source = json['source']?.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),'');
 	}
 
 	Map<String, dynamic> toJson() {
@@ -78,6 +80,7 @@ class Comment extends Content{
       data['comment_badge'] = this.commentBadge.map((v) => v.toJson()).toList();
     }
     data['reply_original_text'] = this.replyOriginalText;
+    data['source'] = this.source;
 		return data;
 	}
 }

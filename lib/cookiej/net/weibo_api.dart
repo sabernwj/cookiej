@@ -17,6 +17,11 @@ class WeiboApi{
   ///单条微博内容
   static const String _weibo='/2/statuses/show.json';
 
+  ///	获取@当前用户的最新微博
+  static const String _mentions='/2/statuses/mentions.json';
+
+
+
   ///发布一条新微博
   static const String _update='/2/statuses/update.json';
 
@@ -40,6 +45,9 @@ class WeiboApi{
         break;
       case WeiboTimelineType.User:
         url=_user;
+        break;
+      case WeiboTimelineType.Mentions:
+        url=_mentions;
         break;
       default:
         return null;

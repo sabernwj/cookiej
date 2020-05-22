@@ -24,6 +24,7 @@ class WeiboWidget extends StatelessWidget {
     if(weibo.retweetedWeibo!=null) {
       weibo.retweetedWeibo.heroTag=weibo.idstr+weibo.retweetedWeibo.idstr;
     }
+    weibo.heroTag=weibo.idstr;
     return GestureDetector(
       child:Container(
         child:Column(

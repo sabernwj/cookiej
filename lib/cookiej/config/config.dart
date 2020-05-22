@@ -64,7 +64,8 @@ enum WeiboTimelineType{
   Bilateral,
   Reposts,
   User,
-  Group
+  Group,
+  Mentions
 }
 extension WeiboTimelineExtesnsion on WeiboTimelineType{
 
@@ -79,12 +80,16 @@ extension WeiboTimelineExtesnsion on WeiboTimelineType{
     '好友圈',
     '转发',
     '用户'
+    '@我的微博'
   ][this.index];
 }
 
 enum CommentsType{
   Hot,
-  Time
+  Time,
+  Mentions,
+  ByMe,
+  ToMe
 }
 
 class CookieJHiveType{

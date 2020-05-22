@@ -18,7 +18,7 @@ class TrendPage extends StatefulWidget {
   _TrendPageState createState() => _TrendPageState();
 }
 
-class _TrendPageState extends State<TrendPage> with WeiboListMixin{
+class _TrendPageState extends State<TrendPage> with AutomaticKeepAliveClientMixin,WeiboListMixin{
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _TrendPageState extends State<TrendPage> with WeiboListMixin{
 
   @override
   Widget build(BuildContext context) {
-
+    super.build(context);
     final _theme=Theme.of(context);
     return CustomScrollView(
         //mainAxisSize: MainAxisSize.min,
@@ -127,9 +127,9 @@ class _TrendPageState extends State<TrendPage> with WeiboListMixin{
                 });
                 //print(videoElementList.length);
                 if(videoElementList.isEmpty){
-                  return Center(
+                  return SliverToBoxAdapter(child:Center(
                     child:Text('没有找到视频')
-                  );
+                  ));
                 }
                 Widget returnWidget;
                 returnWidget=SliverList(
@@ -244,4 +244,8 @@ class _TrendPageState extends State<TrendPage> with WeiboListMixin{
       )
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

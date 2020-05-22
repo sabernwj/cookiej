@@ -12,6 +12,7 @@ class CommentWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     final _theme=Theme.of(context);
+    comment.heroTag=comment.idstr;
     final returnWidget= Container(
       child:Column(
         children: <Widget>[

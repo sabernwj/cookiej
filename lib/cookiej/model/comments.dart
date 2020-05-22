@@ -54,7 +54,7 @@ class Comments {
     maxId = json['max_id'];
     sinceIdStr = json['since_id_str'];
     maxIdStr = json['max_id_str'];
-    weibo= Weibo.fromJson(json['status']) ;
+    weibo= json['status'] != null ? new Weibo.fromJson(json['status']) : null;
   }
 
   Map<String, dynamic> toJson() {
