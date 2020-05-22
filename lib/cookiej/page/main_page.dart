@@ -69,7 +69,7 @@ class _MainPageState extends State<MainPage> {
                     title: Container()
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(FontAwesomeIcons.solidCompass,size: 27,),
+                    icon: Icon(FontAwesomeIcons.solidCompass,size: 26.3,),
                     title: Container()
                   ),
                   BottomNavigationBarItem(

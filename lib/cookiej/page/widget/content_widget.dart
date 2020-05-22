@@ -118,10 +118,15 @@ class ContentWidget extends StatelessWidget {
                   image: PictureProvider.getPictureFromUrl(video.image.url),
                   fit: BoxFit.cover,
                 ),
-                Icon(
-                  Icons.play_circle_outline,
-                  size: 48,
-                  color: Theme.of(context).accentColor,
+                Stack(
+                  children: <Widget>[
+                    Positioned(
+                      left: 1.0,
+                      top: 1.0,
+                      child: Icon(Icons.play_circle_outline,size: 48, color: Colors.black54),
+                    ),
+                    Icon(Icons.play_circle_outline,size: 48, color: Colors.white),
+                  ],
                 ),
                 Positioned.fill(
                   child: Material(

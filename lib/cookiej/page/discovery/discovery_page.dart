@@ -37,43 +37,29 @@ class _DiscoveryPageState extends State<DiscoveryPage> with SingleTickerProvider
       body: extended.NestedScrollView(
         headerSliverBuilder: (context,innerBoxIsScrolled){
           return <Widget>[
-            SliverPersistentHeader(
-              delegate: DiscoveryPageHeaderDelegate(
-                minHeight: MediaQuery.of(context).padding.top+46,
-                maxHeight: MediaQuery.of(context).padding.top+46,
-                child: Container(
-                  child:
-                    SafeArea(
-                      child:Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children:[
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal:16),
-                            alignment: Alignment.centerLeft,
-                            child:Text(
-                              '发现',
-                              style: Theme.of(context).primaryTextTheme.subtitle1.merge(TextStyle(fontSize: 20)),
-                            ),
-                          ),
-                          //搜索按钮
-                          InkWell(
-                            child:Container(
-                              height: 36,
-                              width: 36,
-                              margin: EdgeInsets.only(left:8 ,right: 8),
-                              child:Icon(Icons.search,color: _theme.primaryTextTheme.bodyText1.color),
-                            ),
-                            onTap: (){
+            SliverAppBar(
+              leading: Container(
+                padding: EdgeInsets.only(left:16,bottom: 10),
+                alignment: Alignment.centerLeft,
+                child:Text(
+                  '发现',
+                  style: Theme.of(context).primaryTextTheme.subtitle1.merge(TextStyle(fontSize: 20)),
+                ),
+              ),
+              actions: <Widget>[
+                //搜索按钮
+                InkWell(
+                  child:Container(
+                    height: 36,
+                    width: 36,
+                    margin: EdgeInsets.only(left:8 ,right: 8,bottom: 10),
+                    child:Icon(Icons.search,color: _theme.primaryTextTheme.bodyText1.color),
+                  ),
+                  onTap: (){
 
-                            },
-                          )
-                        ]
-                      ),
-                    ),
-                  color: Theme.of(context).primaryColor,
-                  alignment: Alignment.center,
+                  },
                 )
-              )
+              ],
             ),
             SliverPersistentHeader(
               pinned: true,

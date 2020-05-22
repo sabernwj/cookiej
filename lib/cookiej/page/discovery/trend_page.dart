@@ -20,8 +20,6 @@ class TrendPage extends StatefulWidget {
 
 class _TrendPageState extends State<TrendPage> with WeiboListMixin{
 
-  RefreshController _refreshController=RefreshController(initialRefresh:false);
-
   @override
   void initState() {
     weiboListInit(WeiboTimelineType.Public,extraParams: {
@@ -109,7 +107,8 @@ class _TrendPageState extends State<TrendPage> with WeiboListMixin{
                 var videoElementList=<VideoElement>[];
                 weiboList.forEach((weibo){
                   bool hasVideo=false;
-                  String text='@${weibo.user.screenName}:';
+                  //String text='@${weibo.user.screenName}:';
+                  String text='';
                   Video video;
                   DisplayContent.analysisContent(weibo).forEach((content) {
                     if(content.type==ContentType.Text
