@@ -37,7 +37,23 @@ class _WeiboPageState extends State<WeiboPage>{
               return Center(child:CircularProgressIndicator());
             case ConnectionState.done:
               if(snapshot.hasError){
-                return Text(snapshot.error.toString());
+                return Container(
+                  child:Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:[
+                      SizedBox(height: 16),
+                      Text(snapshot.error.toString()),
+                      SizedBox(height: 16),
+                      RaisedButton(
+                        child: Text('刷新试试'),
+                        onPressed: (){
+                          weiboTask =WeiboProvider.getStatusesShow(widget.weiboId);
+                        }
+                      ),
+                      SizedBox(height: 16),
+                    ]
+                  )
+                );
               }
               Weibo weibo=snapshot.data.data;
               return snapshot.data.success?

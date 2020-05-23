@@ -93,8 +93,10 @@ mixin WeiboListMixin{
           eventBus.fire(StringMsgEvent('${newHomeTimeline.statuses.length}条新的微博'));
           WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid), weiboList);
         }
+        return WeiboListStatus.complete;
       }
-      return WeiboListStatus.complete;
+      readCursor=0;
+      return WeiboListStatus.nodata;
     }).catchError((err){
       print(err);
       return WeiboListStatus.failed;

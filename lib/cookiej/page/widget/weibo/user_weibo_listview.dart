@@ -61,7 +61,26 @@ class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMix
     return FutureBuilder(
       future: isStartLoadDataComplete,
       builder: (context,snaphot){
-        if(snaphot.data!=WeiboListStatus.complete) return Center(child:CircularProgressIndicator());
+          if(snaphot.hasError){
+            return Container(
+              child:Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:[
+                  SizedBox(height: 16),
+                  Text(snaphot.error.toString()),
+                  SizedBox(height: 16),
+                  RaisedButton(
+                    child: Text('刷新试试'),
+                    onPressed: (){
+                      isStartLoadDataComplete=startLoadData();
+                    }
+                  ),
+                  SizedBox(height: 16),
+                ]
+              )
+            );
+          }
+      if(snaphot.data!=WeiboListStatus.complete) return Center(child:CircularProgressIndicator());
         return RefreshConfiguration(
           child:SmartRefresher(
             controller: _refreshController,

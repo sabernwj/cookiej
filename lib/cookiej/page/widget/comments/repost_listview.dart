@@ -40,7 +40,26 @@ class _RepostListviewState extends State<RepostListview> with AutomaticKeepAlive
           case ConnectionState.active:
           case ConnectionState.done:
             if(snapshot.hasError){
-              return Text(snapshot.error.toString());
+              return Container(
+                child:Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:[
+                    SizedBox(height: 16),
+                    Text(snapshot.error.toString()),
+                    SizedBox(height: 16),
+                    RaisedButton(
+                      child: Text('刷新试试'),
+                      onPressed: (){
+                        repostsTask=WeiboProvider.getReposts(widget.sourceWeiboId).then((result){
+                          _weiboList=result.data.reposts;
+                          return result.data;
+                        });
+                      }
+                    ),
+                    SizedBox(height: 16),
+                  ]
+                )
+              );
             }
             return snapshot.data==null?Text('未知状态'):Container(
               child: ListView.builder(

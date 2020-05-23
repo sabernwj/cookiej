@@ -77,7 +77,43 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
           case ConnectionState.active:
           case ConnectionState.done:
             if(snapshot.hasError){
-              return Text(snapshot.error.toString());
+              return Container(
+                child:Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:[
+                    SizedBox(height: 16),
+                    Text(snapshot.error.toString()),
+                    SizedBox(height: 16),
+                    RaisedButton(
+                      child: Text('刷新试试'),
+                      onPressed: (){
+                        commentsTask=CommentProvider.getCommentsShow(widget.id).then((result){
+                          var comments=result.data;
+                          initialComments=comments;
+                          laterComments=initialComments;
+                          groupCommentMap=formatComments(comments);
+                          //将直接回微博的-评论筛选出来
+                          groupCommentMap.forEach((rootId,sameRootCommentMap){       
+                            if(sameRootCommentMap[rootId]==null){
+                              //这种情况是有评论，但没有该评论rootId对应的评论
+                              sameRootCommentMap.forEach((_, value)=>displayCommentList.add(value));
+                            }
+                            else{
+                              //此处将同一rootId的评论扔到了和该rootId相同的评论的属性里
+                              sameRootCommentMap[rootId].commentReplyMap=sameRootCommentMap;
+                              displayCommentList.add(sameRootCommentMap[rootId]);
+                            }
+
+                          });
+                          displayCommentList.sort((a,b)=>b.rootid.compareTo(a.rootid));
+                          return comments;
+                        });
+                      }
+                    ),
+                    SizedBox(height: 16),
+                  ]
+                )
+              );
             }
             return snapshot.data==null?Text('未知状态'):Container(
               child:Column(children: <Widget>[

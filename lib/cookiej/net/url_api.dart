@@ -12,6 +12,7 @@ class UrlApi{
   static Future<Map> getUrlsInfo(List<String> shortUrls) async{
     var url=API.baseUrl+_urlInfo;
     shortUrls.forEach((shortUrl){
+      shortUrl=shortUrl.replaceAll('#', '');
       url=Utils.formatUrlParams(url, {'url_short':shortUrl});
     });
     return (await API.get(url)).data;

@@ -19,8 +19,9 @@ class CookieJColors{
     '杏黄色':CookieJColors.apricot,
     '少女粉':CookieJColors.girlPink,
   };
-  static const int customWhiteValue=0xFFFFFFFF;
-  static const int customBlackValue = 0xFF363636;
+  static const int customWhiteValue=0xFFFEFEFEF;
+  static const int customBlackValue = 0xFF282828;
+  static const int customBlackLowValue=0xFF353535;
   static const int salmonPinkValue=0xFFFA8072;
   static const int apricotValue=0xFFF8B878;
   static const int girlPinkValue=0xFFFA7298;
@@ -28,6 +29,7 @@ class CookieJColors{
   static final MaterialColor apricot=getMaterialColor(apricotValue);
   static final MaterialColor salmonPink=getMaterialColor(salmonPinkValue);
   static final MaterialColor customBlack =getMaterialColor(customBlackValue);
+   static final MaterialColor customBlackLow =getMaterialColor(customBlackLowValue);
   static final MaterialColor girlPink=getMaterialColor(girlPinkValue);
   static final MaterialColor customWhite=getMaterialColor(customWhiteValue);
 
@@ -73,7 +75,7 @@ class CookieJColors{
       //前景色
       accentColor: color.shade600,
       //用于突出显示切换Widget（如Switch，Radio和Checkbox）的活动状态的颜色。
-      dialogBackgroundColor: isDarkMode?Colors.grey[850]:Colors.white,
+      dialogBackgroundColor: isDarkMode?customBlackLow:Colors.white,
       toggleableActiveColor:color.shade500,
       unselectedWidgetColor: isDarkMode ? customBlack : customWhite,
       //cardColor:isDarkMode ? CookieJColors.customBlack : color[200],
@@ -98,24 +100,24 @@ class CookieJColors{
         subtitle2: CookieJTextStyle.minText,
       )
     );
-    if(color==CookieJColors.customWhite){
-      theme=theme.copyWith(
-        primaryColorBrightness: Brightness.light,
-        toggleableActiveColor:Colors.red,
-        primaryTextTheme: TextTheme(
-          overline: TextStyle(fontSize:CookieJTextStyle.minTextSize,color:Colors.grey[600],letterSpacing: 0),
-          bodyText1: CookieJTextStyle.middleTextWhite.merge(TextStyle(
-            //color:luminance<0.15&&!isDarkMode?Colors.blue:color,
-            color:Colors.blue
-          )),
-          bodyText2: CookieJTextStyle.middleText.merge(TextStyle(
-            color:Colors.blue,
-          )),
-          subtitle1: CookieJTextStyle.middleTextWhite.copyWith(color:Colors.blue),
-          subtitle2: CookieJTextStyle.minText.copyWith(color:Colors.blue),
-        ),
-      );
-    }
+    // if(color==CookieJColors.customWhite){
+    //   theme=theme.copyWith(
+    //     primaryColorBrightness: Brightness.light,
+    //     toggleableActiveColor:Colors.red,
+    //     primaryTextTheme: TextTheme(
+    //       overline: TextStyle(fontSize:CookieJTextStyle.minTextSize,color:Colors.grey[600],letterSpacing: 0),
+    //       bodyText1: CookieJTextStyle.middleTextWhite.merge(TextStyle(
+    //         //color:luminance<0.15&&!isDarkMode?Colors.blue:color,
+    //         color:Colors.blue
+    //       )),
+    //       bodyText2: CookieJTextStyle.middleText.merge(TextStyle(
+    //         color:Colors.blue,
+    //       )),
+    //       subtitle1: CookieJTextStyle.middleTextWhite.copyWith(color:Colors.blue),
+    //       subtitle2: CookieJTextStyle.minText.copyWith(color:Colors.blue),
+    //     ),
+    //   );
+    // }
     return theme;
   }
 

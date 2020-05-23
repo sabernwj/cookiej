@@ -64,7 +64,7 @@ class _BootPageState extends State<BootPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body:Container(
-        color:Theme.of(context).primaryColor,
+        color:Theme.of(context).dialogBackgroundColor,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +80,7 @@ class _BootPageState extends State<BootPage> {
               Container(
                 height: 12,
               ),
-              Text('饼干微博',style:Theme.of(context).primaryTextTheme.bodyText1.merge(TextStyle(fontSize: 18))),
+              Text('饼干微博',style:Theme.of(context).primaryTextTheme.bodyText2.merge(TextStyle(fontSize: 18))),
               Container(
                 height:MediaQuery.of(context).size.height/4
               )

@@ -37,7 +37,21 @@ class _CommentListviewMeState extends State<CommentListviewMe> with AutomaticKee
       builder: (context,snaphot){
         if(snaphot.hasError){
           return Container(
-            child: Text(snaphot.error.toString()),
+            child:Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:[
+                SizedBox(height: 16),
+                Text(snaphot.error.toString()),
+                SizedBox(height: 16),
+                RaisedButton(
+                  child: Text('刷新试试'),
+                  onPressed: (){
+                    commentTask=CommentProvider.getCommentsAboutMe(widget.type);
+                  }
+                ),
+                SizedBox(height: 16),
+              ]
+            )
           );
         }
         if(snaphot.hasData){

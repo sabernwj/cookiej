@@ -57,6 +57,7 @@ class DisplayContent{
           }
           else{
             var urlInfo=UrlProvider.getUrlInfo(_singleText).data??UrlInfo(annotations: []);
+            //if(urlInfo.annotations.isNotEmpty) print('解析url成功');
             var displayText='\u{f0c1}网页链接';
             var contentType=ContentType.Link;
             try{

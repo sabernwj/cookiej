@@ -1,4 +1,5 @@
 
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cookiej/cookiej/action/app_state.dart';
@@ -7,11 +8,13 @@ import 'package:cookiej/cookiej/event/event_bus.dart';
 import 'package:cookiej/cookiej/model/user.dart';
 import 'package:cookiej/cookiej/model/user_lite.dart';
 import 'package:cookiej/cookiej/page/widget/custom_tabbarview.dart';
+import 'package:cookiej/cookiej/page/widget/show_image_view.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/user_weibo_listview.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
 import 'package:cookiej/cookiej/page/widget/custom_button.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
@@ -253,6 +256,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
     final _theme=Theme.of(context);
     final _percentWithCollapse=percentWithCollapse(shrinkOffset);
     final _percentWithExpand=percentWithExpand(shrinkOffset);
+    final iconUrl=PictureProvider.getImgUrlFromId(store.state.currentUser.iconId);
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -323,11 +327,21 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                   children: [
                     Row(
                       children:<Widget>[
-                        SizedBox(
-                          width:getIconSize(shrinkOffset,64),
-                          height: getIconSize(shrinkOffset, 64),
-                          child:CircleAvatar(backgroundImage: PictureProvider.getPictureFromId(user.iconId),radius: 20),
-                        ),
+                          GestureDetector(
+                            onTap: ()=>Navigator.push(
+                              context,
+                              Platform.isAndroid
+                                  ? TransparentMaterialPageRoute(builder: (_) => ShowImagesView([iconUrl],))
+                                  : TransparentCupertinoPageRoute(builder: (_) => ShowImagesView([iconUrl],))
+                            ),
+                            child:Hero(
+                              tag: iconUrl,
+                                child: SizedBox(
+                                child: CircleAvatar(backgroundImage: PictureProvider.getPictureFromUrl(iconUrl),radius: 20),
+                                width: 64,height: 64,
+                              ),
+                            )
+                          ),
                         Offstage(
                           offstage: _percentWithCollapse!=1,
                           child:Container(

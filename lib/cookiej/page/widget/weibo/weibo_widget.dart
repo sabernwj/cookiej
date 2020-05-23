@@ -1,6 +1,7 @@
 
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/page/public/user_page.dart';
+import 'package:cookiej/cookiej/page/widget/user_name_span.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
@@ -40,7 +41,7 @@ class WeiboWidget extends StatelessWidget {
                 Container(
                   child: Column(
                     children: <Widget>[
-                      Text(weibo.user.name,style: _theme.primaryTextTheme.bodyText2),
+                      UserNameSpan(weibo.user.name,style: _theme.primaryTextTheme.bodyText2),
                       Text(Utils.getDistanceFromNow(weibo.createdAt)+'    '+weibo.source,style: _theme.primaryTextTheme.overline),
                     ],
                     crossAxisAlignment: CrossAxisAlignment.start,

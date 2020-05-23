@@ -103,6 +103,26 @@ class _TrendPageState extends State<TrendPage> with AutomaticKeepAliveClientMixi
           FutureBuilder(
               future: isStartLoadDataComplete,
               builder: (context,snaphot){
+                if(snaphot.hasError){
+                  return Container(
+                    child:Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:[
+                        SizedBox(height: 16),
+                        Text(snaphot.error.toString()),
+                        SizedBox(height: 16),
+                        RaisedButton(
+                          child: Text('刷新试试'),
+                          onPressed: (){
+                            isStartLoadDataComplete=null;
+                            isStartLoadDataComplete=startLoadData();
+                          }
+                        ),
+                        SizedBox(height: 16),
+                      ]
+                    )
+                  );
+                }
                 if(snaphot.data!=WeiboListStatus.complete) return SliverToBoxAdapter(child:Center(child:CircularProgressIndicator()));              
                 var videoElementList=<VideoElement>[];
                 weiboList.forEach((weibo){
@@ -128,7 +148,23 @@ class _TrendPageState extends State<TrendPage> with AutomaticKeepAliveClientMixi
                 //print(videoElementList.length);
                 if(videoElementList.isEmpty){
                   return SliverToBoxAdapter(child:Center(
-                    child:Text('没有找到视频')
+                    child:Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:[
+                        SizedBox(height: 16),
+                        Text('没有找到视频'),
+                        SizedBox(height: 16),
+                        RaisedButton(
+                          child: Text('刷新试试'),
+                          onPressed: (){
+                            setState(() {
+                              isStartLoadDataComplete=startLoadData();
+                            });
+                          }
+                        ),
+                        SizedBox(height: 16),
+                      ]
+                    )
                   ));
                 }
                 Widget returnWidget;

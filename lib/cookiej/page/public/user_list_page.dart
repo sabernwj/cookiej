@@ -54,6 +54,34 @@ class _UserListPageState extends State<UserListPage> {
       body: FutureBuilder(
         future: userListTask,
         builder: (context,snaphot){
+          if(snaphot.hasError){
+            return Container(
+              child:Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:[
+                  SizedBox(height: 16),
+                  Text(snaphot.error.toString()),
+                  SizedBox(height: 16),
+                  RaisedButton(
+                    child: Text('刷新试试'),
+                    onPressed: (){
+                      switch (widget.type) {
+                        case FriendShipsType.Followers:
+                          userListTask=UserProvider.getFollowers(uid:widget.uid,screenName: widget.screenName);
+                          break;
+                        case FriendShipsType.Friends:
+                        userListTask=UserProvider.getFriends(uid:widget.uid,screenName: widget.screenName);
+                          break;
+                        default:
+                          break;
+                      }
+                    }
+                  ),
+                  SizedBox(height: 16),
+                ]
+              )
+            );
+          }
           if(snaphot.hasData){
             if(snaphot.data.success){
               List<User> userList=snaphot.data.data;

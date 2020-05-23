@@ -49,20 +49,23 @@ class _VideoPageState extends State<VideoPage> {
                   title: widget.video.displayName,
                 );
               }catch(e){
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.error_outline),
-                    Text('解析视频地址错误错误',style: _theme.primaryTextTheme.bodyText1,),
-                    RaisedButton(
-                      child: Text('点击重试'),
-                      onPressed: (){
-                        setState(() {
-                          videoRawTask=UrlApi.getVideoRaw(widget.video.id);
-                        });
-                      }
-                    )
-                  ],
+                return Container(
+                  child:Column(
+                    mainAxisSize:MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(Icons.error_outline),
+                      Text('解析视频地址错误错误${e.toString()}',style: _theme.primaryTextTheme.bodyText1,),
+                      RaisedButton(
+                        child: Text('点击重试'),
+                        onPressed: (){
+                          setState(() {
+                            videoRawTask=UrlApi.getVideoRaw(widget.video.id);
+                          });
+                        }
+                      )
+                    ],
+                  )
                 );
               }
             }else {

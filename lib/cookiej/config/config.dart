@@ -21,6 +21,7 @@ class Config{
 
   static const themeNameStorageKey='theme_name';
   static const isDarkModeStorageKey='is_dark_mode';
+  static const isDarkModeAutoStorageKey='is_dark_mode_auto';
 
   static const userInfoDB='UserInfo';
   static const userInfoDB_Id='uid';

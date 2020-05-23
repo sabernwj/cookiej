@@ -1,5 +1,6 @@
 import 'package:cookiej/cookiej/config/style.dart';
 import 'package:cookiej/cookiej/model/weibo_lite.dart';
+import 'package:cookiej/cookiej/page/public/video_page.dart';
 import 'package:cookiej/cookiej/page/public/weibo_page.dart';
 import 'package:cookiej/cookiej/page/widget/content_widget.dart';
 import 'package:cookiej/cookiej/page/widget/user_icon.dart';
@@ -47,6 +48,14 @@ class WeiboVideoWidget2 extends StatelessWidget {
                       ),
                       Icon(Icons.play_circle_outline,size: 64, color: Colors.white),
                     ],
+                  ),
+                  Material(
+                    color:Colors.transparent,
+                    child:InkWell(
+                      onTap:(){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>VideoPage(video: videoElement.video)));
+                      },
+                    )
                   ),
                 ]
               )
