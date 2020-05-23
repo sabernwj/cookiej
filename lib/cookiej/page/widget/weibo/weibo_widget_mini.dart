@@ -1,5 +1,6 @@
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/model/weibo_lite.dart';
+import 'package:cookiej/cookiej/page/public/weibo_page.dart';
 import 'package:cookiej/cookiej/page/widget/content_widget.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class WeiboWidgetMini extends StatelessWidget {
       color: backgroundColor??_theme.unselectedWidgetColor,
       child: InkWell(
         onTap: (){
-
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>WeiboPage(weibo.id)));
         },
         child:Row(
           children: <Widget>[
