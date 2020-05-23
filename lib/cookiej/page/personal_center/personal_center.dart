@@ -61,7 +61,7 @@ class PersonalCenter extends StatelessWidget {
                               context,
                               Platform.isAndroid
                                   ? TransparentMaterialPageRoute(builder: (_) => ShowImagesView([iconUrl],))
-                                  : TransparentCupertinoPageRoute(builder: (_) => ShowImagesView([iconUrl],))
+                                  : TransparentMaterialPageRoute(builder: (_) => ShowImagesView([iconUrl],))
                             ),
                             child:Hero(
                               tag: iconUrl,

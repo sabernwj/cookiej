@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cookiej/cookiej/action/theme_state.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
@@ -64,7 +66,7 @@ class CookieJColors{
     var theme= ThemeData(
       fontFamily: null,
       primarySwatch: color,
-      platform: TargetPlatform.iOS,
+      platform: Platform.isIOS?TargetPlatform.iOS:TargetPlatform.android,
       brightness: isDarkMode?Brightness.dark:Brightness.light,
       //主颜色属于暗色还是亮色，关乎到文本的黑或白
       primaryColorBrightness: Brightness.dark,

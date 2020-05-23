@@ -256,7 +256,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
     final _theme=Theme.of(context);
     final _percentWithCollapse=percentWithCollapse(shrinkOffset);
     final _percentWithExpand=percentWithExpand(shrinkOffset);
-    final iconUrl=PictureProvider.getImgUrlFromId(store.state.currentUser.iconId);
+    final iconUrl=PictureProvider.getImgUrlFromId(user.iconId);
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -280,6 +280,8 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
             ),
           )
         ),
+
+
         //顶栏
          SafeArea(
             bottom: false,
@@ -332,13 +334,13 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                               context,
                               Platform.isAndroid
                                   ? TransparentMaterialPageRoute(builder: (_) => ShowImagesView([iconUrl],))
-                                  : TransparentCupertinoPageRoute(builder: (_) => ShowImagesView([iconUrl],))
+                                  : TransparentMaterialPageRoute(builder: (_) => ShowImagesView([iconUrl],))
                             ),
                             child:Hero(
                               tag: iconUrl,
                                 child: SizedBox(
                                 child: CircleAvatar(backgroundImage: PictureProvider.getPictureFromUrl(iconUrl),radius: 20),
-                                width: 64,height: 64,
+                                width: getIconSize(shrinkOffset,64),height:getIconSize(shrinkOffset,64),
                               ),
                             )
                           ),
@@ -388,8 +390,10 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                 key: overflowWidgetKey,
                 height: overflowWidgetSize==null?null:(overflowWidgetSize*_percentWithExpand),
                 padding: EdgeInsets.symmetric(horizontal: 16),
-                child:
-                  Column(
+                //此处包一层scollview是为了反正overflow的警告
+                child:SingleChildScrollView(
+                  physics: NeverScrollableScrollPhysics(),
+                  child:Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -427,6 +431,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                         height:24
                       )
                     ],
+                  )
                 )
               ),
               bottomWidget??Container()

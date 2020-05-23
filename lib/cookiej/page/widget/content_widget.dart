@@ -210,7 +210,7 @@ class ContentWidget extends StatelessWidget {
         context,
         Platform.isAndroid
             ? TransparentMaterialPageRoute(builder: (_) => ShowImagesView(imgUrls,currentIndex: index,heroTag: content.heroTag,))
-            : TransparentCupertinoPageRoute(builder: (_) => ShowImagesView(imgUrls,currentIndex: index,heroTag: content.heroTag,)),
+            : TransparentMaterialPageRoute(builder: (_) => ShowImagesView(imgUrls,currentIndex: index,heroTag: content.heroTag,)),
       );
     };
     if(imgUrls.length==1){

@@ -37,39 +37,38 @@ class _DiscoveryPageState extends State<DiscoveryPage> with SingleTickerProvider
       body: extended.NestedScrollView(
         headerSliverBuilder: (context,innerBoxIsScrolled){
           return <Widget>[
-            SliverAppBar(
-              leading: Container(
-                padding: EdgeInsets.only(left:16,bottom: 10),
-                alignment: Alignment.centerLeft,
-                child:Text(
-                  '发现',
-                  style: Theme.of(context).primaryTextTheme.subtitle1.merge(TextStyle(fontSize: 20)),
-                ),
-              ),
-              actions: <Widget>[
-                //搜索按钮
-                InkWell(
-                  child:Container(
-                    height: 36,
-                    width: 36,
-                    margin: EdgeInsets.only(left:8 ,right: 8,bottom: 10),
-                    child:Icon(Icons.search,color: _theme.primaryTextTheme.bodyText1.color),
-                  ),
-                  onTap: (){
-
-                  },
-                )
-              ],
-            ),
             SliverPersistentHeader(
               pinned: true,
-              delegate: DiscoveryPageHeaderDelegate(
-                minHeight: 24+MediaQuery.of(context).padding.top,
-                maxHeight: 24+MediaQuery.of(context).padding.top,
-                child: Container(
+              delegate: CustomSliverPersistentHeaderDelegate(
+                floatHeight:34,
+                fixedHeight: 36+MediaQuery.of(context).padding.top,
+                topWidget: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left:16),
+                      child:Text(
+                        '发现',
+                        style: Theme.of(context).primaryTextTheme.subtitle1.merge(TextStyle(fontSize: 20)),
+                      )
+                    ),
+                    InkWell(
+                      child:Container(
+                        height: 36,
+                        width: 36,
+                        margin: EdgeInsets.only(left:8 ,right: 8),
+                        child:Icon(Icons.search,color: _theme.primaryTextTheme.bodyText1.color),
+                      ),
+                      onTap: (){
+
+                      },
+                    )
+                  ],
+                ),
+                bottomWidgte: Container(
                   padding: EdgeInsets.only(bottom:2),
-                  color:_theme.primaryColor,
-                  alignment:Alignment.bottomCenter,
+                  alignment:Alignment.center,
                   child:TabBar(
                     labelPadding: EdgeInsets.symmetric(vertical:4,horizontal:12),
                     isScrollable: true,
@@ -137,5 +136,82 @@ class DiscoveryPageHeaderDelegate extends SliverPersistentHeaderDelegate{
     return true;
   }
   
+  
+}
+
+class CustomSliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate{
+
+  final double floatHeight;
+  final double fixedHeight;
+  final Widget topWidget;
+  final Widget bottomWidgte;
+
+  CustomSliverPersistentHeaderDelegate({
+    this.floatHeight,
+    this.fixedHeight,
+    this.topWidget,
+    this.bottomWidgte
+  });
+  ///扩张时0->1
+  double percentWithExpand(double shrinkOffset){
+    return (this.maxExtent - this.minExtent-shrinkOffset)/(this.maxExtent - this.minExtent);
+  }
+
+  ///收缩时0->1
+  double percentWithCollapse(double shrinkOffset){
+    return shrinkOffset/(this.maxExtent - this.minExtent);
+  }
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Material(
+      color: Theme.of(context).primaryColor,
+      child: Stack(
+        overflow: Overflow.clip,
+        fit:StackFit.expand,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Transform.translate(
+                  offset: Offset(0, -shrinkOffset),
+                  child: Opacity(
+                    opacity: percentWithExpand(shrinkOffset).clamp(0.0, 1.0),
+                    child: topWidget,
+                  )
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding:EdgeInsets.only( top:MediaQuery.of(context).padding.top),
+            child:Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                bottomWidgte
+              ]
+            )
+          )
+          
+        ],
+      )
+    );
+    
+  }
+  
+    @override
+    double get maxExtent => fixedHeight+floatHeight;
+  
+    @override
+    double get minExtent => fixedHeight;
+  
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
+  }
   
 }
