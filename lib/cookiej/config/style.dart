@@ -64,6 +64,7 @@ class CookieJColors{
     var theme= ThemeData(
       fontFamily: null,
       primarySwatch: color,
+      platform: TargetPlatform.iOS,
       brightness: isDarkMode?Brightness.dark:Brightness.light,
       //主颜色属于暗色还是亮色，关乎到文本的黑或白
       primaryColorBrightness: Brightness.dark,

@@ -15,7 +15,7 @@ class PictureProvider{
   static int _serverUseCount=0;
   ///记录某ID图片使用哪个服务器的使用记录，才能正确使用根据url缓存的图片
   static Map<String,String> _imgIdServerCache=new Map();
-  static Box _imgIdBox;
+  static Box<String> _imgIdBox;
 
   static Future<void> init() async {
     _imgIdBox=await Hive.openBox('img_id_box');
@@ -53,7 +53,8 @@ class PictureProvider{
     String baseUrl=_imgIdServerCache[id]??_imgIdBox.get(id)??_getImgServer();
     _imgIdServerCache[id]=baseUrl;
     if(_imgIdServerCache.length>20){
-      var cacheClone=Map.from(_imgIdServerCache);
+      if(id==null) id=id.toString();
+      var cacheClone=Map<dynamic,String>.from(_imgIdServerCache);
       _imgIdBox.putAll(cacheClone);
       _imgIdServerCache.clear();
     }

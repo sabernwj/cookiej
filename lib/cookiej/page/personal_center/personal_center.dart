@@ -66,7 +66,7 @@ class PersonalCenter extends StatelessWidget {
                             child:Hero(
                               tag: iconUrl,
                                 child: SizedBox(
-                                child: CircleAvatar(backgroundImage: PictureProvider.getPictureFromUrl(iconUrl),radius: 20),
+                                child: ClipOval(child: Image(image: PictureProvider.getPictureFromUrl(iconUrl),),),
                                 width: 64,height: 64,
                               ),
                             )

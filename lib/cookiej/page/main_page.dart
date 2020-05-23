@@ -64,7 +64,7 @@ class _MainPageState extends State<MainPage> {
               child: SizedBox(
                 height:46,
                 child:BottomNavigationBar(
-                  backgroundColor: _theme.dialogBackgroundColor,
+                  //backgroundColor: _theme.dialogBackgroundColor,
                   elevation: 0,
                   items: <BottomNavigationBarItem>[
                     BottomNavigationBarItem(

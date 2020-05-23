@@ -41,7 +41,7 @@ class CommentWidget extends StatelessWidget{
           ),
           //评论正文
           Container(
-            child: ContentWidget(comment,textStyle: TextStyle(fontSize:_theme.textTheme.bodyText2.fontSize-1.5),),
+            child: ContentWidget(comment,textStyle: _theme.textTheme.bodyText2.copyWith(fontSize:_theme.textTheme.bodyText2.fontSize-1.5)),
             margin: EdgeInsets.only(left:46),
           ),
           
@@ -57,7 +57,7 @@ class CommentWidget extends StatelessWidget{
       final displayReplyWidgetList=<Widget>[];
       comment.commentReplyMap.forEach((id,_comment){
         if(id!=comment.id){
-          displayReplyWidgetList.add(ContentWidget(_comment,textStyle: TextStyle(fontSize:_theme.textTheme.bodyText2.fontSize-1.5),isLightMode: true));
+          displayReplyWidgetList.add(ContentWidget(_comment,textStyle: _theme.textTheme.bodyText2.copyWith(fontSize:_theme.textTheme.bodyText2.fontSize-1.5),isLightMode: true));
         }
       });
       (returnWidget.child as Column).children.add(Container(

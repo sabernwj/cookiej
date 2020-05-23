@@ -35,7 +35,9 @@ class _HotPgaeState extends State<HotPgae> with WeiboListMixin,AutomaticKeepAliv
                 RaisedButton(
                   child: Text('刷新试试'),
                   onPressed: (){
-                    isStartLoadDataComplete=startLoadData();
+                    setState(() {
+                      isStartLoadDataComplete=startLoadData();
+                    });
                   }
                 ),
                 SizedBox(height: 16),
@@ -44,6 +46,7 @@ class _HotPgaeState extends State<HotPgae> with WeiboListMixin,AutomaticKeepAliv
           );
         }
         if(snaphot.data!=WeiboListStatus.complete) return Center(child:CircularProgressIndicator());
+        if(weiboList.isEmpty) return Center(child:Text('没有找到微博'));
         return ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
