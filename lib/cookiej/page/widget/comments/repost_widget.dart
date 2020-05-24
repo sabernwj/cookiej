@@ -41,7 +41,7 @@ class RepostWidget extends StatelessWidget {
           ),
           //转发内容正文
           Container(
-            child: ContentWidget(repost,textStyle: TextStyle(fontSize:_theme.textTheme.bodyText2.fontSize-1.5),),
+            child: ContentWidget(repost,textStyle: _theme.textTheme.bodyText2.copyWith(fontSize:_theme.textTheme.bodyText2.fontSize-1.5),),
             margin: EdgeInsets.only(left:46),
           ),
           
