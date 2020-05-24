@@ -122,8 +122,8 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                     isScrollable: true,
                     labelPadding: EdgeInsets.symmetric(vertical:10,horizontal:12),
                     tabs: <Widget>[
-                      Text('转发(${initialComments.weibo.repostsCount})',style: _theme.textTheme.bodyText2,),
-                      Text('评论(${initialComments.weibo.commentsCount})',style: _theme.textTheme.bodyText2),
+                      Text('转发(${initialComments.weibo?.repostsCount??0})',style: _theme.textTheme.bodyText2,),
+                      Text('评论(${initialComments.weibo?.commentsCount??0})',style: _theme.textTheme.bodyText2),
                       //Text('赞(${initialComments.weibo.attitudesCount})')
                     ],
                     controller: _commentStatusController,

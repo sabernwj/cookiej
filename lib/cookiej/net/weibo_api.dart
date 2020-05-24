@@ -72,6 +72,7 @@ class WeiboApi{
       'id':id.toString()
     };
     final result=await API.get(Utils.formatUrlParams(url, params));
+    if(!(result is Map)) return null;
     return result.data;
     // return result.then((result) async {
     //   final repost=Reposts.fromJson(result.data);
