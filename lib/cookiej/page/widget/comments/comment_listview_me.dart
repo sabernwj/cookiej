@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:core';
 import 'package:cookiej/cookiej/config/config.dart';
-import 'package:cookiej/cookiej/model/comment.dart';
 import 'package:cookiej/cookiej/model/comments.dart';
-import 'package:cookiej/cookiej/page/widget/comments/comment_widget.dart';
 import 'package:cookiej/cookiej/page/widget/comments/comment_widget_me.dart';
 import 'package:cookiej/cookiej/provider/comment_provider.dart';
 import 'package:cookiej/cookiej/provider/provider_result.dart';
@@ -82,7 +80,6 @@ class _CommentListviewMeState extends State<CommentListviewMe> with AutomaticKee
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
 }

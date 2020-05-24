@@ -26,7 +26,7 @@ class WeiboApi{
   static const String _update='/2/statuses/update.json';
 
   ///上传图片并发布一条新微博
-  static const String _upload='/2/statuses/upload.json';
+  //static const String _upload='/2/statuses/upload.json';
 
 
   ///获取微博列表

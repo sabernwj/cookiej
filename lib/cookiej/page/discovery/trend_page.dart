@@ -10,7 +10,6 @@ import 'package:cookiej/cookiej/page/widget/weibo/weibo_video_widget.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_video_widget2.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 class TrendPage extends StatefulWidget {
@@ -282,6 +281,6 @@ class _TrendPageState extends State<TrendPage> with AutomaticKeepAliveClientMixi
   }
 
   @override
-  // TODO: implement wantKeepAlive
+
   bool get wantKeepAlive => true;
 }

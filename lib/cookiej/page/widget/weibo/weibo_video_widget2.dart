@@ -1,8 +1,7 @@
-import 'package:cookiej/cookiej/config/style.dart';
+
 import 'package:cookiej/cookiej/model/weibo_lite.dart';
 import 'package:cookiej/cookiej/page/public/video_page.dart';
 import 'package:cookiej/cookiej/page/public/weibo_page.dart';
-import 'package:cookiej/cookiej/page/widget/content_widget.dart';
 import 'package:cookiej/cookiej/page/widget/user_icon.dart';
 import 'package:cookiej/cookiej/page/widget/user_name_span.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_video_widget.dart';

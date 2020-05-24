@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:async';
-import 'package:cookiej/cookiej/config/config.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
 

@@ -75,9 +75,9 @@ class PersonalCenter extends StatelessWidget {
                             child:ListTile(
                               title:Row(
                                 children:[
-                                  Text(store.state.currentUser.screenName,style: _theme.primaryTextTheme.subhead),
+                                  Text(store.state.currentUser.screenName,style: _theme.primaryTextTheme.subtitle1),
                                   InkWell(
-                                    child: Icon(IconData(0xf0d7,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subhead.color ,size: 24),
+                                    child: Icon(IconData(0xf0d7,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subtitle1.color ,size: 24),
                                     onTap: ()async{
                                       final RenderBox textDescription=_displayUserNameKey.currentContext.findRenderObject();
                                       showMenu(
@@ -89,8 +89,8 @@ class PersonalCenter extends StatelessWidget {
                                   )
                                 ]
                               ),
-                              subtitle: Text(store.state.currentUser.description.isEmpty?'\u{3000}':store.state.currentUser.description,key: _displayUserNameKey,style: _theme.primaryTextTheme.subtitle),
-                              trailing: IconButton(icon: Icon(IconData(0xf105,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subhead.color,size: 28,), onPressed: (){
+                              subtitle: Text(store.state.currentUser.description.isEmpty?'\u{3000}':store.state.currentUser.description,key: _displayUserNameKey,style: _theme.primaryTextTheme.subtitle2),
+                              trailing: IconButton(icon: Icon(IconData(0xf105,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subtitle1.color,size: 28,), onPressed: (){
                                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>UserPage(inputUser:store.state.currentUser)));
                               }),
                             ),
@@ -107,24 +107,24 @@ class PersonalCenter extends StatelessWidget {
                             Navigator.of(context).push(MaterialPageRoute(builder: (context)=>UserPage(inputUser:store.state.currentUser)));
                           }, child: Column(
                             children:[
-                              Text(store.state.currentUser.statusesCount.toString(),style: _theme.primaryTextTheme.subhead),
-                              Text('微博',style: _theme.primaryTextTheme.subtitle)
+                              Text(store.state.currentUser.statusesCount.toString(),style: _theme.primaryTextTheme.subtitle1),
+                              Text('微博',style: _theme.primaryTextTheme.subtitle2)
                             ]
                           )),
                           FlatButton(onPressed: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>UserListPage(type: FriendShipsType.Friends,screenName:user.screenName)));
                           }, child: Column(
                             children:[
-                              Text(store.state.currentUser.friendsCount.toString(),style: _theme.primaryTextTheme.subhead),
-                              Text('关注',style: _theme.primaryTextTheme.subtitle)
+                              Text(store.state.currentUser.friendsCount.toString(),style: _theme.primaryTextTheme.subtitle1),
+                              Text('关注',style: _theme.primaryTextTheme.subtitle2)
                             ]
                           )),
                           FlatButton(onPressed: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>UserListPage(type: FriendShipsType.Followers,screenName:user.screenName)));
                           }, child: Column(
                             children:[
-                              Text(store.state.currentUser.followersCount.toString(),style: _theme.primaryTextTheme.subhead),
-                              Text('粉丝',style: _theme.primaryTextTheme.subtitle)
+                              Text(store.state.currentUser.followersCount.toString(),style: _theme.primaryTextTheme.subtitle1),
+                              Text('粉丝',style: _theme.primaryTextTheme.subtitle2)
                             ]
                           )),
                         ]

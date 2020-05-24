@@ -3,12 +3,11 @@ import 'package:cookiej/cookiej/page/discovery/discovery_page.dart';
 import 'package:cookiej/cookiej/page/widget/comments/comment_listview_me.dart';
 import 'package:cookiej/cookiej/page/widget/custom_tabbarview.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/user_weibo_listview.dart';
-import 'package:cookiej/cookiej/page/widget/weibo/weibo_listview.dart';
+
 import 'package:flutter/material.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
-import 'dart:math'
-    as math;
+
 
 class ShowMessagePage extends StatefulWidget {
   final int initialIndex;

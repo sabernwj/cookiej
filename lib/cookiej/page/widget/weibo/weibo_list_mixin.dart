@@ -6,7 +6,7 @@ import 'package:cookiej/cookiej/model/weibos.dart';
 import 'package:cookiej/cookiej/provider/weibo_provider.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
 import 'dart:math' as math;
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 
 mixin WeiboListMixin{
   Weibos homeTimeline;

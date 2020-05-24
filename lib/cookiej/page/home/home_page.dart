@@ -1,4 +1,4 @@
-import 'package:cookiej/cookiej/action/access_state.dart';
+
 import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_listview.dart';

@@ -1,12 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
-import 'package:cookiej/cookiej/utils/utils.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'package:photo_view/photo_view_gallery.dart';
-
 ///封装好，全屏查看一批图片的组件
 class ShowImagesView extends StatefulWidget {
   //final imageList;

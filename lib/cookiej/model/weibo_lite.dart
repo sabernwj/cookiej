@@ -39,7 +39,7 @@ class WeiboLite extends Content{
   WeiboLite({this.idstr,this.id,this.user,this.attitudesCount,this.commentsCount,this.createdAt,this.favorited,this.mid,this.picUrls,this.repostsCount,this.retweetedWeibo,this.text,this.source});
 
   WeiboLite.fromJson(Map<String, dynamic> json){
-		createdAt = createdAt = Utils.parseWeiboTimeStrToUtc(json['created_at']);;
+		createdAt = createdAt = Utils.parseWeiboTimeStrToUtc(json['created_at']);
 		id = json['id'];
 		idstr = json['idstr'];
 		mid = json['mid'];

@@ -4,12 +4,10 @@ import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/event/event_bus.dart';
 import 'package:cookiej/cookiej/model/local/display_content.dart';
 import 'package:cookiej/cookiej/model/video.dart';
-import 'package:cookiej/cookiej/page/public/video_page.dart';
 import 'package:cookiej/cookiej/page/public/weibo_page.dart';
 
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_video_widget.dart';
-import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
-    as extended;
+
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_list_mixin.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_widget.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';

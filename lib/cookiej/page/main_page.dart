@@ -4,7 +4,7 @@ import 'package:cookiej/cookiej/page/home/home_page.dart';
 import 'package:cookiej/cookiej/page/discovery/discovery_page.dart';
 import 'package:cookiej/cookiej/page/message/message_page.dart';
 import 'package:cookiej/cookiej/page/login/login_page.dart';
-import 'package:cookiej/cookiej/page/widget/custom_button.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -26,7 +26,6 @@ class _MainPageState extends State<MainPage> {
   }
   @override
   Widget build(BuildContext context) {
-    final _theme=Theme.of(context);
     return StoreBuilder<AppState>(
       builder: (context,store){
         return WillPopScope(

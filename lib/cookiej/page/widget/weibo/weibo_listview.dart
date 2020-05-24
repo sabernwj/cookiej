@@ -4,17 +4,13 @@ import 'package:cookiej/cookiej/event/event_bus.dart';
 import 'package:cookiej/cookiej/event/notice_audio_event.dart';
 import 'package:cookiej/cookiej/event/string_msg_event.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_list_mixin.dart';
-import 'package:cookiej/cookiej/provider/weibo_provider.dart';
-import 'package:cookiej/cookiej/utils/utils.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import './weibo_widget.dart';
-import 'package:cookiej/cookiej/model/weibos.dart';
-import 'package:cookiej/cookiej/model/weibo_lite.dart';
-import '../../public/weibo_page.dart';
-import 'dart:async';
+
 
 ///自带刷新加载更多的微博列表
 class WeiboListview extends StatefulWidget {

@@ -3,8 +3,6 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:cookiej/cookiej/action/app_state.dart';
-import 'package:cookiej/cookiej/config/config.dart';
-import 'package:cookiej/cookiej/event/event_bus.dart';
 import 'package:cookiej/cookiej/model/user.dart';
 import 'package:cookiej/cookiej/model/user_lite.dart';
 import 'package:cookiej/cookiej/page/widget/custom_tabbarview.dart';

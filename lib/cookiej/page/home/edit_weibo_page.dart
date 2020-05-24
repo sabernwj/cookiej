@@ -1,4 +1,3 @@
-import 'package:cookiej/cookiej/model/emotion.dart';
 import 'package:cookiej/cookiej/model/local/edit_special_text.dart';
 import 'package:cookiej/cookiej/net/api.dart';
 import 'package:cookiej/cookiej/net/interceptors/access_interceptor.dart';

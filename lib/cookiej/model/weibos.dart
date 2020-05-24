@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:hive/hive.dart';
 import 'package:cookiej/cookiej/model/weibo_lite.dart';

@@ -1,5 +1,4 @@
 import 'package:cookiej/cookiej/action/theme_state.dart';
-import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:cookiej/cookiej/config/style.dart';
 

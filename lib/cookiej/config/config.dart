@@ -1,7 +1,5 @@
 
 
-import 'package:cookiej/cookiej/model/local/local_state.dart';
-
 class Config{
   static const appkey='';
   static const appSecret='';

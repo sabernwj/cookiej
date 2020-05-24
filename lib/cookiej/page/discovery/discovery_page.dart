@@ -1,17 +1,13 @@
-import 'package:cookiej/cookiej/config/style.dart';
+
 import 'package:cookiej/cookiej/page/discovery/hot_page.dart';
 import 'package:cookiej/cookiej/page/discovery/trend_page.dart';
 import 'package:cookiej/cookiej/page/widget/custom_tabbarview.dart';
-import 'package:cookiej/cookiej/page/widget/no_ink_behavior.dart';
-import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'dart:math'
     as math;
 
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
 class DiscoveryPage extends StatefulWidget {
   @override
   _DiscoveryPageState createState() => _DiscoveryPageState();

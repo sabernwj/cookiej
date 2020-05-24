@@ -3,7 +3,6 @@ import 'package:cookiej/cookiej/page/public/user_page.dart';
 import 'package:cookiej/cookiej/page/widget/content_widget.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
 class RepostWidget extends StatelessWidget {

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/model/user.dart';
-import 'package:cookiej/cookiej/model/user_lite.dart';
 import 'package:cookiej/cookiej/net/friendships_api.dart';
 import 'package:cookiej/cookiej/net/user_api.dart';
 import 'package:cookiej/cookiej/provider/provider_result.dart';

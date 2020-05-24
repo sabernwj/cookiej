@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:cookiej/cookiej/action/access_state.dart';
-import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/net/access_api.dart';
 import 'package:cookiej/cookiej/provider/provider_result.dart';
 import 'package:cookiej/cookiej/utils/local_storage.dart';
-import 'package:redux/redux.dart';
 
 class AccessProvider{
 

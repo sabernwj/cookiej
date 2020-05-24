@@ -65,7 +65,7 @@ class UrlProvider{
     var urlInfo;
     try{
       urlInfo=UrlInfo.fromJson(urlJsonInfo);
-    }on TypeError catch(e){
+    }on TypeError {
       try{
         urlInfo=UrlInfo.fromJson(jsonDecode(jsonEncode(urlJsonInfo)));
       }catch(e){

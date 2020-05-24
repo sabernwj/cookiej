@@ -1,7 +1,6 @@
 import 'package:cookiej/cookiej/action/app_state.dart';
-import 'package:cookiej/cookiej/config/style.dart';
+
 import 'package:cookiej/cookiej/page/public/user_page.dart';
-import 'package:cookiej/cookiej/page/widget/custom_button.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
 import 'package:flutter/material.dart';

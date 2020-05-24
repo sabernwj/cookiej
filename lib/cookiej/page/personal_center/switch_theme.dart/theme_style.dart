@@ -6,7 +6,6 @@ import 'package:cookiej/cookiej/utils/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:redux/redux.dart';
 class ThemeStyle extends StatelessWidget {
 
   final themeColors=CookieJColors.themeColors;
