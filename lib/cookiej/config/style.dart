@@ -31,7 +31,7 @@ class CookieJColors{
   static final MaterialColor apricot=getMaterialColor(apricotValue);
   static final MaterialColor salmonPink=getMaterialColor(salmonPinkValue);
   static final MaterialColor customBlack =getMaterialColor(customBlackValue);
-   static final MaterialColor customBlackLow =getMaterialColor(customBlackLowValue);
+  static final MaterialColor customBlackLow =getMaterialColor(customBlackLowValue);
   static final MaterialColor girlPink=getMaterialColor(girlPinkValue);
   static final MaterialColor customWhite=getMaterialColor(customWhiteValue);
 

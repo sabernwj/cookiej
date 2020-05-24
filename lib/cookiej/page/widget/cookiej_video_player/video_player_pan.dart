@@ -75,7 +75,7 @@ class _VideoPlayerPanState extends State<VideoPlayerPan>
                       borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   child: Text(
                     volumePercentage,
-                    style: TextStyle(color: Colors.white, fontSize: 12),
+                    style: TextStyle(color: Colors.white, fontSize: 14),
                   ),
                 ),
               ),

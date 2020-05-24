@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/action/theme_state.dart';
@@ -5,7 +7,10 @@ import 'package:cookiej/cookiej/action/user_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/config/style.dart';
 import 'package:cookiej/cookiej/db/sql_manager.dart';
+import 'package:cookiej/cookiej/event/event_bus.dart';
+import 'package:cookiej/cookiej/event/string_msg_event.dart';
 import 'package:cookiej/cookiej/net/api.dart';
+import 'package:flutter/services.dart';
 import 'package:cookiej/cookiej/page/main_page.dart';
 import 'package:cookiej/cookiej/provider/access_provider.dart';
 import 'package:cookiej/cookiej/provider/picture_provider.dart';
@@ -30,6 +35,7 @@ class BootPage extends StatefulWidget {
 
 class _BootPageState extends State<BootPage> {
 
+  String loadInfo='';
   bool isLoad=false;
   @override
   Future<void> didChangeDependencies() async {
@@ -43,6 +49,7 @@ class _BootPageState extends State<BootPage> {
       store.dispatch(RefreshThemeState(ThemeState(themeName,CookieJColors.getThemeData(themeName,isDarkMode: isDarkMode))));
     }
     //初始化
+    await loadAssetData();
     API.init();
     SqlManager.init()
       .then((_)=>Hive.initFlutter())
@@ -58,6 +65,22 @@ class _BootPageState extends State<BootPage> {
       })
       .catchError((e)=>print(e));
     isLoad=true;
+  }
+  Future<void> loadAssetData() async {
+    try{
+      var appkeyMap= json.decode(await rootBundle.loadString('assets/data/appkey.json'));
+      Config.appkey_0=appkeyMap['appkey'].toString();
+      Config.appSecret_0=appkeyMap['appSecret'].toString();
+      Config.redirectUri_0=appkeyMap['redirectUri'].toString();
+      if(Config.appkey_0==null||Config.appkey_0.isEmpty){
+        throw Exception();
+      }
+    }catch(e){
+       setState(() {
+         loadInfo='加载appkey失败\n启动前必须正确在项目asset/data/appkey.json文件中添加appkey';
+       });
+       throw e;
+    }
   }
 
   @override
@@ -83,7 +106,8 @@ class _BootPageState extends State<BootPage> {
               Text('饼干微博',style:Theme.of(context).primaryTextTheme.bodyText2.merge(TextStyle(fontSize: 18))),
               Container(
                 height:MediaQuery.of(context).size.height/4
-              )
+              ),
+              Text(loadInfo,style: Theme.of(context).textTheme.subtitle2,)
             ]
           ),
         ),

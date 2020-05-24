@@ -91,6 +91,7 @@ flutter:
    - assets/images/icon.png
    - assets/images/white.jpg
    - assets/audios/refresh.mp3
+   - assets/data/appkey.json
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

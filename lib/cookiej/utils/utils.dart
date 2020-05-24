@@ -29,6 +29,12 @@ class Utils {
     if(distance.inSeconds>=60){
       if(distance.inMinutes>=60){
         if(distance.inHours>=24){
+          if(distance.inDays>7){
+            if(inputTime.year!=now.year){
+              return DateFormat('yyyy-MM-dd').format(inputTime.toLocal());
+            }
+            return DateFormat('MM月dd日').format(inputTime.toLocal());
+          }
           return distance.inDays.toString()+'天前';
         }
         return distance.inHours.toString()+'小时前';
@@ -62,9 +68,5 @@ class Utils {
     var key='$uid.${timelineType.toStringNew()}.${groupId??''}';
     print(key);
     return key;
-  }
-
-  static String getWeiboTimelineFromHiveKey(String key){
-    
   }
 }

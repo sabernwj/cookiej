@@ -50,10 +50,10 @@ class PictureProvider{
 
   ///根据图片ID返回url
   static String getImgUrlFromId(String id,{String sinaImgSize=SinaImgSize.bmiddle}){
+    if(id==null) id=id.toString();
     String baseUrl=_imgIdServerCache[id]??_imgIdBox.get(id)??_getImgServer();
     _imgIdServerCache[id]=baseUrl;
     if(_imgIdServerCache.length>20){
-      if(id==null) id=id.toString();
       var cacheClone=Map<dynamic,String>.from(_imgIdServerCache);
       _imgIdBox.putAll(cacheClone);
       _imgIdServerCache.clear();
@@ -65,6 +65,7 @@ class PictureProvider{
     var urlList=<String>[];
     String baseUrl=_getImgServer();
     ids.forEach((id){
+      if(id==null) id=id.toString();
       urlList.add('${_imgIdServerCache[id]??_imgIdBox.get(id)??baseUrl}$sinaImgSize/$id.jpg');
       _imgIdServerCache[id]=_imgIdServerCache[id]??_imgIdBox.get(id)??baseUrl;
     });
@@ -83,7 +84,7 @@ class PictureProvider{
 
   ///根据图片Url返回图片Provider
   static ImageProvider getPictureFromUrl(String url,{String sinaImgSize}){
-    if(url==null||url.contains('default')){
+    if(url==null||url.contains('default')||url.contains('null')){
       return ExtendedAssetImageProvider('assets/images/white.jpg');
     }
     if(sinaImgSize!=null){
