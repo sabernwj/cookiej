@@ -6,7 +6,7 @@
 
 UI是参照了**Smooth**、**Share**、**微博国际版** 以及个人喜好
 
-**体验请点击[下载](http://d.firim.vip/5ftc)** (APP仍在持续开发中)
+**体验请点击[下载](https://www.pgyer.com/PMcz)** (APP仍在持续开发中)
 ![](screenshot/download.png)
 
 
@@ -80,6 +80,8 @@ UI是参照了**Smooth**、**Share**、**微博国际版** 以及个人喜好
 有其他问题请提交[issues](https://github.com/sabernwj/cookiej/issues)
 
 特别感谢Smooth作者[@06peng](https://weibo.com/llp0524)的appkey
+
+视频播放器代码大部分来自[Flutter：基于video_player实现视频相关手势控制、全屏播放](https://juejin.im/post/5e12d60ce51d45415a66733d)
 
 欢迎找我交流flutter相关
 
