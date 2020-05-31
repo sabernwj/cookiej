@@ -1,13 +1,13 @@
 # 饼干酱 -Flutter下的微博客户端
 
-**一个Flutter新手不断踩坑的实践**
+**一个在Flutter上不断踩坑不断实践的项目**
 
 接口使用的是**新浪开放平台**提供的API
 
 UI是参照了**Smooth**、**Share**、**微博国际版** 以及个人喜好
 
-**体验请点击[下载](https://www.pgyer.com/PMcz) 密码1** (APP仍在持续开发中)
-
+**体验请点击[下载](http://d.firim.vip/5ftc)** (APP仍在持续开发中)
+![](screenshot/download.png)
 
 
 ||||
@@ -38,7 +38,7 @@ UI是参照了**Smooth**、**Share**、**微博国际版** 以及个人喜好
 
 ## 项目说明
 
-本项目主要是对Flutter进行学习，在个人接触过的客户端应用开发(WinForm/Vue+Cordova)来说，Flutter构建界面体验是最为优秀的，以下是目录的一些说明，请参照项目食用。
+本项目主要是对Flutter进行学习，在个人接触过的客户端应用开发(WinForm/Vue+Cordova)来说，Flutter构建界面体验是比较优秀的，以下是目录的一些说明，请参照项目食用。
 
 >`action` `reducer` 用于redux的模型以及方法
 
@@ -57,7 +57,7 @@ UI是参照了**Smooth**、**Share**、**微博国际版** 以及个人喜好
 >>`public` 指多个界面都可能会跳转到的页面  
 >>`widget` 对一些复用组件的封装
 
->`provider` 可以看作controller
+>`provider` 可以看作controller，包含对数据持久化的控制
 
 >`utils` 工具类
 
@@ -66,7 +66,7 @@ UI是参照了**Smooth**、**Share**、**微博国际版** 以及个人喜好
 ## 问题答疑
 
 #### 1. 为什么应用中多处按钮点击无反应？
-    一是人懒效率还低仍在实现中，二是新浪API不好弄，希望有相关经验的dalao可以推进
+    一是人懒效率还低仍在实现中，二是新浪API不好弄，希望有相关经验的dalao可以指导
 
 #### 2. IOS端没有返回键，怎么退出图片浏览
     使用下滑手势可以退出
@@ -78,6 +78,8 @@ UI是参照了**Smooth**、**Share**、**微博国际版** 以及个人喜好
     [ ] 适配微博更多内容(话题,投票等)
 
 有其他问题请提交[issues](https://github.com/sabernwj/cookiej/issues)
+
+特别感谢Smooth作者[@06peng](https://weibo.com/llp0524)的appkey
 
 欢迎找我交流flutter相关
 
