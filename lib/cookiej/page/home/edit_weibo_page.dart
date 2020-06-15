@@ -4,6 +4,7 @@ import 'package:cookiej/cookiej/net/interceptors/access_interceptor.dart';
 import 'package:cookiej/cookiej/net/weibo_api.dart';
 import 'package:cookiej/cookiej/page/widget/custom_button.dart';
 import 'package:cookiej/cookiej/provider/access_provider.dart';
+import 'package:cookiej/cookiej/provider/emotion_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
@@ -53,7 +54,6 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
         });
       },
     );
-
   
   }
 
@@ -75,7 +75,7 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
                 controller: _controller,
                 enableSuggestions: false,
                 specialTextSpanBuilder: WeiboSpecialTextSpanBuilder(context),
-                style:_theme.textTheme.bodyText1,
+                style:_theme.textTheme.bodyText2,
                 focusNode: _textFieldNode,
                 decoration: InputDecoration(
                   border: InputBorder.none,
@@ -91,7 +91,27 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
                 minLines: 5,
                 maxLines: null,
                 cursorColor: _theme.accentColor,
-                onChanged:(text)=>rawText=text,
+                onChanged:(text){
+                  if(text.length<rawText.length){
+                    //这部分用于处理删除表情的逻辑
+                    var endIndex=_controller.selection.baseOffset;
+                    if(rawText.substring(endIndex,endIndex+1)==']'){
+                      var head=rawText.substring(0,_controller.selection.baseOffset);
+                      var end=rawText.substring(_controller.selection.baseOffset+1);
+                      var startIndex=head.lastIndexOf('[');
+                      var emotionText=rawText.substring(startIndex,endIndex+1);
+                      if(endIndex>startIndex&&(endIndex-startIndex<12)&&EmotionProvider.getEmotion(emotionText).success){
+                        head=rawText.substring(0,startIndex);
+                        _controller.text=head+end;
+                        _controller.selection=TextSelection.fromPosition(TextPosition(offset: startIndex));
+                        rawText=_controller.text;
+                        return;
+                      }
+                    }
+                  }
+                  rawText=text;
+                },
+                textInputAction: TextInputAction.done,
               ),
             ),
             SliverPadding(
@@ -201,7 +221,11 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
                 height:emotionPanelHeight,
                 child: EmotionPanel(
                   onEmotionButtonTap: (emotionName){
-                    _controller.text+=emotionName;
+                    var text=_controller.text;
+                    var textHead=text.substring(0,_controller.selection.baseOffset)+emotionName;
+                    _controller.text=textHead+text.substring(_controller.selection.baseOffset);
+                    _controller.selection=TextSelection.fromPosition(TextPosition(offset: textHead.length));
+                    rawText=_controller.text;
                   },
                 ),
               ),
@@ -217,25 +241,25 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
   //   //isResizeToAvoidBottomInset=!isResizeToAvoidBottomInset;
   //   isKeyboardShow?SystemChannels.textInput.invokeMethod('TextInput.hide'):_textFieldNode.requestFocus();
   // }
-  void openPhotoGallery(){
+  Future<void> openPhotoGallery() async {
     //在安卓10上打不开系统相机，待解决
     var _theme=Theme.of(context);
     if(imageGridList.length>=9) return;
-
-    MultiImagePicker.pickImages(
-      maxImages: 9-imageGridList.length,
-      enableCamera: true,
-      materialOptions: MaterialOptions(
-        allViewTitle:'全部图片',
-        lightStatusBar:_theme.brightness==Brightness.dark,
-        actionBarTitle: '已选择',
-        selectionLimitReachedText: '已达上限',
-        textOnNothingSelected: '没有选择图片',
-        statusBarColor:  '#'+_theme.primaryColor.value.toRadixString(16),
-        actionBarColor: '#'+_theme.primaryColor.value.toRadixString(16),
-        actionBarTitleColor: '#'+_theme.primaryTextTheme.bodyText1.color.value.toRadixString(16)
-      )
-    ).then((assetList){
+    try{
+      var assetList=await MultiImagePicker.pickImages(
+        maxImages: 9-imageGridList.length,
+        enableCamera: true,
+        materialOptions: MaterialOptions(
+          allViewTitle:'全部图片',
+          lightStatusBar:_theme.brightness==Brightness.dark,
+          actionBarTitle: '已选择',
+          selectionLimitReachedText: '已达上限',
+          textOnNothingSelected: '没有选择图片',
+          statusBarColor:  '#'+_theme.primaryColor.value.toRadixString(16),
+          actionBarColor: '#'+_theme.primaryColor.value.toRadixString(16),
+          actionBarTitleColor: '#'+_theme.primaryTextTheme.bodyText1.color.value.toRadixString(16)
+        )
+      );
       var tumbList=assetList.map((asset){
         var tumb= AssetThumb(asset: asset,width: 100,height: 100);
         var _key=GlobalKey();
@@ -267,7 +291,11 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
       setState(() {
         imageGridList.addAll(tumbList);
       });
-    }).catchError((e)=>print('打开相册发生错误${e.toString()}'));
+    }
+    catch(e){
+      if(e is NoImagesSelectedException) return;
+      print('打开相册发生错误${e.toString()}');
+    }
   }
 
   List<Widget> autoAddButtonToGrid(List<Widget> sourceList){

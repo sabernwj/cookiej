@@ -47,7 +47,7 @@ dependencies:
 
   #可能会被替换的
   extended_image: ^0.7.3+1 #路人皆知的好用图片扩展
-  extended_text_field: ^0.5.0
+  extended_text_field: ^1.0.1
   hive: ^1.4.1+1  #一个轻量级的数据库
   hive_flutter: ^0.3.0+2
   sqflite: ^1.2.1
