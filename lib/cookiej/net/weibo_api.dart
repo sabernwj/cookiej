@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/net/api.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
+import 'package:dio/dio.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:http_parser/http_parser.dart';
 
 class WeiboApi{
   ///公共微博
@@ -25,9 +28,12 @@ class WeiboApi{
   ///发布一条新微博
   static const String _update='/2/statuses/update.json';
 
-  ///上传图片并发布一条新微博
+  ///上传一张图片并发布一条新微博
   //static const String _upload='/2/statuses/upload.json';
-
+  ///上传图片，返回图片picid,urls(3个url)
+  static const String _upload_pic='/2/statuses/upload_pic.json';
+  ///指定图片URL地址抓取后上传并同时发布一条新微博（用于发多图微博）
+  static const String _upload_url_text='/2/statuses/upload_url_text.json';
 
   ///获取微博列表
   static Future<Map> getTimeLine(int sinceId,int maxId,WeiboTimelineType timelineType,Map<String,String> extraParams) async {
@@ -74,14 +80,6 @@ class WeiboApi{
     final result=await API.get(Utils.formatUrlParams(url, params));
     if(!(result is Map)) return null;
     return result.data;
-    // return result.then((result) async {
-    //   final repost=Reposts.fromJson(result.data);
-    //   await CacheController.cacheUrlInfoToRAM(repost.reposts);
-    //   return repost;
-    // }).catchError((e){
-    //   print(e.response.data);
-    //   return null;
-    // });
   }
 
   ///根据微博ID获取单条微博内容
@@ -104,8 +102,10 @@ class WeiboApi{
     String listId,
     double lat,
     double long,
+    List<Asset> picList
   }) async{
-    var url=_update;
+    if(weiboRawText==null||weiboRawText.isEmpty) return false;
+    var url=(picList==null||picList.length==0)?_update:_upload_url_text;
     var params=<String,String>{
       'status':Uri.encodeComponent(weiboRawText),
     };
@@ -113,6 +113,39 @@ class WeiboApi{
     if(listId!=null) params['list_id']=listId;
     if(lat!=null) params['lat']=lat.toString();
     if(long!=null) params['long']=long.toString();
-    return (await API.post(Utils.formatUrlParams(url, params)))==null?false:true;
+    //添加图片
+    //FormData formData;
+    if(picList!=null&&picList.length!=0){
+      var picTask=List<Future<Response<dynamic>>>();
+      for (Asset asset in picList) { 
+        var file=MultipartFile.fromBytes(
+          (await asset.getByteData()).buffer.asUint8List(),
+          filename: asset.name,
+          contentType:MediaType("image", "jpg") 
+        );
+        var formData=FormData();
+        formData.files.add(MapEntry('pic',file));
+        picTask.add(API.post(
+          Utils.formatUrlParams(_upload_pic, {}),
+          data: formData==null?'':formData,
+          options: Options(contentType:Headers.formUrlEncodedContentType)
+        ));
+      }
+      String picIds='';
+      //这里是预先调用上传图片接口返回图片id
+      await Future.wait(picTask).then((results) {
+        results.forEach((element) {
+          picIds+=element.data['pic_id'].toString()+',';
+        });
+      }).catchError((e){
+        print(e);
+      });
+      params['pic_id']=picIds;
+    }
+    return (await API.post(
+      Utils.formatUrlParams(url, params),
+      data: '',
+      options: Options(contentType:Headers.formUrlEncodedContentType)
+    ))==null?false:true;
   }
 }

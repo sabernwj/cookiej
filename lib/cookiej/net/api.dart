@@ -65,7 +65,7 @@ class API{
         path,
         data: data,
         queryParameters: queryParameters,
-        options: options,
+        options:options,
         cancelToken: cancelToken,
         onSendProgress:onSendProgress,
         onReceiveProgress: onReceiveProgress

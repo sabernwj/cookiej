@@ -32,6 +32,7 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
   ///用于准备向发送接口输入的文本 
   String rawText='';
   String displayText='';
+  List<Asset> assetList;
 
   @override
   void initState(){
@@ -197,17 +198,19 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
                   padding: EdgeInsets.all(0),
                   shape: Border(),
                   onTap: () async {
-                    var success=await WeiboApi.postWeibo(rawText);
+                    
+                    var sendText=rawText;
+                    if(sendText==null||sendText.isEmpty){
+                      if(assetList!=null) sendText='分享图片';
+                      else{
+                        toast('请填写微博内容');
+                        return;
+                      }
+                    }
+                    Navigator.pop(context);
+                    var success=await WeiboApi.postWeibo(sendText,picList: assetList);
                     if(success){
-                      Fluttertoast.showToast(
-                        msg: '发布成功',
-                        gravity: ToastGravity.BOTTOM,
-                      );
-                    }else{
-                      // Fluttertoast.showToast(
-                      //   msg: '发布失败',
-                      //   gravity: ToastGravity.BOTTOM,
-                      // );
+                      toast('发布成功');
                     }
                   },
                   color: Colors.transparent,
@@ -246,7 +249,7 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
     var _theme=Theme.of(context);
     if(imageGridList.length>=9) return;
     try{
-      var assetList=await MultiImagePicker.pickImages(
+      assetList=await MultiImagePicker.pickImages(
         maxImages: 9-imageGridList.length,
         enableCamera: true,
         materialOptions: MaterialOptions(
@@ -260,6 +263,8 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
           actionBarTitleColor: '#'+_theme.primaryTextTheme.bodyText1.color.value.toRadixString(16)
         )
       );
+      var data=await assetList[0].getByteData();
+      print(data.lengthInBytes*data.elementSizeInBytes);
       var tumbList=assetList.map((asset){
         var tumb= AssetThumb(asset: asset,width: 100,height: 100);
         var _key=GlobalKey();
@@ -279,6 +284,7 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
                       onTap:(){
                         setState(() {
                           imageGridList.remove(_key.currentWidget);
+                          assetList.remove(asset);
                         });
                       }
                     )
@@ -313,5 +319,13 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
       );
     }
     return returnList;
+  }
+  void toast(String str){
+    Fluttertoast.showToast(
+      msg: str,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black87,
+      textColor: Colors.white,
+    );
   }
 }
