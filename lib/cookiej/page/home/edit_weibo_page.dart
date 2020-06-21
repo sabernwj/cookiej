@@ -31,7 +31,6 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
   TextEditingController _controller=TextEditingController();
   ///用于准备向发送接口输入的文本 
   String rawText='';
-  String displayText='';
   List<Asset> assetList;
 
   @override
@@ -153,7 +152,13 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
                       child: Icon(Icons.alternate_email,color: _theme.primaryColor,),
                       padding: EdgeInsets.all(0),
                       shape: Border(),
-                      onTap: (){},
+                      onTap: (){
+                        var text=_controller.text;
+                        var textHead=text.substring(0,_controller.selection.baseOffset)+'@ ';
+                        _controller.text=textHead+text.substring(_controller.selection.baseOffset);
+                        _controller.selection=TextSelection.fromPosition(TextPosition(offset: textHead.length-1));
+                        rawText=_controller.text;
+                      },
                       color: Colors.transparent,
                     ),
                     //话题
@@ -162,7 +167,13 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
                       child: Icon(IconData(0x0023),color: _theme.primaryColor,),
                       padding: EdgeInsets.all(0),
                       shape: Border(),
-                      onTap: (){},
+                      onTap: (){
+                        var text=_controller.text;
+                        var textHead=text.substring(0,_controller.selection.baseOffset)+'##';
+                        _controller.text=textHead+text.substring(_controller.selection.baseOffset);
+                        _controller.selection=TextSelection.fromPosition(TextPosition(offset: textHead.length-1));
+                        rawText=_controller.text;
+                      },
                       color: Colors.transparent,
                     ),
                     //表情

@@ -1,6 +1,11 @@
 
 import 'package:cookiej/cookiej/config/config.dart';
+import 'package:cookiej/cookiej/event/comment_listview_add_event.dart';
+import 'package:cookiej/cookiej/event/event_bus.dart';
+import 'package:cookiej/cookiej/model/comment.dart';
+import 'package:cookiej/cookiej/net/comment_api.dart';
 import 'package:cookiej/cookiej/page/public/user_page.dart';
+import 'package:cookiej/cookiej/page/widget/edit_reply_widget.dart';
 import 'package:cookiej/cookiej/page/widget/user_name_span.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,10 +19,27 @@ import 'package:cookiej/cookiej/page/widget/content_widget.dart';
 
 //单条微博的卡片形式
 
-class WeiboWidget extends StatelessWidget {
+class WeiboWidget extends StatefulWidget {
+
   final WeiboLite weibo;
   final bool clicked;
   WeiboWidget(this.weibo,{this.clicked=true});
+
+  @override
+  _WeiboWidgetState createState() => _WeiboWidgetState();
+}
+
+class _WeiboWidgetState extends State<WeiboWidget> {
+
+  WeiboLite weibo;
+  bool clicked;
+
+  @override
+  void initState() {
+    weibo=widget.weibo;
+    clicked=widget.clicked;
+    super.initState();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -77,6 +99,26 @@ class WeiboWidget extends StatelessWidget {
                 }, icon: Icon(FontAwesomeIcons.shareSquare,size: CookieJTextStyle.normalText.fontSize,), label: Text(Utils.formatNumToChineseStr(weibo.repostsCount)),textColor: Colors.grey),
                 FlatButton.icon(onPressed: (){
                   //评论
+                  Future<bool> sendCommentFunction(String sendText) async {
+                    if(sendText==null||sendText.isEmpty){
+                      return false;
+                    }else{
+                      try{
+                        var comment= Comment.fromJson((await CommentApi.createComment(weibo.id, sendText)));
+                        if(comment!=null){
+                          setState(() {
+                            weibo.commentsCount++;
+                            eventBus.fire(CommentListviewAddEvent(weibo.id,comment));
+                            Utils.defaultToast('评论成功');
+                          });
+                        }
+                      }catch(e){
+                        print(e);
+                      }
+                      return true;
+                    }
+                  }
+                  showModalBottomSheet(context: context, builder: (context)=>EditReplyWidget(hintText: '评论微博...',sendCall: sendCommentFunction,));
                 }, icon: Icon(FontAwesomeIcons.comments,size: CookieJTextStyle.normalText.fontSize,), label: Text(Utils.formatNumToChineseStr(weibo.commentsCount)),textColor: Colors.grey),
                 FlatButton.icon(onPressed: (){
                   //点赞

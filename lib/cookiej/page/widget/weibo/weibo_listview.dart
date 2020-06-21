@@ -2,7 +2,7 @@ import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/event/event_bus.dart';
 import 'package:cookiej/cookiej/event/notice_audio_event.dart';
-import 'package:cookiej/cookiej/event/string_msg_event.dart';
+import 'package:cookiej/cookiej/event/weibo_listview_refresh_event.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_list_mixin.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -37,14 +37,12 @@ class _WeiboListviewState extends State<WeiboListview> with WeiboListMixin,Autom
     weiboListInit(widget.timelineType,extraParams:widget.extraParams);
     //isStartLoadDataComplete=startLoadData();
     assert((){
-      eventBus.on<StringMsgEvent>().listen((event) {
-        if(event.msg=='重新加载微博'){
-          setState(() {
-            weiboList=[];
-            _refreshController.resetNoData();
-            isStartLoadDataComplete=startLoadData();
-          });
-        }
+      eventBus.on<WeiboListViewRefreshEvent>().listen((event) {
+        setState(() {
+          weiboList=[];
+          _refreshController.resetNoData();
+          isStartLoadDataComplete=startLoadData();
+        });
       });
       return true;
     }());

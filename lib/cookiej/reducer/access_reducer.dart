@@ -32,6 +32,8 @@ AccessState _updateCurrentAccess(AccessState accessState,UpdateCurrentAccess act
   //更换Dio拦截器使用的token
   API.httpClientDefault.interceptors.removeWhere((interceptor)=>interceptor is AccessInterceptor);
   API.httpClientDefault.interceptors.add(AccessInterceptor(accessState.currentAccess));
+  API.httpClientSend.interceptors.removeWhere((interceptor)=>interceptor is AccessInterceptor);
+  API.httpClientSend.interceptors.add(AccessInterceptor(accessState.currentAccess));
   return accessState;
 }
 

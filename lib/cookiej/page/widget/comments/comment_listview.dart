@@ -1,7 +1,10 @@
 
 import 'package:cookiej/cookiej/config/config.dart';
+import 'package:cookiej/cookiej/event/comment_listview_add_event.dart';
+import 'package:cookiej/cookiej/event/event_bus.dart';
 import 'package:cookiej/cookiej/model/comment.dart';
 import 'package:cookiej/cookiej/model/comments.dart';
+import 'package:cookiej/cookiej/model/weibo_lite.dart';
 import 'package:cookiej/cookiej/page/widget/comments/comment_widget.dart';
 import 'package:cookiej/cookiej/page/widget/comments/repost_listview.dart';
 import 'package:cookiej/cookiej/provider/comment_provider.dart';
@@ -14,8 +17,8 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 class CommentListview extends StatefulWidget {
 
   final CommentsType commentsType;
-  final int id;
-  CommentListview(this.id,[this.commentsType=CommentsType.Time]);
+  final WeiboLite weibo;
+  CommentListview(this.weibo,[this.commentsType=CommentsType.Time]);
 
   @override
   _CommentListviewState createState() => _CommentListviewState();
@@ -31,35 +34,28 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
   List<Comment> displayCommentList=<Comment>[]; 
   Future<Comments> commentsTask;
   TabController _commentStatusController;
-
+  int id;
   // @override
   // bool get wantKeepAlive => true;
   @override
   void initState() {
     //_isStartLoad=startLoadData();
-    commentsTask=CommentProvider.getCommentsShow(widget.id).then((result){
-      var comments=result.data;
-      initialComments=comments;
-      laterComments=initialComments;
-      groupCommentMap=formatComments(comments);
-      //将直接回微博的-评论筛选出来
-      groupCommentMap.forEach((rootId,sameRootCommentMap){       
-        if(sameRootCommentMap[rootId]==null){
-          //这种情况是有评论，但没有该评论rootId对应的评论
-          sameRootCommentMap.forEach((_, value)=>displayCommentList.add(value));
-        }
-        else{
-          //此处将同一rootId的评论扔到了和该rootId相同的评论的属性里
-          sameRootCommentMap[rootId].commentReplyMap=sameRootCommentMap;
-          displayCommentList.add(sameRootCommentMap[rootId]);
-        }
-
-      });
-      displayCommentList.sort((a,b)=>b.rootid.compareTo(a.rootid));
-      return comments;
-    });
+    id=widget.weibo.id;
+    commentsTask=refreshComments();
     _commentStatusController=TabController(initialIndex: 1,length: 2,vsync: this);
     _commentStatusController.addListener(()=>_commentStatusController.indexIsChanging?setState((){}):(){});
+
+    //即时显示增加的评论
+    eventBus.on<CommentListviewAddEvent>().listen((event) {
+      if(event.weiboId==id){
+        if(this.mounted){
+          setState(() {
+            displayCommentList.insert(0, event.comment);
+            initialComments.weibo?.commentsCount++;
+          });
+        }
+      }
+    });
     super.initState();
   }
 
@@ -86,27 +82,7 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                     RaisedButton(
                       child: Text('刷新试试'),
                       onPressed: (){
-                        commentsTask=CommentProvider.getCommentsShow(widget.id).then((result){
-                          var comments=result.data;
-                          initialComments=comments;
-                          laterComments=initialComments;
-                          groupCommentMap=formatComments(comments);
-                          //将直接回微博的-评论筛选出来
-                          groupCommentMap.forEach((rootId,sameRootCommentMap){       
-                            if(sameRootCommentMap[rootId]==null){
-                              //这种情况是有评论，但没有该评论rootId对应的评论
-                              sameRootCommentMap.forEach((_, value)=>displayCommentList.add(value));
-                            }
-                            else{
-                              //此处将同一rootId的评论扔到了和该rootId相同的评论的属性里
-                              sameRootCommentMap[rootId].commentReplyMap=sameRootCommentMap;
-                              displayCommentList.add(sameRootCommentMap[rootId]);
-                            }
-
-                          });
-                          displayCommentList.sort((a,b)=>b.rootid.compareTo(a.rootid));
-                          return comments;
-                        });
+                        refreshComments();
                       }
                     ),
                     SizedBox(height: 16),
@@ -145,10 +121,9 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
                     ),
                   ),
                 ),
-                
                 IndexedStack(
                   children: [
-                    RepostListview(widget.id),
+                    RepostListview(id),
                     AnimationLimiter(
                       child: ListView.builder(
                         itemCount: groupCommentMap.length,
@@ -180,7 +155,29 @@ class _CommentListviewState extends State<CommentListview> with SingleTickerProv
       },
     );
   }
+  Future<Comments> refreshComments(){
+    return CommentProvider.getCommentsShow(id).then((result){
+      var comments=result.data;
+      initialComments=comments;
+      laterComments=initialComments;
+      groupCommentMap=formatComments(comments);
+      //将直接回微博的-评论筛选出来
+      groupCommentMap.forEach((rootId,sameRootCommentMap){       
+        if(sameRootCommentMap[rootId]==null){
+          //这种情况是有评论，但没有该评论rootId对应的评论
+          sameRootCommentMap.forEach((_, value)=>displayCommentList.add(value));
+        }
+        else{
+          //此处将同一rootId的评论扔到了和该rootId相同的评论的属性里
+          sameRootCommentMap[rootId].commentReplyMap=sameRootCommentMap;
+          displayCommentList.add(sameRootCommentMap[rootId]);
+        }
 
+      });
+      displayCommentList.sort((a,b)=>b.rootid.compareTo(a.rootid));
+      return comments;
+    });
+  }
   ///将获取到的评论数据集进行分组<rootId,<id,comment>>
   Map<int,Map<int,Comment>> formatComments(Comments comments){
     var commentMap=new Map<int,Map<int,Comment>>();

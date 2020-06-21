@@ -1,4 +1,6 @@
 import 'package:cookiej/cookiej/config/config.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
@@ -68,5 +70,14 @@ class Utils {
     var key='$uid.${timelineType.toStringNew()}.${groupId??''}';
     print(key);
     return key;
+  }
+
+  static void defaultToast(String str){
+    Fluttertoast.showToast(
+      msg: str,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black87,
+      textColor: Colors.white,
+    );
   }
 }

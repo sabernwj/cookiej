@@ -7,7 +7,7 @@ import 'package:cookiej/cookiej/action/theme_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/config/style.dart';
 import 'package:cookiej/cookiej/event/event_bus.dart';
-import 'package:cookiej/cookiej/event/string_msg_event.dart';
+import 'package:cookiej/cookiej/event/weibo_listview_refresh_event.dart';
 import 'package:cookiej/cookiej/model/weibos.dart';
 import 'package:cookiej/cookiej/page/login/login_page.dart';
 import 'package:cookiej/cookiej/page/personal_center/switch_theme.dart/theme_style.dart';
@@ -202,7 +202,7 @@ class PersonalCenter extends StatelessWidget {
                               Hive.lazyBox<Weibos>('weibos_box').delete(store.state.accessState.currentAccess.uid);
                               WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(WeiboTimelineType.Statuses, store.state.accessState.currentAccess.uid), [lastWeibo]);
                               print(Hive.lazyBox<Weibos>('weibos_box').keys);
-                              eventBus.fire(StringMsgEvent('重新加载微博'));
+                              eventBus.fire(WeiboListViewRefreshEvent());
                             });
                             return true;
                           }());

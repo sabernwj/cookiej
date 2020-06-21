@@ -61,7 +61,7 @@ class DisplayContent{
             var displayText='\u{f0c1}网页链接';
             var contentType=ContentType.Link;
             try{
-              if(urlInfo.annotations.length!=0){
+              if(urlInfo.annotations.length!=0&&urlInfo.annotations[0]!=null){
                 switch(urlInfo.annotations[0].objectType){
                   case 'place':
                     contentType=ContentType.Place;
@@ -70,6 +70,7 @@ class DisplayContent{
                   case 'video':
                     contentType=ContentType.Video;
                     if(hasVideo)  continue;
+                    if(urlInfo.annotations[0].object.id==null) continue;
                     displayText='\u{f03d}'+urlInfo.annotations[0].object.displayName;
                     hasVideo=true;
                     break;

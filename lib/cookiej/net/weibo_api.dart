@@ -35,6 +35,12 @@ class WeiboApi{
   ///指定图片URL地址抓取后上传并同时发布一条新微博（用于发多图微博）
   static const String _upload_url_text='/2/statuses/upload_url_text.json';
 
+  ///转发一条微博
+  //static const String _repostCreate='/2/statuses/repost.json';
+
+
+
+
   ///获取微博列表
   static Future<Map> getTimeLine(int sinceId,int maxId,WeiboTimelineType timelineType,Map<String,String> extraParams) async {
     // Future<Weibos> returnTimeline;

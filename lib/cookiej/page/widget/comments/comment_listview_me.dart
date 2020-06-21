@@ -72,6 +72,8 @@ class _CommentListviewMeState extends State<CommentListviewMe> with AutomaticKee
                 );
               }
             );
+          }else{
+            return Center(child:Text('没有找到相关信息'));
           }
         }
         return Center(child: CircularProgressIndicator());

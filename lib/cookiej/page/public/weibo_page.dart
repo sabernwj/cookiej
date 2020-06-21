@@ -59,8 +59,8 @@ class _WeiboPageState extends State<WeiboPage>{
               return snapshot.data.success?
                 Container(child:ListView(
                   children:<Widget>[
-                    WeiboWidget(weibo,clicked: false,),
-                    CommentListview(weibo.id)
+                    WeiboWidget(weibo,clicked: false),
+                    CommentListview(weibo)
                   ]
                 ))
                 :Text('未知状态');
