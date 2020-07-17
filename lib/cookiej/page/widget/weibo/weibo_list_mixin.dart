@@ -32,7 +32,7 @@ mixin WeiboListMixin{
   ///开始获取微博
   ///(目前从网络获取，可添加从本地缓存中读取)
   Future<WeiboListStatus> startLoadData() async{
-    var result=WeiboProvider.getTimeLine(localUid: localUid,timelineType: timelineType,extraParams: extraParams).then((timeline){
+    var result=WeiboProvider.getTimeLine(localUid: localUid,timelineType: timelineType,extraParams: extraParams,groupId: groupId).then((timeline){
       homeTimeline=timeline.data;
       newHomeTimeline=homeTimeline;
       oldHomeTimeline=homeTimeline;
@@ -52,7 +52,7 @@ mixin WeiboListMixin{
     if(oldHomeTimeline.maxId==0||oldHomeTimeline.maxId==null){
       return WeiboListStatus.nodata;
     }
-    return WeiboProvider.getTimeLine(maxId: oldHomeTimeline.maxId??0,timelineType: timelineType,extraParams: extraParams).then((timeline){
+    return WeiboProvider.getTimeLine(maxId: oldHomeTimeline.maxId??0,timelineType: timelineType,extraParams: extraParams,groupId: groupId).then((timeline){
       oldHomeTimeline=timeline.data;
       if(oldHomeTimeline!=null){
         var ids= weiboList.map((weiboLite) => weiboLite.id);
@@ -61,7 +61,7 @@ mixin WeiboListMixin{
         }
         //刷新成功，更新本地缓存
         //这里考虑把homeTimeline维护成本地缓存的
-        if(localUid!=null) WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid), weiboList);
+        if(localUid!=null) WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid,groupId: groupId), weiboList);
       }
       return WeiboListStatus.complete;
     }).catchError((err){
@@ -74,7 +74,7 @@ mixin WeiboListMixin{
     var tempList=<WeiboLite>[];
     //之前使用的是weibos的sinceId，发现用过一次后返回的timeLine即weibos的sinceId为0，造成重复叠加，遂使用当前_weibolist的0位weibo的id
     //loadMoreData暂时没改，需要测试观察一下
-    return WeiboProvider.getTimeLine(sinceId: weiboList[0].id??0,timelineType: timelineType,extraParams: extraParams).then((timeline){
+    return WeiboProvider.getTimeLine(sinceId: weiboList[0].id??0,timelineType: timelineType,extraParams: extraParams,groupId: groupId).then((timeline){
       newHomeTimeline=timeline.data;
       if(newHomeTimeline!=null){
         var ids= weiboList.map((weiboLite) => weiboLite.id);
@@ -91,7 +91,7 @@ mixin WeiboListMixin{
         //这里考虑把homeTimeline维护成本地缓存的
         if(localUid!=null){
           eventBus.fire(StringMsgEvent('${newHomeTimeline.statuses.length}条新的微博'));
-          WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid), weiboList);
+          WeiboProvider.putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid,groupId: groupId), weiboList);
         }
         return WeiboListStatus.complete;
       }

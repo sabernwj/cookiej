@@ -23,13 +23,14 @@ class WeiboProvider{
   }
 
   static void putIntoWeibosBox(String key, List<WeiboLite> weiboList) {
-      Weibos weibos=Weibos(
-        statuses: weiboList,
-        sinceId: weiboList[0].id,
-        maxId: weiboList[weiboList.length-1].id
-      );
+    if(weiboList.isEmpty) return;
+    Weibos weibos=Weibos(
+      statuses: weiboList,
+      sinceId: weiboList[0].id,
+      maxId: weiboList[weiboList.length-1].id
+    );
     _weibosBox.put(key, weibos);
-    print('存储后_weibosBox容量为${weibos.statuses.length}');
+    print('存储后$key容量为${weibos.statuses.length}');
     print('$key 缓存微博成功,sinceId:${weibos.sinceId},maxId:${weibos.maxId}');
     print('从微博列表读取的sinceId:${weibos.statuses[0].id},时间:${weibos.statuses[0].createdAt}');
     print('从微博列表读取的maxId:${weibos.statuses[weibos.statuses.length-1].id},时间:${weibos.statuses[weibos.statuses.length-1].createdAt}');
@@ -42,15 +43,20 @@ class WeiboProvider{
       int sinceId=0,
       int maxId=0,
       WeiboTimelineType timelineType=WeiboTimelineType.Statuses,
-      String grouId,
+      String groupId,
       Map<String,String> extraParams
     }
   ) async {
+    if(groupId!=null&&groupId.isNotEmpty){
+      if(extraParams==null) extraParams=Map();
+      extraParams['list_id']=groupId;
+    }
+
     //读取本地缓存的微博
     if(localUid!=null){
-      var _weibos=await _weibosBox.get(Utils.generateHiveWeibosKey(timelineType, localUid));
+      var _weibos=await _weibosBox.get(Utils.generateHiveWeibosKey(timelineType, localUid,groupId: groupId));
       if(_weibos!=null){
-        print('此时读取_weibosBox容量为${_weibos.statuses.length}');
+        print('此时读取${Utils.generateHiveWeibosKey(timelineType, localUid,groupId:groupId)}容量为${_weibos.statuses.length}');
         return ProviderResult(_weibos,true);
       }
     }
@@ -80,7 +86,7 @@ class WeiboProvider{
           ..statuses.addAll(weibos.statuses);
       }
         if(localUid!=null){
-          putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid), returnWeibos.statuses);
+          putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid,groupId: groupId), returnWeibos.statuses);
         }
         await UrlProvider.saveUrlInfoToHive(returnWeibos.statuses);
         return ProviderResult(returnWeibos,true);
@@ -88,7 +94,7 @@ class WeiboProvider{
       var jsonRes=await WeiboApi.getTimeLine(sinceId,maxId,timelineType,extraParams);
       var weibos=Weibos.fromJson(jsonRes);
       if(localUid!=null){
-        putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid), weibos.statuses);
+        putIntoWeibosBox(Utils.generateHiveWeibosKey(timelineType, localUid,groupId: groupId), weibos.statuses);
       }
       //await UrlProvider.saveUrlInfoToRAM(weibos.statuses);
       await UrlProvider.saveUrlInfoToHive(weibos.statuses);
@@ -113,7 +119,9 @@ class WeiboProvider{
   static Future<ProviderResult<Reposts>> getReposts(int id,{int sinceId=0,int maxId=0}){
     var result;
     result=WeiboApi.getReposts(id,sinceId,maxId)
-      .then((json)=>Reposts.fromJson(json))
+      .then((json){
+        return Reposts.fromJson(json);
+      })
       .then((repost) async {
         //await UrlProvider.saveUrlInfoToRAM(repost.reposts);
         await UrlProvider.saveUrlInfoToHive(repost.reposts);

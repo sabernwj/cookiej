@@ -23,6 +23,8 @@ class WeiboApi{
   ///	获取@当前用户的最新微博
   static const String _mentions='/2/statuses/mentions.json';
 
+  /// 获取当前登录用户某一好友分组的微博列表
+  static const String _groupsTimeline='/2/friendships/groups/timeline.json';
 
 
   ///发布一条新微博
@@ -61,6 +63,9 @@ class WeiboApi{
       case WeiboTimelineType.Mentions:
         url=_mentions;
         break;
+      case WeiboTimelineType.Group:
+        url=_groupsTimeline;
+        break;
       default:
         return null;
     }
@@ -84,8 +89,8 @@ class WeiboApi{
       'id':id.toString()
     };
     final result=await API.get(Utils.formatUrlParams(url, params));
-    if(!(result is Map)) return null;
-    return result.data;
+    //if(!(result is Map)) return null;
+    return result?.data;
   }
 
   ///根据微博ID获取单条微博内容

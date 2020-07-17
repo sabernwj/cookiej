@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 
 void main() {
   runZoned((){
+    WidgetsFlutterBinding.ensureInitialized();
     runApp(CookieJ());
     SystemUiOverlayStyle systemUiOverlayStyle =SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);

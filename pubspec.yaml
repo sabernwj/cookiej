@@ -7,7 +7,7 @@ description: A Weibo Client By Flutter.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 1.0.3
+version: 1.0.4
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -23,7 +23,10 @@ dependencies:
   cupertino_icons: ^0.1.2
   dio: ^3.0.8
   dio_cookie_manager: ^1.0.0
+  cookie_jar: ^1.0.1
   flutter_webview_plugin: ^0.3.11 #浏览器插件
+  #webview_flutter: ^0.3.22+1
+  flutter_inappwebview: ^4.0.0+4
   intl: ^0.15.7 #该软件包提供国际化和本地化功能
   cached_network_image: ^2.2.0+1 #带缓存的图片组件
   pull_to_refresh: ^1.5.8 #上拉加载下拉刷新

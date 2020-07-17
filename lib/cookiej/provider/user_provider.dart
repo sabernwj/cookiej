@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:cookiej/cookiej/action/access_state.dart';
+import 'package:cookiej/cookiej/model/group.dart';
 import 'package:cookiej/cookiej/model/user.dart';
 import 'package:cookiej/cookiej/net/friendships_api.dart';
 import 'package:cookiej/cookiej/net/user_api.dart';
 import 'package:cookiej/cookiej/provider/provider_result.dart';
 import 'package:cookiej/cookiej/config/config.dart';
-import 'dart:async';
 import 'package:cookiej/cookiej/db/sql_manager.dart';
 import 'package:sqflite/sqlite_api.dart';
 
@@ -117,5 +117,13 @@ class UserProvider{
     jsonRes['users'].forEach((user)=>userList.add(User.fromJson(user)));
     if(userList.isNotEmpty) return ProviderResult(userList, true);
     return ProviderResult(null, false);
+  }
+
+  static Future<ProviderResult<List<Group>>> getGroups() async {
+    var jsonRes=await FriendshipsApi.getGroups();
+    List<Group> groupList=[];
+    jsonRes['lists'].forEach((group)=>groupList.add(Group.fromJson(group)));
+    if(groupList.isNotEmpty) return ProviderResult(groupList, true);
+    return ProviderResult.failed();
   }
 }

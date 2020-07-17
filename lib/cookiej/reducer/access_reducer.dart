@@ -34,6 +34,7 @@ AccessState _updateCurrentAccess(AccessState accessState,UpdateCurrentAccess act
   API.httpClientDefault.interceptors.add(AccessInterceptor(accessState.currentAccess));
   API.httpClientSend.interceptors.removeWhere((interceptor)=>interceptor is AccessInterceptor);
   API.httpClientSend.interceptors.add(AccessInterceptor(accessState.currentAccess));
+  //eventBus.fire(WeiboListViewRefreshEvent());
   return accessState;
 }
 

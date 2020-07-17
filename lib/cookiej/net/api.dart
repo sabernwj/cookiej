@@ -88,11 +88,15 @@ class API{
             msg=(e.response.data as Map)['error'].toString();
         }
         break;
+      //应该是接口权限不足
+      case 403:
+        msg='';
+        break;
       default:
         
         break;
     }
-    eventBus.fire(StringMsgEvent(msg));
+    if(msg.isNotEmpty) eventBus.fire(StringMsgEvent(msg));
   }
 
   static void init(){

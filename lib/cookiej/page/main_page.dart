@@ -62,35 +62,47 @@ class _MainPageState extends State<MainPage> {
             bottomNavigationBar: SafeArea(
               child: SizedBox(
                 height:46,
-                child:BottomNavigationBar(
-                  //backgroundColor: _theme.dialogBackgroundColor,
-                  elevation: 0,
-                  items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Icon(IconData(0xf2da,fontFamily: CookieJTextStyle.iconFontFamily),size: 27,),
-                      title: Container()
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(FontAwesomeIcons.solidCompass,size: 26.3,),
-                      title: Container()
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(FontAwesomeIcons.facebookMessenger,size: 26,),
-                      title: Container()
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(FontAwesomeIcons.userAlt,size: 24,),
-                      title: Container()
-                    ),
-                  ],
-                  currentIndex: _currentIndex,
-                  type: BottomNavigationBarType.fixed,
-                  iconSize: 30,
-                  onTap: (int index){
-                    setState(() {
-                      _currentIndex=index;
-                    });
-                  },
+                child:Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black,
+                        offset: Offset(0, 5.0),
+                        blurRadius: 5,
+                        spreadRadius: 0.5
+                      )
+                    ]
+                  ),
+                  child:BottomNavigationBar(
+                    //backgroundColor: _theme.dialogBackgroundColor,
+                    elevation: 0,
+                    items: <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: Icon(IconData(0xf2da,fontFamily: CookieJTextStyle.iconFontFamily),size: 27,),
+                        title: Container()
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(FontAwesomeIcons.solidCompass,size: 26.3,),
+                        title: Container()
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(FontAwesomeIcons.facebookMessenger,size: 26,),
+                        title: Container()
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(FontAwesomeIcons.userAlt,size: 24,),
+                        title: Container()
+                      ),
+                    ],
+                    currentIndex: _currentIndex,
+                    type: BottomNavigationBarType.fixed,
+                    iconSize: 30,
+                    onTap: (int index){
+                      setState(() {
+                        _currentIndex=index;
+                      });
+                    },
+                  )
                 ),
               )
             )

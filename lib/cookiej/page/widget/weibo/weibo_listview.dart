@@ -3,6 +3,7 @@ import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/event/event_bus.dart';
 import 'package:cookiej/cookiej/event/notice_audio_event.dart';
 import 'package:cookiej/cookiej/event/weibo_listview_refresh_event.dart';
+import 'package:cookiej/cookiej/model/group.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_list_mixin.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -16,8 +17,8 @@ import './weibo_widget.dart';
 class WeiboListview extends StatefulWidget {
   final WeiboTimelineType timelineType;
   final Map<String,String> extraParams;
-  final String groupId;
-  WeiboListview({this.timelineType=WeiboTimelineType.Statuses,this.extraParams,this.groupId});
+  final Group group;
+  WeiboListview({this.timelineType=WeiboTimelineType.Statuses,this.extraParams,this.group});
   @override                                                                                                               
   _WeiboListviewState createState() => _WeiboListviewState();
 }
@@ -34,7 +35,7 @@ class _WeiboListviewState extends State<WeiboListview> with WeiboListMixin,Autom
 
   @override
   void initState(){
-    weiboListInit(widget.timelineType,extraParams:widget.extraParams);
+    weiboListInit(widget.timelineType,extraParams:widget.extraParams,groupId: widget.group?.idstr);
     //isStartLoadDataComplete=startLoadData();
     assert((){
       eventBus.on<WeiboListViewRefreshEvent>().listen((event) {
@@ -76,7 +77,11 @@ class _WeiboListviewState extends State<WeiboListview> with WeiboListMixin,Autom
                   noDataText: '已无更多数据'
                 ),
                 controller: _refreshController,
-                child: ListView.builder(
+                child: weiboList.isEmpty
+                ?Center(
+                  child: Text('这里是空的噢'),
+                )
+                :ListView.builder(
                   itemBuilder: (BuildContext context,int index){
                     if(index==readCursor){
                       if(readCursor==0) return Container();
@@ -143,9 +148,19 @@ class _WeiboListviewState extends State<WeiboListview> with WeiboListMixin,Autom
       },
       onWillChange: (oldStore,store){
         if(localUid!=store.state.accessState.currentAccess.uid){
-          localUid=store.state.accessState.currentAccess.uid;
-          setState((){
+          setState(() {
+            readCursor=0;
             weiboList=[];
+          });
+        }
+      },
+      onDidChange: (store){
+        if(localUid!=store.state.accessState.currentAccess.uid){
+          localUid=store.state.accessState.currentAccess.uid;
+          if(widget.group!=null&&widget.group?.user?.idstr!=localUid) {
+            return;
+          }
+          setState((){
             _refreshController.resetNoData();
             isStartLoadDataComplete=startLoadData();
           });
