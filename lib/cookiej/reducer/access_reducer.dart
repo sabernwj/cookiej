@@ -1,14 +1,17 @@
 
 import 'package:cookiej/cookiej/action/access_state.dart';
 import 'package:cookiej/cookiej/action/app_state.dart';
+import 'package:cookiej/cookiej/config/config.dart';
 import 'package:cookiej/cookiej/model/user.dart';
 import 'package:cookiej/cookiej/net/interceptors/access_interceptor.dart';
 import 'package:cookiej/cookiej/provider/emotion_provider.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
+import 'package:hive/hive.dart';
 import 'package:redux/redux.dart';
 import 'package:cookiej/cookiej/net/api.dart';
 import 'package:cookiej/cookiej/provider/access_provider.dart';
 import 'package:cookiej/cookiej/action/user_state.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 final accessReducer=combineReducers<AccessState>([
   TypedReducer<AccessState,SetAccessState>(_setAccessState),
@@ -79,6 +82,15 @@ class AccessMiddleware implements MiddlewareClass<AppState>{
       });
     }
     else if(action is AddNewAccess){
+      //存下cookie
+      var cookieManager=CookieManager.instance();
+      var cookies=await cookieManager.getCookies(url: 'https://weibo.cn');
+      List<String> cookiesStr=[];
+      cookies.forEach((cookie) {
+        cookiesStr.add('${cookie.name}=${cookie.value}');
+      });
+      Hive.box(HiveBoxNames.cookie).put(action.access.uid, cookiesStr);
+      
       next(action);
       store.dispatch(UpdateCurrentAccess(action.access));
       AccessProvider.saveAccessStateLocal(store.state.accessState);

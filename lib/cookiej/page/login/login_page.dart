@@ -15,7 +15,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-
   @override
   void initState() {
     super.initState();
@@ -28,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
         title: new Text("用户授权"),
       ),
       body: InAppWebView(
-        initialUrl: AccessApi.getOauth2Authorize(),
+        initialUrl:'https://passport.weibo.cn/signin/login?entry=openapi&r='+Uri.encodeComponent(AccessApi.getOauth2Authorize()),
         onLoadStart: (controller, url) async {
           if(url.contains('?code=')){
             await controller.stopLoading();
@@ -40,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.pop(context);
             }
           }
-        },
+        }
       ),
       resizeToAvoidBottomInset: false,
     );

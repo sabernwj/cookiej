@@ -1,5 +1,9 @@
 
 
+import 'dart:convert';
+
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
 class Config{
   static const appkey='';
   static const appSecret='';
@@ -40,6 +44,9 @@ class Config{
 
 }
 
+class HiveBoxNames{
+  static const String cookie='cookie_box';
+}
 
 
 class SinaImgSize{
@@ -80,6 +87,23 @@ extension WeiboTimelineExtesnsion on WeiboTimelineType{
     '@我的微博'
   ][this.index];
 }
+
+extension CookieInAppWebview on Cookie{
+  static Cookie fromString(String str){
+    Map<String,dynamic> map= json.decode(str);
+    return Cookie(
+      name: map['name'],
+      value: map['value'],
+      expiresDate: map['expiresDate'],
+      isSessionOnly: map['isSessionOnly'],
+      domain: map['domain'],
+      isSecure: map['isSecure'],
+      isHttpOnly: map['isHttpOnly'],
+      path:map['path']
+    );
+  }
+}
+
 
 enum CommentsType{
   Hot,

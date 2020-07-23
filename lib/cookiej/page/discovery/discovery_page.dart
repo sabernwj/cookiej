@@ -28,7 +28,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    final _theme=Theme.of(context);
+    //final _theme=Theme.of(context);
     return Scaffold(
       body: extended.NestedScrollView(
         headerSliverBuilder: (context,innerBoxIsScrolled){
@@ -49,17 +49,17 @@ class _DiscoveryPageState extends State<DiscoveryPage> with SingleTickerProvider
                         style: Theme.of(context).primaryTextTheme.subtitle1.merge(TextStyle(fontSize: 20)),
                       )
                     ),
-                    InkWell(
-                      child:Container(
-                        height: 36,
-                        width: 36,
-                        margin: EdgeInsets.only(left:8 ,right: 8),
-                        child:Icon(Icons.search,color: _theme.primaryTextTheme.bodyText1.color),
-                      ),
-                      onTap: (){
+                    // InkWell(
+                    //   child:Container(
+                    //     height: 36,
+                    //     width: 36,
+                    //     margin: EdgeInsets.only(left:8 ,right: 8),
+                    //     child:Icon(Icons.search,color: _theme.primaryTextTheme.bodyText1.color),
+                    //   ),
+                    //   onTap: (){
 
-                      },
-                    )
+                    //   },
+                    // )
                   ],
                 ),
                 bottomWidgte: Container(

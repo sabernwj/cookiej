@@ -84,8 +84,11 @@ class _WeiboListviewState extends State<WeiboListview> with WeiboListMixin,Autom
                 :ListView.builder(
                   itemBuilder: (BuildContext context,int index){
                     if(index==readCursor){
-                      if(readCursor==0) return Container();
+                      if(readCursor==0) return Container(
+                        key: ValueKey(0),
+                      );
                       return Container(
+                        key: ValueKey(1),
                         margin: EdgeInsets.only(bottom:12),
                         padding: EdgeInsets.symmetric(vertical:4,horizontal: 12),
                         alignment: Alignment.center,
@@ -99,13 +102,14 @@ class _WeiboListviewState extends State<WeiboListview> with WeiboListMixin,Autom
                         )
                       );
                     }
-                    if(index>readCursor) index=index-1;
+                    else if(index>readCursor) index--;
                     return Container(
+                      key: ValueKey(weiboList[index].idstr),
                       child:WeiboWidget(weiboList[index]),
                       margin: EdgeInsets.only(bottom:12),
                     );
                   },
-                  itemCount: weiboList.length+1,
+                  itemCount: weiboList.length,
                   physics: const AlwaysScrollableScrollPhysics(),
                 ),
                 onRefresh: (){
@@ -117,9 +121,11 @@ class _WeiboListviewState extends State<WeiboListview> with WeiboListMixin,Autom
                           _refreshController.refreshCompleted();
                         });
                       }
-                      else if(isComplete==WeiboListStatus.nodata) setState(() {
-                        _refreshController.refreshCompleted();
-                      });
+                      else if(isComplete==WeiboListStatus.nodata) {
+                        setState(() {
+                          _refreshController.refreshCompleted();
+                        });
+                      }
                       else _refreshController.refreshFailed();
                     }).catchError((e)=>_refreshController.refreshFailed());
                 },

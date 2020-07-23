@@ -40,6 +40,9 @@ class WeiboApi{
   ///转发一条微博
   //static const String _repostCreate='/2/statuses/repost.json';
 
+  static const String _create_attitudes='https://m.weibo.cn/api/attitudes/create';
+  static const String _destroy_attitudes='https://m.weibo.cn/api/attitudes/destroy';
+
 
 
 
@@ -158,5 +161,21 @@ class WeiboApi{
       data: '',
       options: Options(contentType:Headers.formUrlEncodedContentType)
     ))==null?false:true;
+  }
+
+  //暂时放弃，因为缺少xsrf-token的获取方式
+  static Future<bool> createAttitudes(String weiboId) async{
+    var url=_create_attitudes;
+    var opt=Options(contentType:Headers.formUrlEncodedContentType);
+    opt.headers['referer']=url;
+    var res=await API.post(
+      url,
+      options: opt,
+      data: FormData.fromMap({
+        'id':weiboId,
+        'attitude':'heart'
+      })
+    );
+    return false;
   }
 }

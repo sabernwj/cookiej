@@ -18,8 +18,6 @@ class AccessApi{
       //'display':'wap'
     };
     url=Utils.formatUrlParams(url, params);
-    //针对2020 7.14左右出现的新浪API接口变更添加的url
-    url='https://passport.weibo.cn/signin/login?entry=openapi&r='+Uri.encodeComponent(url);
     return url;
   }
 
