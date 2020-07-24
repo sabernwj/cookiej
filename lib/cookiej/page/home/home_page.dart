@@ -1,6 +1,7 @@
 
 import 'package:cookiej/cookiej/action/app_state.dart';
 import 'package:cookiej/cookiej/config/config.dart';
+import 'package:cookiej/cookiej/page/public/search_page.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_listview.dart';
 import 'package:cookiej/cookiej/page/home/edit_weibo_page.dart';
 import 'package:cookiej/cookiej/provider/user_provider.dart';
@@ -64,17 +65,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           )
                         ),
                         //搜索按钮
-                        // InkWell(
-                        //   child:Container(
-                        //     margin: EdgeInsets.only(top:5),
-                        //     height: 36,
-                        //     width: 36,
-                        //     child:Icon(Icons.search,color: _theme.primaryTextTheme.bodyText1.color),
-                        //   ),
-                        //   onTap: (){
-
-                        //   },
-                        // )
+                        InkWell(
+                          child:Container(
+                            margin: EdgeInsets.only(top:5),
+                            height: 36,
+                            width: 36,
+                            child:Icon(Icons.search,color: _theme.primaryTextTheme.bodyText1.color),
+                          ),
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder:(context)=> SearchPage()));
+                          },
+                        )
                       ],
                     )
                   ),

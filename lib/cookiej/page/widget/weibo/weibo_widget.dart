@@ -4,7 +4,6 @@ import 'package:cookiej/cookiej/event/comment_listview_add_event.dart';
 import 'package:cookiej/cookiej/event/event_bus.dart';
 import 'package:cookiej/cookiej/model/comment.dart';
 import 'package:cookiej/cookiej/net/comment_api.dart';
-import 'package:cookiej/cookiej/net/weibo_api.dart';
 import 'package:cookiej/cookiej/page/public/user_page.dart';
 import 'package:cookiej/cookiej/page/widget/edit_reply_widget.dart';
 import 'package:cookiej/cookiej/page/widget/user_name_span.dart';
@@ -123,7 +122,7 @@ class _WeiboWidgetState extends State<WeiboWidget> {
                 }, icon: Icon(FontAwesomeIcons.comments,size: CookieJTextStyle.normalText.fontSize,), label: Text(Utils.formatNumToChineseStr(weibo.commentsCount)),textColor: Colors.grey),
                 FlatButton.icon(onPressed: (){
                   //点赞
-                  WeiboApi.createAttitudes(weibo.idstr);
+                  //WeiboApi.createAttitudes(weibo.idstr);
                 }, icon: Icon(FontAwesomeIcons.thumbsUp,size: CookieJTextStyle.normalText.fontSize,), label: Text(Utils.formatNumToChineseStr(weibo.attitudesCount)),textColor: Colors.grey),
               ],
             )
