@@ -36,18 +36,26 @@ class WeiboLite extends Content{
   @HiveField(12)
   List<String> picUrls;
 
-  WeiboLite({this.idstr,this.id,this.user,this.attitudesCount,this.commentsCount,this.createdAt,this.favorited,this.mid,this.picUrls,this.repostsCount,this.retweetedWeibo,this.text,this.source});
+  ///这个新增的成员是因为使用了网页微博API 时间格式变化
+  String createdAtStr;
+
+  WeiboLite({this.idstr,this.id,this.user,this.attitudesCount,this.commentsCount,this.createdAt,this.favorited,this.mid,this.picUrls,this.repostsCount,this.retweetedWeibo,this.text,this.source,this.createdAtStr});
 
   WeiboLite.fromJson(Map<String, dynamic> json){
-		createdAt = createdAt = Utils.parseWeiboTimeStrToUtc(json['created_at']);
-		id = json['id'];
+    try{
+      createdAt = Utils.parseWeiboTimeStrToUtc(json['created_at']);
+    }catch(e){
+      createdAtStr=json['created_at'];
+    }
+		
+		id = (json['id'] is String)?int.parse(json['id']):json['id'];
 		idstr = json['idstr'];
 		mid = json['mid'];
-		text = json['text'];
+		text = json['raw_text']??json['text'];
     favorited = json['favorited'];
-		repostsCount = json['reposts_count'];
-		commentsCount = json['comments_count'];
-		attitudesCount = json['attitudes_count'];
+		repostsCount = (json['reposts_count'] is String)?int.parse(json['reposts_count']):json['reposts_count'];
+		commentsCount = (json['comments_count'] is String)?int.parse(json['comments_count']):json['comments_count'];
+		attitudesCount = (json['attitudes_count'] is String)?int.parse(json['attitudes_count']):json['attitudes_count'];
     //此处对来源进行了格式化
     source = json['source']?.replaceAll(RegExp('<(S*?)[^>]*>.*?|<.*? />'),'');
     user = json['user'] != null ? UserLite.fromJson(json['user']) : null;
@@ -59,7 +67,7 @@ class WeiboLite extends Content{
       retweetedWeibo=WeiboLite.fromJson(json['retweeted_status']);
       retweetedWeibo.text=retweetedWeibo?.user?.name==null?
         retweetedWeibo.text
-        :'@'+retweetedWeibo.user.name+'\n'+retweetedWeibo.text;
+        :'@'+retweetedWeibo.user.screenName+'\n'+retweetedWeibo.text;
     }
   }
 

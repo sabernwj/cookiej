@@ -1,10 +1,13 @@
 import 'dart:ui';
 
+import 'package:cookiej/cookiej/model/weibo_lite.dart';
 import 'package:cookiej/cookiej/net/search_api.dart';
 import 'package:cookiej/cookiej/page/widget/custom_tabbarview.dart';
 import 'package:cookiej/cookiej/page/widget/no_ink_behavior.dart';
+import 'package:cookiej/cookiej/page/widget/search_listview.dart';
 import 'package:cookiej/cookiej/provider/search_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 class SearchPage extends StatefulWidget {
@@ -17,24 +20,25 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
   String hintText='搜点什么...';
   TabController _tabController;
   PageController _pageController;
+  TextEditingController _editingController;
   bool isGetResult=false;
   List<Widget> _tabs;
   Future<List<String>> getSearchRecommendTask;
+  FocusNode _focusNode;
+  List<Widget> _tabChildrens;
 
   @override
   void initState() {
     super.initState();
-    _tabs=[
-      Text('综合'),
-      Text('用户'),
-      Text('实时'),
-      Text('关注'),
-      Text('热门'),
-      Text('图片'),
-      Text('视频'),
-    ];
+    _tabs=SearchApiType.allType.map((e) => Text(e.text)).toList();
+    _tabChildrens=SearchApiType.allType.map((e) => SearchListView(
+      getSearchResult:getSearchResultFunction,
+      searchApiType:e
+    )).toList();
+    _editingController=TextEditingController();
     _tabController=TabController(length: _tabs.length, vsync: this);
     _pageController=PageController();
+    _focusNode=FocusNode();
     getSearchRecommendTask=SearchProvider.getSearchRecommend();
 
   }
@@ -54,7 +58,9 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                 height: 42,
                 margin: EdgeInsets.symmetric(horizontal: 8),
                 child: TextField(
+                  controller: _editingController,
                   maxLines: 1,
+                  focusNode: _focusNode,
                   scrollPadding: EdgeInsets.all(0),
                   decoration:InputDecoration(
                     fillColor:_theme.dialogBackgroundColor,
@@ -66,17 +72,34 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                     ),
                     suffixIcon: InkWell(
                       child:Icon(Icons.search),
+                      //点击右上角搜索按钮时
+                      onTap: (){
+                        isGetResult=true;
+                        setState(() {
+                          _tabChildrens=SearchApiType.allType.map((e) => SearchListView(
+                            key: Key(_editingController.text+e.text),
+                            getSearchResult:getSearchResultFunction,
+                            searchApiType:e
+                          )).toList();
+                          _focusNode.unfocus();
+                        });
+                      },
 
                     ),
                     contentPadding: EdgeInsets.symmetric(vertical:0,horizontal:4),
                     hintText: hintText,
                   ),
                   textInputAction: TextInputAction.search,
+                  //按下键盘搜索按钮时
                   onSubmitted: (value) async{
-                    var res=await SearchApi.getSearchResult(SearchApiType.all.id, value);
-                    if(res!=null){
-
-                    }
+                    isGetResult=true;
+                    setState(() {
+                      _tabChildrens=SearchApiType.allType.map((e) => SearchListView(
+                        key: Key(_editingController.text+e.text),
+                        getSearchResult:getSearchResultFunction,
+                        searchApiType:e
+                      )).toList();
+                    });
                   },
                 ),
               ),
@@ -89,6 +112,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                   tabs: _tabs,
                   indicatorColor: _theme.selectedRowColor,
                   labelPadding: EdgeInsets.symmetric(vertical:6,horizontal:12),
+                  onTap: (value) => _pageController.jumpToPage(value),
                 )
               )
               :Container()
@@ -97,11 +121,12 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
         ),
         preferredSize: Size.fromHeight(appbarHeight())
       ),
+      //下面主体部分，上面代码是顶部固定的
       body: isGetResult
       ?CustomTabBarView(
         tabController: _tabController,
         pageController: _pageController,
-        children: _tabs,
+        children: _tabChildrens,
       )
       :Container(
         color: _theme.dialogBackgroundColor,
@@ -122,9 +147,15 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                     List<String> list=snapot.data;
                     return _buildGridviewWidget(
                       '热门搜索', '',
-                      list.map((str) => _buildGridItem([Expanded(child: Text(str,overflow: TextOverflow.ellipsis,))])).toList(),
+                      list.map((str) => _buildGridItem([Expanded(child: Text(str,overflow: TextOverflow.ellipsis,))],onTap: (){
+                        _editingController.text=str;
+                        isGetResult=true;
+                        setState(() {
+                          _focusNode.unfocus();
+                        });
+                      })).toList(),
                       _theme,
-                      crossAxisCount: 1
+                      crossAxisCount: 1,
                     );
                   }
                 }
@@ -137,12 +168,18 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
     );
   }
 
+  Future<List<WeiboLite>> getSearchResultFunction(SearchApiType searchType,int pageIndex) async {
+    var result=await SearchProvider.getSearchResult(_editingController.text,sType: searchType,pageIndex: pageIndex);
+    return result;
+  }
+
+
   double appbarHeight(){
     if(isGetResult) return 84;
     else return 48;
   }
 
-  Widget _buildGridItem(List<Widget> children){
+  Widget _buildGridItem(List<Widget> children,{Function onTap}){
     return InkWell(
       child:Padding(
         padding: EdgeInsets.all(10),
@@ -151,7 +188,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
           children: children,
         ),
       ),
-      onTap:(){}
+      onTap:onTap
     );
   }
 
@@ -167,7 +204,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
   //   );
   // }
 
-  Widget _buildGridviewWidget(String leftTitle,String rightTitle,List<Widget> grids,ThemeData _theme,{int crossAxisCount=2}){
+  Widget _buildGridviewWidget(String leftTitle,String rightTitle,List<Widget> grids,ThemeData _theme,{int crossAxisCount=2,Function onTap}){
     return Container(
       color: _theme.dialogBackgroundColor,
       margin:EdgeInsets.only(top:16),
@@ -177,7 +214,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
         child:Column(
           children: <Widget>[
             InkWell(
-              onTap:(){},
+              onTap:onTap,
               child:Padding(
               padding:EdgeInsets.symmetric(vertical: 8,horizontal: 12),
                 child: Row(

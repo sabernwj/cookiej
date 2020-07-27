@@ -6,7 +6,6 @@ import 'package:cookiej/cookiej/utils/utils.dart';
 
 
 class SearchApi{
-  static const String searchRecommend='https://m.weibo.cn/api/container/getIndex?containerid=231583&page_type=searchall';
   static const String urlBase='https://m.weibo.cn/api/container/getIndex';
 
 
@@ -20,7 +19,7 @@ class SearchApi{
     return res.data;
   }
 
-  static Future<Map> getSearchResult(String typeId,String str,{String pageIndex='1'}) async {
+  static Future<Map> getSearchResult(String typeId,String str,String pageIndex) async {
     var url=urlBase;
     var firstParam='100103type=$typeId&q=$str&t=0';
     firstParam=Uri.encodeComponent(firstParam);
@@ -55,4 +54,14 @@ class SearchApiType{
   static var topic=SearchApiType('38','话题');
   static var superTopic=SearchApiType('98','超话');
   static var index=SearchApiType('32','主页');
+
+  static List<SearchApiType> allType=[
+    all,
+    user,
+    follow,
+    now,
+    video,
+    picture,
+    hot,
+  ];
 }

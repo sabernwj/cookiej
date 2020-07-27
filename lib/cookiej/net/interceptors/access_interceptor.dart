@@ -13,7 +13,7 @@ class AccessInterceptor extends InterceptorsWrapper{
     if(access!=null){
       var url=options.path;
       var params= {"access_token":access.accessToken};
-      options.path=Utils.formatUrlParams(url, params);
+      if(!url.contains('m.weibo.cn')) options.path=Utils.formatUrlParams(url, params);
       httpCount++;
       print('${access.uid} 已发起请求次数'+httpCount.toString()+':'+options.path);
       //加载cookie

@@ -63,8 +63,8 @@ class _WeiboWidgetState extends State<WeiboWidget> {
                 Container(
                   child: Column(
                     children: <Widget>[
-                      UserNameSpan(weibo.user.name,style: _theme.primaryTextTheme.bodyText2),
-                      Text(Utils.getDistanceFromNow(weibo.createdAt)+'    '+weibo.source,style: _theme.primaryTextTheme.overline),
+                      UserNameSpan(weibo.user.screenName,style: _theme.primaryTextTheme.bodyText2),
+                      Text(weibo.createdAtStr??Utils.getDistanceFromNow(weibo.createdAt)+'    '+weibo.source,style: _theme.primaryTextTheme.overline),
                     ],
                     crossAxisAlignment: CrossAxisAlignment.start,
                   ),
