@@ -58,10 +58,10 @@ class SearchApiType{
   static List<SearchApiType> allType=[
     all,
     user,
-    follow,
     now,
-    video,
-    picture,
     hot,
+    picture,
+    video,
+    follow,
   ];
 }

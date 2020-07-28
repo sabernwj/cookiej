@@ -75,7 +75,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> with SingleTickerProvider
                       Text('热门')
                     ],
                     onTap: (index)=>_pageController.jumpToPage(index)
-                  )
+                  ),
                 )
               )
             )

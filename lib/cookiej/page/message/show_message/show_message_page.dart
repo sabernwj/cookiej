@@ -55,7 +55,7 @@ class _ShowMessagePageState extends State<ShowMessagePage> with SingleTickerProv
                     indicatorColor: Theme.of(context).selectedRowColor,
                     controller: _tabController,
                     tabs: [
-                      Text('@我的微博',style: _theme.primaryTextTheme.bodyText1,),
+                      Text('@我的微博'),
                       Text('@我的评论'),
                       Text('收到的评论'),
                       Text('发出的评论')

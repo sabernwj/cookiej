@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   child: Container(
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.only(top:MediaQueryData.fromWindow(window).padding.top,left: 8,right: 8),
-                    color:_theme.primaryColor,
+                    //color:_theme.primaryColor,
                     child:Row(
                       children: <Widget>[
                         Expanded(
@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         //搜索按钮
                         InkWell(
                           child:Container(
-                            margin: EdgeInsets.only(top:5),
+                            margin: EdgeInsets.only(top:5,left: 8),
                             height: 36,
                             width: 36,
                             child:Icon(Icons.search,color: _theme.primaryTextTheme.bodyText1.color),
@@ -77,7 +77,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           },
                         )
                       ],
-                    )
+                    ),
+                    decoration: BoxDecoration(
+                      color: _theme.primaryColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black,
+                          offset: Offset(0, -3),
+                          blurRadius: 5,
+                          spreadRadius: 0.5
+                        )
+                      ]
+                    ),
                   ),
                   preferredSize: Size.fromHeight(46)
                 ),

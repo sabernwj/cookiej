@@ -9,9 +9,9 @@ class CookieJColors{
 
   static final Map<String,MaterialColor> themeColors= {
     //'默认白':CookieJColors.customWhite,
+    '谷歌蓝':Colors.blue,
     '薄荷绿':Colors.teal,
     '经典黑':CookieJColors.customBlack,
-    '谷歌蓝':Colors.blue,
     '琥珀黄':Colors.amber,
     '钢蓝灰':Colors.blueGrey,
     '胡萝卜':Colors.orange,
@@ -22,8 +22,8 @@ class CookieJColors{
     '少女粉':CookieJColors.girlPink,
   };
   static const int customWhiteValue=0xFFFEFEFEF;
-  static const int customBlackValue = 0xFF282828;
-  static const int customBlackLowValue=0xFF353535;
+  static const int customBlackValue = 0xFF292929;
+  static const int customBlackLowValue=0xFF252525;
   static const int salmonPinkValue=0xFFFA8072;
   static const int apricotValue=0xFFF8B878;
   static const int girlPinkValue=0xFFFA7298;

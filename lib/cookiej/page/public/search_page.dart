@@ -112,6 +112,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                   isScrollable: true,
                   tabs: _tabs,
                   indicatorColor: _theme.selectedRowColor,
+                  indicatorPadding: EdgeInsets.symmetric(horizontal:2),
                   labelPadding: EdgeInsets.symmetric(vertical:6,horizontal:12),
                   onTap: (value) => _pageController.jumpToPage(value),
                 )

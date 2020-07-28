@@ -82,7 +82,7 @@ class _MessagePageState extends State<MessagePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('竹笋饼干'),
+                          Text('开发者'),
                           Text(
                             '暂时没有获取私信接口的权限，敬请期待',
                             style: _theme.primaryTextTheme.overline,
@@ -93,13 +93,12 @@ class _MessagePageState extends State<MessagePage> {
                       tralling: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Text('03/16',style: _theme.primaryTextTheme.overline),
-                          countNoticeWidget(99, context)
+                          Text('07/16',style: _theme.primaryTextTheme.overline),
+                          countNoticeWidget(index+1, context)
                         ],
                       )
                     );
                   },
-                  childCount: 1
                 ),
               ),
             ]
@@ -112,7 +111,7 @@ class _MessagePageState extends State<MessagePage> {
     final _themeText=Theme.of(context).primaryTextTheme;
     return Material(
       shape:StadiumBorder(),
-      color: Theme.of(context).primaryColor,
+      color: _themeText.bodyText2.color,
       child: Container(
         //padding: EdgeInsets.symmetric(4),
         padding: EdgeInsets.symmetric(horizontal:4,vertical:2),
@@ -137,7 +136,9 @@ class _MessagePageState extends State<MessagePage> {
         child: Container(
           height: 48,width: 48,
           child: leadingChild,
-          color: Theme.of(context).primaryColor,
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryTextTheme.bodyText2.color,
+          ),
         ),
       ),
       onTap: onTap??(){},

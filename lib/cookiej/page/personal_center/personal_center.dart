@@ -169,7 +169,7 @@ class PersonalCenter extends StatelessWidget {
                     children:[
                       ListTile(
                         leading: Icon(Icons.wb_sunny),
-                        title: Text('夜间模式'),
+                        title: Text('黑暗模式'),
                         trailing: CupertinoSwitch(
                           value: _isDarkMode,
                           activeColor: store.state.themeState.themeData.primaryColor,

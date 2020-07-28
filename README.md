@@ -1,4 +1,4 @@
-# 饼干酱 -Flutter下的微博客户端
+# 饼干微博 -Flutter下的微博客户端
 
 **一个在Flutter上不断踩坑不断实践的项目**
 
@@ -6,7 +6,7 @@
 
 UI是参照了**Smooth**、**Share**、**微博国际版** 以及个人喜好
 
-**体验请点击[下载](https://www.pgyer.com/PMcz)** (APP仍在持续开发中)
+**体验请点击[下载](https://www.coolapk.com/apk/268934)** (APP仍在持续开发中)
 ![](screenshot/download.png)
 
 
@@ -46,7 +46,7 @@ UI是参照了**Smooth**、**Share**、**微博国际版** 以及个人喜好
 
 >`db` sql的封装
 
->`event` eventBus相关的模型
+>`event` eventBus相关
 
 >`model` 微博Json转化而来的数据模型，大部分使用[JsonToDart](https://javiercbk.github.io/json_to_dart/)生成
 >>`local` 存储的是一些与本地数据或widget相关的模型
@@ -66,11 +66,9 @@ UI是参照了**Smooth**、**Share**、**微博国际版** 以及个人喜好
 ## 问题答疑
 
 #### 1. 为什么应用中多处按钮点击无反应？
-    一是人懒效率还低仍在实现中，二是新浪API不好弄，希望有相关经验的dalao可以指导
+    一是人懒效率还低仍在实现中，二是新浪API不好弄，希望有相关经验的dalao可以贡献代码或指导
 
-#### 2. IOS端没有返回键，怎么退出图片浏览
-    使用下滑手势可以退出
-#### 3. 下一步的计划是
+#### 2. 下一步的计划是
     [ ] 添加字体更换以及语言选择
     [ ] 黑暗模式跟随系统
     [ ] 适配微博定位信息到地图
@@ -81,7 +79,6 @@ UI是参照了**Smooth**、**Share**、**微博国际版** 以及个人喜好
 
 特别感谢Smooth作者[@06peng](https://weibo.com/llp0524)的appkey
 
-视频播放器代码大部分来自[Flutter：基于video_player实现视频相关手势控制、全屏播放](https://juejin.im/post/5e12d60ce51d45415a66733d)
 
 欢迎找我交流flutter相关
 

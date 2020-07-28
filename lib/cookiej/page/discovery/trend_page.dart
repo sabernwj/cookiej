@@ -80,7 +80,7 @@ class _TrendPageState extends State<TrendPage> with AutomaticKeepAliveClientMixi
           ),
           SliverToBoxAdapter(
             child:_buildGridviewWidget(
-              '热门话题', '全部',
+              '本页面只用于布局练习，并无实际功能', '全部',
               <Widget>[
                 _buildGridItem([
                   Expanded(child: Text('#521表白文案#',overflow: TextOverflow.ellipsis,)),

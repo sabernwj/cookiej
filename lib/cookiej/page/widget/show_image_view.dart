@@ -230,7 +230,7 @@ class _ShowImagesViewState extends State<ShowImagesView>  with TickerProviderSta
         var preImg= ExtendedImage(
           image: PictureProvider.getPictureFromUrl(url,sinaImgSize: SinaImgSize.bmiddle),
           initGestureConfigHandler: _initGestureConfigHandler,
-          heroBuilderForSlidingPage: _heroBuilderForSlidingPage,
+          //heroBuilderForSlidingPage: _heroBuilderForSlidingPage,
           fit: BoxFit.contain,
           enableSlideOutPage: true,
           mode: ExtendedImageMode.gesture,
