@@ -45,9 +45,9 @@ class _WeiboWidgetState extends State<WeiboWidget> {
   Widget build(BuildContext context) {
     final _theme=Theme.of(context);
     if(weibo.retweetedWeibo!=null) {
-      weibo.retweetedWeibo.heroTag=weibo.idstr+weibo.retweetedWeibo.idstr;
+      weibo.retweetedWeibo.heroTag=weibo.id.toString()+weibo.retweetedWeibo.id.toString();
     }
-    weibo.heroTag=weibo.idstr;
+    weibo.heroTag=weibo.id.toString();
     return GestureDetector(
       child:Container(
         child:Column(
@@ -122,7 +122,7 @@ class _WeiboWidgetState extends State<WeiboWidget> {
                 }, icon: Icon(FontAwesomeIcons.comments,size: CookieJTextStyle.normalText.fontSize,), label: Text(Utils.formatNumToChineseStr(weibo.commentsCount)),textColor: Colors.grey),
                 FlatButton.icon(onPressed: (){
                   //点赞
-                  //WeiboApi.createAttitudes(weibo.idstr);
+                  //WeiboApi.createAttitudes(weibo.id.toString());
                 }, icon: Icon(FontAwesomeIcons.thumbsUp,size: CookieJTextStyle.normalText.fontSize,), label: Text(Utils.formatNumToChineseStr(weibo.attitudesCount)),textColor: Colors.grey),
               ],
             )

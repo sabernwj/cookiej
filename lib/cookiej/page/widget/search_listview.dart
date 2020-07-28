@@ -1,13 +1,14 @@
 //下拉重新搜索，上拉加载更多搜索内容
 
 
-import 'package:cookiej/cookiej/model/weibo_lite.dart';
+import 'package:cookiej/cookiej/model/user_lite.dart';
 import 'package:cookiej/cookiej/net/search_api.dart';
+import 'package:cookiej/cookiej/page/widget/user_widget.dart';
 import 'package:cookiej/cookiej/page/widget/weibo/weibo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-typedef GetSearchResCallBack= Future<List<WeiboLite>> Function(SearchApiType searchType,int pageIndex);
+typedef GetSearchResCallBack= Future<List<dynamic>> Function(SearchApiType searchType,int pageIndex);
 
 class SearchListView extends StatefulWidget {
 
@@ -22,7 +23,7 @@ class SearchListView extends StatefulWidget {
 
 class _SearchListViewState extends State<SearchListView> with AutomaticKeepAliveClientMixin {
 
-  Map<String,WeiboLite> weiboList={};
+  Map<String,dynamic> weiboList={};
   RefreshController _refreshController=RefreshController(initialRefresh:true);
   int pageIndex=1;
 
@@ -38,13 +39,6 @@ class _SearchListViewState extends State<SearchListView> with AutomaticKeepAlive
       child: SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
-        // header: ClassicHeader(
-        //   refreshingText: '刷新中',
-        //   failedText: '刷新失败',
-        //   completeText:'刷新成功' ,
-        //   releaseText: '刷新微博',
-        //   idleText: '下拉刷新',
-        // ),
         footer: ClassicFooter(
           failedText: '加载失败',
           canLoadingText: '加载更多',
@@ -60,7 +54,7 @@ class _SearchListViewState extends State<SearchListView> with AutomaticKeepAlive
             var _keyId=weiboList.keys.toList()[index];
             return Container(
               key: ValueKey(_keyId),
-              child:WeiboWidget(weiboList[_keyId]),
+              child:(weiboList[_keyId] is UserLite)?UserWidget(userLite:weiboList[_keyId]):WeiboWidget(weiboList[_keyId]),
               margin: EdgeInsets.only(bottom:12),
             );
           },
@@ -72,8 +66,8 @@ class _SearchListViewState extends State<SearchListView> with AutomaticKeepAlive
           weiboList={};
           var receiveList=(await widget.getSearchResult(widget.searchApiType,pageIndex))??[];
           receiveList.forEach((element) {
-            if(!weiboList.containsKey(element.idstr)){
-              weiboList[element.idstr]=element;
+            if(!weiboList.containsKey(element.id.toString())){
+              weiboList[element.id.toString()]=element;
             }
           });
           setState(() {
@@ -85,8 +79,8 @@ class _SearchListViewState extends State<SearchListView> with AutomaticKeepAlive
           pageIndex++;
           var moreList=(await widget.getSearchResult(widget.searchApiType,pageIndex))??[];
           moreList.forEach((element) {
-            if(!weiboList.containsKey(element.idstr)){
-              weiboList[element.idstr]=element;
+            if(!weiboList.containsKey(element.id.toString())){
+              weiboList[element.id.toString()]=element;
             }
           });
           setState(() {

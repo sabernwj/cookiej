@@ -1,6 +1,4 @@
 import 'dart:ui';
-
-import 'package:cookiej/cookiej/model/weibo_lite.dart';
 import 'package:cookiej/cookiej/net/search_api.dart';
 import 'package:cookiej/cookiej/page/widget/custom_tabbarview.dart';
 import 'package:cookiej/cookiej/page/widget/no_ink_behavior.dart';
@@ -74,6 +72,8 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                       child:Icon(Icons.search),
                       //点击右上角搜索按钮时
                       onTap: (){
+                        var value=_editingController.text;
+                        if(value==null||value.isEmpty) return;
                         isGetResult=true;
                         setState(() {
                           _tabChildrens=SearchApiType.allType.map((e) => SearchListView(
@@ -92,6 +92,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                   textInputAction: TextInputAction.search,
                   //按下键盘搜索按钮时
                   onSubmitted: (value) async{
+                    if(value==null||value.isEmpty) return;
                     isGetResult=true;
                     setState(() {
                       _tabChildrens=SearchApiType.allType.map((e) => SearchListView(
@@ -168,8 +169,12 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
     );
   }
 
-  Future<List<WeiboLite>> getSearchResultFunction(SearchApiType searchType,int pageIndex) async {
-    var result=await SearchProvider.getSearchResult(_editingController.text,sType: searchType,pageIndex: pageIndex);
+  Future<List<dynamic>> getSearchResultFunction(SearchApiType searchType,int pageIndex) async {
+    var result;
+    if(searchType==SearchApiType.user){
+      result=await SearchProvider.getSearchUserResult(_editingController.text,sType: searchType,pageIndex: pageIndex);
+    }
+    else result=await SearchProvider.getSearchResult(_editingController.text,sType: searchType,pageIndex: pageIndex);
     return result;
   }
 

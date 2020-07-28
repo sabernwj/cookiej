@@ -39,7 +39,7 @@ class UserLite {
 		screenName = json['screen_name'];
 		name = json['name'];
     description = json['description'];
-		followersCount = json['followers_count'];
+		followersCount = (json['followers_count'] is String)?countParse(json['followers_count']):json['followers_count'];
 		friendsCount = json['friends_count'];
 		pagefriendsCount = json['pagefriends_count'];
 		statusesCount = json['statuses_count'];
@@ -76,4 +76,11 @@ class UserLite {
 		data['favourites_count'] = this.favouritesCount;
 		return data;
 	}
+
+  int countParse(String count){
+    count=count.replaceAll(' ', '');
+    count=count.replaceAll('万', '0000');
+    var num=int.tryParse(count);
+    return num;
+  }
 }

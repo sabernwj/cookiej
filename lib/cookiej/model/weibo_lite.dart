@@ -1,4 +1,5 @@
 import 'package:cookiej/cookiej/config/config.dart';
+import 'package:cookiej/cookiej/provider/picture_provider.dart';
 import 'package:cookiej/cookiej/utils/utils.dart';
 
 import 'user_lite.dart';
@@ -63,6 +64,11 @@ class WeiboLite extends Content{
 			picUrls = List<String>();
 			json['pic_urls'].forEach((v) { picUrls.add(v['thumbnail_pic']); });
 		}
+    //此处为对接网页微博做的更改
+    if(json['pics']!=null){
+      picUrls = List<String>();
+      	json['pics'].forEach((v) { picUrls.add(PictureProvider.getImgUrlFromId(v['pid'])); });
+    }
     if(json['retweeted_status']!=null){
       retweetedWeibo=WeiboLite.fromJson(json['retweeted_status']);
       retweetedWeibo.text=retweetedWeibo?.user?.name==null?

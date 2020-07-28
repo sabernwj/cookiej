@@ -48,8 +48,9 @@ class Utils {
   
   ///将数字转化为文字
   static String formatNumToChineseStr(int number){
+    if(number==null) return '';
     if(number>=1000&&number<10000) return '${(number/1000).toStringAsFixed(1)}k';
-    else if(number>=10000) return '${(number/10000).toStringAsFixed(1)}万';
+    else if(number>=10000) return '${(number/10000).toStringAsFixed(0)}万';
     return number.toString();
   }
 
