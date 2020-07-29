@@ -28,6 +28,8 @@
 .pub-cache/
 .pub/
 build/
+key.jks
+key.properties
 
 # Android related
 **/android/**/gradle-wrapper.jar
@@ -71,7 +73,7 @@ build/
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
-.flutter-plugins-dependencies
-.flutter-plugins-dependencies
 ios/Flutter/flutter_export_environment.sh
 assets/data/appkey.json
+
+
