@@ -33,7 +33,9 @@ UI是参照了**Smooth**、**Share**、**微博国际版** 以及个人喜好
     "redirectUri":""
 }
 ```
-没有在官方申请到key的同学，可以使用`assets/data/appkey-n.json`改名`appkey.json`进行测试。
+~~没有在官方申请到key的同学，可以使用`assets/data/appkey-n.json`改名`appkey.json`进行测试。~~  
+在`appkey-n.json`里的key权限较低只能使用有限的测试账号，及更少的功能，如需使用请在issue或其他方式联系我告知你的微博id，我在微博平台后台添加测试账号。
+所以请大家尽量去微博开放平台申请自己的key，
 
 
 
