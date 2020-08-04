@@ -33,6 +33,7 @@ UI是参照了**Smooth**、**Share**、**微博国际版** 以及个人喜好
     "redirectUri":""
 }
 ```
+没有在官方申请到key的同学，可以使用`assets/data/appkey-n.json`改名`appkey.json`进行测试。
 
 
 
