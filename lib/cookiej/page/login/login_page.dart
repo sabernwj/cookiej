@@ -15,9 +15,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
+  CookieManager cookieManager;
+
   @override
   void initState() {
-    var cookieManager=CookieManager.instance();
+    cookieManager=CookieManager.instance();
     cookieManager.deleteAllCookies();
     super.initState();
   }
@@ -31,11 +33,10 @@ class _LoginPageState extends State<LoginPage> {
       body: InAppWebView(
         initialUrl:'https://passport.weibo.cn/signin/login',
         onLoadStart: (controller, url) async {
+
+        },
+        onLoadStop: (controller,url) async {
           print(url);
-          if(url.contains('https://m.weibo.cn/')){
-            controller.stopLoading();
-            controller.loadUrl(url: AccessApi.getOauth2Authorize());
-          }
           if(url.contains('?code=')){
             await controller.stopLoading();
             //登录成功，下面获取access
@@ -45,6 +46,24 @@ class _LoginPageState extends State<LoginPage> {
               // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainPage()));
               Navigator.pop(context);
             }
+          }
+          if(url.contains('https://m.weibo.cn/')){
+            await controller.stopLoading();
+            var cookies=await cookieManager.getCookies(url: 'https://weibo.cn');
+            List<String> cookiesStr=[];
+            cookies.forEach((cookie) {
+              cookiesStr.add('${cookie.name}=${cookie.value}');
+            });
+            var cookieStr='';
+            cookiesStr.forEach((str) { 
+              cookieStr+=str+';';
+            });
+            controller.loadUrl(
+              url: AccessApi.getOauth2Authorize(),
+              headers: {
+                'cookie':cookieStr
+              }
+            );
           }
         },
       ),
