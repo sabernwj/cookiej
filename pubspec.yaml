@@ -50,14 +50,14 @@ dependencies:
 
   #可能会被替换的
   extended_image: ^0.7.3+1 #路人皆知的好用图片扩展
-  extended_text_field: ^1.0.1
+  extended_text_field: ^4.0.0
   hive: ^1.4.1+1  #一个轻量级的数据库
   hive_flutter: ^0.3.0+2
   sqflite: ^1.2.1
   shared_preferences: ^0.5.6+2  
   fluttertoast: ^4.0.0 #弹出消息工具
   flustars: ^0.2.6+1 #包含了一些通用工具类
-  waterfall_flow: any #展示瀑布流的widget
+  waterfall_flow: ^2.0.2 #展示瀑布流的widget
   #flutter_staggered_grid_view: ^0.3.0
   #chewie: ^0.9.10
 

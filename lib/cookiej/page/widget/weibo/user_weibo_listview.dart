@@ -152,7 +152,7 @@ class _UserWeiboListViewState extends State<UserWeiboListView> with WeiboListMix
       padding: EdgeInsets.all(8),
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverWaterfallFlowDelegate(
+      gridDelegate: SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8

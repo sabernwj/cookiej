@@ -18,11 +18,13 @@ class AccessInterceptor extends InterceptorsWrapper{
       print('${access.uid} 已发起请求次数'+httpCount.toString()+':'+options.path);
       //加载cookie
       List<String> listCookieStr= Hive.box(HiveBoxNames.cookie).get(access.uid);
-      var cookieStr='';
-      listCookieStr.forEach((str) { 
-        cookieStr+=str+';';
-      });
-      options.headers['cookie']=cookieStr;
+      if(listCookieStr!=null){
+        var cookieStr='';
+        listCookieStr.forEach((str) { 
+          cookieStr+=str+';';
+        });
+        options.headers['cookie']=cookieStr;
+      }
 
     }
     return options;

@@ -17,6 +17,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+    var cookieManager=CookieManager.instance();
+    cookieManager.deleteAllCookies();
     super.initState();
   }
 
@@ -27,11 +29,16 @@ class _LoginPageState extends State<LoginPage> {
         title: new Text("用户授权"),
       ),
       body: InAppWebView(
-        initialUrl:'https://passport.weibo.cn/signin/login?entry=openapi&r='+Uri.encodeComponent(AccessApi.getOauth2Authorize()),
+        initialUrl:'https://passport.weibo.cn/signin/login',
         onLoadStart: (controller, url) async {
+          print(url);
+          if(url.contains('https://m.weibo.cn/')){
+            controller.stopLoading();
+            controller.loadUrl(url: AccessApi.getOauth2Authorize());
+          }
           if(url.contains('?code=')){
             await controller.stopLoading();
-            //登录成功，获取到code，下面获取access
+            //登录成功，下面获取access
             var provider=await AccessProvider.getAccessNet(Uri.tryParse(url).queryParameters['code']);
             if(provider.success){
               StoreProvider.of<AppState>(context).dispatch(AddNewAccess(provider.data));
@@ -39,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.pop(context);
             }
           }
-        }
+        },
       ),
       resizeToAvoidBottomInset: false,
     );

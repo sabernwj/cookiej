@@ -47,6 +47,7 @@ class _CustomTabBarViewState extends State<CustomTabBarView> {
       itemBuilder: (context, index) {
         return widget.children[index];
       },
+      itemCount: widget.children.length,
     );
   }
 }
