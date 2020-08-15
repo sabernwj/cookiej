@@ -113,8 +113,11 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                   tabs: _tabs,
                   indicatorColor: _theme.selectedRowColor,
                   indicatorPadding: EdgeInsets.symmetric(horizontal:2),
-                  labelPadding: EdgeInsets.symmetric(vertical:6,horizontal:12),
-                  onTap: (value) => _pageController.jumpToPage(value),
+                  labelPadding: EdgeInsets.symmetric(vertical:4,horizontal:12),
+                  onTap: (value){
+                    _focusNode.unfocus();
+                    _pageController.jumpToPage(value);
+                  }
                 )
               )
               :Container()

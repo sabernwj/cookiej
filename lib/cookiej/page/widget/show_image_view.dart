@@ -226,6 +226,7 @@ class _ShowImagesViewState extends State<ShowImagesView>  with TickerProviderSta
       }
     };
     Function _loadStateChanged=(ExtendedImageState state){
+      state.returnLoadStateChangedWidget=true;
       if(state.extendedImageLoadState==LoadState.loading){
         var preImg= ExtendedImage(
           image: PictureProvider.getPictureFromUrl(url,sinaImgSize: SinaImgSize.bmiddle),
@@ -266,6 +267,7 @@ class _ShowImagesViewState extends State<ShowImagesView>  with TickerProviderSta
       heroBuilderForSlidingPage: _heroBuilderForSlidingPage,
       handleLoadingProgress: true,
       cache: true,
+      
     );
   }
 }

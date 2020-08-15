@@ -77,7 +77,7 @@ class PersonalCenter extends StatelessWidget {
                                 children:[
                                   Text(store.state.currentUser.screenName,style: _theme.primaryTextTheme.subtitle1),
                                   InkWell(
-                                    child: Icon(IconData(0xf0d7,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subtitle1.color ,size: 24),
+                                    child: Icon(const IconData(0xf0d7,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subtitle1.color ,size: 24),
                                     onTap: ()async{
                                       final RenderBox textDescription=_displayUserNameKey.currentContext.findRenderObject();
                                       showMenu(
@@ -90,7 +90,7 @@ class PersonalCenter extends StatelessWidget {
                                 ]
                               ),
                               subtitle: Text(store.state.currentUser.description.isEmpty?'\u{3000}':store.state.currentUser.description,key: _displayUserNameKey,style: _theme.primaryTextTheme.subtitle2),
-                              trailing: IconButton(icon: Icon(IconData(0xf105,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subtitle1.color,size: 28,), onPressed: (){
+                              trailing: IconButton(icon: Icon(const IconData(0xf105,fontFamily:CookieJTextStyle.iconFontFamily),color:_theme.primaryTextTheme.subtitle1.color,size: 28,), onPressed: (){
                                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>UserPage(inputUser:store.state.currentUser)));
                               }),
                             ),
@@ -150,7 +150,7 @@ class PersonalCenter extends StatelessWidget {
                     children: <Widget>[
                     _buildExpandedItem(Icons.star, Colors.yellow[700], '收藏', _theme),
                     _buildExpandedItem(Icons.supervised_user_circle, Colors.blue[400], '我的好友', _theme),
-                    _buildExpandedItem(IconData(0x23), Colors.orange[700], '关注的话题', _theme),
+                    _buildExpandedItem(const IconData(0x23), Colors.orange[700], '关注的话题', _theme),
                     _buildExpandedItem(FontAwesomeIcons.qrcode, Colors.blue[400], '扫一扫', _theme,size: 28),
                     _buildExpandedItem(Icons.history, Colors.teal[300], '浏览历史', _theme),
                     _buildExpandedItem(FontAwesomeIcons.envelopeOpen, Colors.purple, '草稿箱', _theme,size: 23),

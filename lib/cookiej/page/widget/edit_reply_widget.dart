@@ -146,7 +146,7 @@ class _EditReplyWidgetState extends State<EditReplyWidget> {
                         //话题
                         CustomButton(
                           height: 48,width: 48,
-                          child: Icon(IconData(0x0023),color: _theme.primaryColor,),
+                          child: Icon(const IconData(0x0023),color: _theme.primaryColor,),
                           padding: EdgeInsets.all(0),
                           shape: Border(),
                           onTap: (){

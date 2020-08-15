@@ -47,7 +47,7 @@ class _TrendPageState extends State<TrendPage> with AutomaticKeepAliveClientMixi
                   children:[
                     _buildExpandedItem(Icons.map, Colors.teal[300], '疫情地图', _theme,size: 26),
                     _buildExpandedItem(Icons.location_on, Colors.blue[400], '同城', _theme),
-                    _buildExpandedItem(IconData(0xf219,fontFamily: CookieJTextStyle.iconFontFamily), Colors.orange[700], '超级话题', _theme,size: 23),
+                    _buildExpandedItem(const IconData(0xf219,fontFamily: CookieJTextStyle.iconFontFamily), Colors.orange[700], '超级话题', _theme,size: 23),
                     _buildExpandedItem(FontAwesomeIcons.chartBar, Colors.red[400], '榜单', _theme,size: 23)
                   ]
                 )

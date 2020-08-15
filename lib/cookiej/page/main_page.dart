@@ -36,7 +36,7 @@ class _MainPageState extends State<MainPage> {
             body:store.state.accessState.currentAccess==null?
               Center(
                   child:RaisedButton.icon(
-                    icon: Icon(IconData(0xf18a,fontFamily: CookieJTextStyle.iconFontFamily),size: 24),
+                    icon: Icon(const IconData(0xf18a,fontFamily: CookieJTextStyle.iconFontFamily),size: 24),
                     label: Text('去登录',style: TextStyle(fontSize:18),),
                     onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
@@ -78,7 +78,7 @@ class _MainPageState extends State<MainPage> {
                     elevation: 0,
                     items: <BottomNavigationBarItem>[
                       BottomNavigationBarItem(
-                        icon: Icon(IconData(0xf2da,fontFamily: CookieJTextStyle.iconFontFamily),size: 27,),
+                        icon: Icon(const IconData(0xf2da,fontFamily: CookieJTextStyle.iconFontFamily),size: 27,),
                         title: Container()
                       ),
                       BottomNavigationBarItem(
