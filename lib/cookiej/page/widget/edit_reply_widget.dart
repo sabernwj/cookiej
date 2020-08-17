@@ -8,7 +8,7 @@ import 'package:extended_text_field/extended_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 class EditReplyWidget extends StatefulWidget {
@@ -37,8 +37,8 @@ class _EditReplyWidgetState extends State<EditReplyWidget> {
   @override
   void initState() {
     super.initState();
-    KeyboardVisibilityNotification().addNewListener(
-      onChange: (bool visible) {
+    KeyboardVisibility.onChange.listen(
+      (bool visible) {
         setState(() {
           // isKeyboardShow=visible??isKeyboardShow;
           if(visible!=null&&isKeyboardShow!=visible){

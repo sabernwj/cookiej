@@ -42,12 +42,18 @@ class _WeiboPageState extends State<WeiboPage>{
                     mainAxisAlignment: MainAxisAlignment.center,
                     children:[
                       SizedBox(height: 16),
-                      Text(snapshot.error.toString()),
+                      Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.symmetric(horizontal:6),
+                        child:Text(snapshot.error.toString()),
+                      ),
                       SizedBox(height: 16),
                       RaisedButton(
                         child: Text('刷新试试'),
                         onPressed: (){
-                          weiboTask =WeiboProvider.getStatusesShow(widget.weiboId);
+                          setState(() {
+                            weiboTask =WeiboProvider.getStatusesShow(widget.weiboId);
+                          });
                         }
                       ),
                       SizedBox(height: 16),

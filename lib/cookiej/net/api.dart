@@ -78,6 +78,9 @@ class API{
 
   static void dioErrorHandle(DioError e){
     var msg='未知HttpErrorMsg';
+    if(e.response==null){
+      return;
+    }
     switch(e.response.statusCode){
       case 400:
         switch((e.response.data as Map)['error_code']){

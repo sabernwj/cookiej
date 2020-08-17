@@ -35,7 +35,7 @@ dependencies:
   flutter_redux: ^0.6.0
   redux: ^4.0.0 
   path_provider: ^1.6.5 #使用文件夹路径之类的
-  keyboard_visibility: any #检测软键盘状态的插件
+  flutter_keyboard_visibility: ^3.2.1 #检测软键盘状态的插件
   multi_image_picker: ^4.6.6+rc.1 #图片选择插件
   video_player: ^0.10.9+1 #FlutterDev提供的视频播放插件
   auto_orientation: ^1.0.6 #控制横竖屏
@@ -53,8 +53,8 @@ dependencies:
     git:
       url: https://gitee.com/ihearyou/extended_image_nwj.git
   extended_text_field: ^4.0.0
-  hive: ^1.4.1+1  #一个轻量级的数据库
-  hive_flutter: ^0.3.0+2
+  hive: ^1.4.3  #一个轻量级的数据库
+  hive_flutter: ^0.3.1
   sqflite: ^1.2.1
   shared_preferences: ^0.5.6+2  
   fluttertoast: ^4.0.0 #弹出消息工具

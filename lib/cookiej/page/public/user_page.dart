@@ -219,43 +219,43 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
   });
 
   ///展开时渐渐显示，适用于输入不带透明度的颜色
-  Color showInExpand(Color color,double shrinkOffset){
-    final int alpha = (percentWithExpand(shrinkOffset) * 255).clamp(0, 255).toInt();
+  Color showInExpand(Color color){
+    final int alpha = (percentExpand * 255).clamp(0, 255).toInt();
     return Color.fromARGB(alpha, color.red, color.green, color.blue);
   }
   ///收缩时渐渐显示，适用于输入不带透明度的颜色
-  Color showInCollapse(Color color,double shrinkOffset){
-    final int alpha = (percentWithCollapse(shrinkOffset) * 255).clamp(0, 255).toInt();
+  Color showInCollapse(Color color){
+    final int alpha = (percentCollapse * 255).clamp(0, 255).toInt();
     return Color.fromARGB(alpha, color.red, color.green, color.blue);
   }
 
-  double getBlurValue(double shrinkOffset){
-    return percentWithCollapse(shrinkOffset)*10 ;
+  double getBlurValue(){
+    return percentCollapse*10 ;
   }
 
-  ///扩张时0->1
-  double percentWithExpand(double shrinkOffset){
-    return (this.maxExtent - this.minExtent-shrinkOffset)/(this.maxExtent - this.minExtent);
-  }
 
   ///收缩时0->1
-  double percentWithCollapse(double shrinkOffset){
+  double percentWithCollapseFunction(double shrinkOffset){
     return shrinkOffset/(this.maxExtent - this.minExtent);
   }
 
-  double getIconSize(double shrinkOffset,double iconSize){
-    return (percentWithExpand(shrinkOffset)*0.5+0.5)*iconSize;
+  double getIconSize(double percentWithExpand,double iconSize){
+    return (percentWithExpand*0.5+0.5)*iconSize;
   }
+
+  ///扩张时0->1
+  double get percentExpand=>1-percentCollapse;
+  double percentCollapse=1;
+
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     final store=StoreProvider.of<AppState>(context);
     shrinkOffset=shrinkOffset.clamp(0, maxExtent-minExtent);
     final _theme=Theme.of(context);
-    final _percentWithCollapse=percentWithCollapse(shrinkOffset);
-    final _percentWithExpand=percentWithExpand(shrinkOffset);
+    percentCollapse=percentWithCollapseFunction(shrinkOffset);
     final iconUrl=PictureProvider.getImgUrlFromId(user.iconId);
-    return Stack(
+    Widget widget= Stack(
       fit: StackFit.expand,
       children: <Widget>[
         //背景图
@@ -264,21 +264,19 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
           fit: BoxFit.cover,
         ),
         //模糊遮罩
-        Positioned(
-          left: 0,right: 0,top: 0,
-          child: BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: getBlurValue(shrinkOffset),
-              sigmaY: getBlurValue(shrinkOffset)
-            ),
-            child: Container(
-              height:maxExtent,
-              width: MediaQuery.of(context).size.width,
-              color: Colors.black12,
-            ),
-          )
-        ),
-
+        // Positioned.fill(
+        //   left: 0,right: 0,top: 0,bottom: 0,
+        //   child: BackdropFilter(
+        //     filter: ImageFilter.blur(
+        //       sigmaX: getBlurValue(),
+        //       sigmaY: getBlurValue()
+        //     ),
+        //     child: Container(
+        //       color: Colors.black12,
+        //     ),
+        //   )
+        // ),
+        Positioned.fill(child: Container(color: Colors.black12,)),
 
         //顶栏
          SafeArea(
@@ -291,11 +289,11 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Offstage(
-                        offstage: percentWithCollapse(shrinkOffset)==1,
+                        offstage: percentCollapse==1,
                         child:IconButton(
                           icon: Icon(
                             Icons.arrow_back,
-                            color: showInExpand(_theme.primaryTextTheme.subtitle1.color, shrinkOffset),	
+                            color: showInExpand(_theme.primaryTextTheme.subtitle1.color),
                           ),
                           onPressed: () => Navigator.pop(context),
                         ),
@@ -320,7 +318,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
             mainAxisAlignment: MainAxisAlignment.end,
             children:[
               Container(
-                padding: EdgeInsets.only(left:(10+6*_percentWithExpand),right: 16+_percentWithCollapse*32),
+                padding: EdgeInsets.only(left:(10+6*percentExpand),right: 16+percentCollapse*32),
                 child:Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   //头像
@@ -338,12 +336,12 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                               tag: iconUrl,
                                 child: SizedBox(
                                 child: CircleAvatar(backgroundImage: PictureProvider.getPictureFromUrl(iconUrl),radius: 20),
-                                width: getIconSize(shrinkOffset,64),height:getIconSize(shrinkOffset,64),
+                                width: getIconSize(percentExpand,64),height:getIconSize(percentExpand,64),
                               ),
                             )
                           ),
                         Offstage(
-                          offstage: _percentWithCollapse!=1,
+                          offstage: percentCollapse!=1,
                           child:Container(
                             margin: EdgeInsets.only(left:20),
                             child: Text(
@@ -361,11 +359,11 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
                         children: <Widget>[
                           CustomButton(
                             child: Icon(Icons.email,color: _theme.primaryTextTheme.bodyText1.color),
-                            color: showInExpand(_theme.primaryColor, shrinkOffset),
+                            color: showInExpand(_theme.primaryColor),
                             onTap: (){},
                           ),
                           CustomButton(
-                            color: showInExpand(_theme.primaryColor, shrinkOffset),
+                            color: showInExpand(_theme.primaryColor),
                             child: Text(
                               (user==null||user.followMe==null||user.following==null)?''
                               :(user.followMe&&user.following)?'互相关注'
@@ -386,7 +384,7 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
               //随着滑动而被遮盖的部分
               Container(
                 key: overflowWidgetKey,
-                height: overflowWidgetSize==null?null:(overflowWidgetSize*_percentWithExpand),
+                height: overflowWidgetSize==null?null:(overflowWidgetSize*percentExpand),
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 //此处包一层scollview是为了反正overflow的警告
                 child:SingleChildScrollView(
@@ -438,7 +436,11 @@ class UserPageHeaderDelegate extends SliverPersistentHeaderDelegate{
         )
       ],
     );
-    
+    widget = ClipRect(
+      child: widget,
+      clipBehavior: Clip.hardEdge,
+    );
+    return widget;
   }
 
   @override

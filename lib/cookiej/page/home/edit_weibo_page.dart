@@ -7,7 +7,7 @@ import 'package:cookiej/cookiej/provider/access_provider.dart';
 import 'package:cookiej/cookiej/provider/emotion_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:cookiej/cookiej/page/widget/emotion_panel.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -44,8 +44,8 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
         API.httpClientSend.interceptors.add(AccessInterceptor(result.data.currentAccess));
       }
     }).catchError((e)=>print(e));
-    KeyboardVisibilityNotification().addNewListener(
-      onChange: (bool visible) {
+    KeyboardVisibility.onChange.listen(
+      (bool visible) {
         setState(() {
           // isKeyboardShow=visible??isKeyboardShow;
           if(visible!=null&&isKeyboardShow!=visible){

@@ -45,6 +45,8 @@ class _CookieJState extends State<CookieJAPP> {
             title: '饼干酱',
             home: BootPage(),
             theme: store.state.themeState.themeData,
+            //checkerboardOffscreenLayers: true,
+            //checkerboardRasterCacheImages: true,
           );
         },
       )

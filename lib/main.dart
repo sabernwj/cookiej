@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
+  //debugProfileBuildsEnabled=true;
   runZoned((){
     WidgetsFlutterBinding.ensureInitialized();
     runApp(CookieJ());

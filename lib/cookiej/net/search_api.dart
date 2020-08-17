@@ -30,7 +30,7 @@ class SearchApi{
     };
     url=Utils.formatUrlParams(url, params);
     var res=await API.get(url);
-    return res.data;
+    return res?.data;
   }
   
 

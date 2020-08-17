@@ -113,7 +113,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
                   tabs: _tabs,
                   indicatorColor: _theme.selectedRowColor,
                   indicatorPadding: EdgeInsets.symmetric(horizontal:2),
-                  labelPadding: EdgeInsets.symmetric(vertical:4,horizontal:12),
+                  labelPadding: EdgeInsets.only(top:6, bottom: 4,left: 12,right: 12),
                   onTap: (value){
                     _focusNode.unfocus();
                     _pageController.jumpToPage(value);
@@ -128,10 +128,15 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
       ),
       //下面主体部分，上面代码是顶部固定的
       body: isGetResult
-      ?CustomTabBarView(
-        tabController: _tabController,
-        pageController: _pageController,
-        children: _tabChildrens,
+      ?GestureDetector(
+        onTapDown:(details){
+          _focusNode.unfocus();
+        },
+        child:CustomTabBarView(
+          tabController: _tabController,
+          pageController: _pageController,
+          children: _tabChildrens,
+        )
       )
       :Container(
         color: _theme.dialogBackgroundColor,
@@ -184,8 +189,8 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
 
 
   double appbarHeight(){
-    if(isGetResult) return 84;
-    else return 48;
+    if(isGetResult) return 80;
+    else return 52;
   }
 
   Widget _buildGridItem(List<Widget> children,{Function onTap}){

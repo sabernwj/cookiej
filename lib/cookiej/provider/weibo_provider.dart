@@ -142,7 +142,7 @@ class WeiboProvider{
         return ProviderResult(weibo,true);
       })
       .catchError((e){
-          throw e;
+          throw '获取微博失败';
         }
       );
     return result;

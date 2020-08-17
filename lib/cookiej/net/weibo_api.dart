@@ -81,7 +81,7 @@ class WeiboApi{
       params.addAll(extraParams);
     }
     final result=await API.get(Utils.formatUrlParams(url, params));
-    return result.data;
+    return result?.data;
   }
   
   ///获取转发的微博
