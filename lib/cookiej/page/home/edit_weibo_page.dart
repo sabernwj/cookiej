@@ -54,7 +54,6 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
         });
       },
     );
-  
   }
 
   @override
@@ -312,6 +311,9 @@ class _EditWeiboPageState extends State<EditWeiboPage> {
     catch(e){
       if(e is NoImagesSelectedException) return;
       print('打开相册发生错误${e.toString()}');
+    }finally{
+      // _textFieldNode.requestFocus();
+      // SystemChannels.textInput.invokeMethod('TextInput.show');
     }
   }
 

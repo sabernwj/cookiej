@@ -154,7 +154,7 @@ class PersonalCenter extends StatelessWidget {
                     _buildExpandedItem(FontAwesomeIcons.qrcode, Colors.blue[400], '扫一扫', _theme,size: 28),
                     _buildExpandedItem(Icons.history, Colors.teal[300], '浏览历史', _theme),
                     _buildExpandedItem(FontAwesomeIcons.envelopeOpen, Colors.purple, '草稿箱', _theme,size: 23),
-                     _buildExpandedItem(Icons.location_on, Colors.red[400], '附近的微博', _theme),
+                    _buildExpandedItem(Icons.location_on, Colors.red[400], '附近的微博', _theme),
                     _buildExpandedItem(Icons.more_horiz, Colors.blueGrey, '更多', _theme),
                     
                     ],

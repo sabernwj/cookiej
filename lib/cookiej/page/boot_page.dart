@@ -52,10 +52,10 @@ class _BootPageState extends State<BootPage> {
       .then((_)=>Hive.initFlutter())
       .then((_)=>UrlProvider.init())
       .then((_)=>PictureProvider.init())
-      .then((_) => Hive.openBox(HiveBoxNames.cookie))
+      .then((_)=>Hive.openBox(HiveBoxNames.cookie))
       .then((_)=>WeiboProvider.init())
       .then((_)=>store.dispatch(InitAccessState()))
-      .then((_) => print('初始化完成'))
+      .then((_)=>print('初始化完成'))
       .then((_){
         Future.delayed(Duration(milliseconds: 500),(){
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainPage()));

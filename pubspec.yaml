@@ -36,7 +36,7 @@ dependencies:
   redux: ^4.0.0 
   path_provider: ^1.6.5 #使用文件夹路径之类的
   flutter_keyboard_visibility: ^3.2.1 #检测软键盘状态的插件
-  multi_image_picker: ^4.6.6+rc.1 #图片选择插件
+  multi_image_picker: ^4.7.13 #图片选择插件
   video_player: ^0.10.9+1 #FlutterDev提供的视频播放插件
   auto_orientation: ^1.0.6 #控制横竖屏
   screen: ^0.0.5  #屏幕亮度
