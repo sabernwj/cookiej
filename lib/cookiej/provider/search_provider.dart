@@ -26,25 +26,9 @@ class SearchProvider{
     var res= await SearchApi.getSearchResult(sType.id, keyword,pageIndex.toString());
     if(res['ok']!=1) return null;
     List rawList=res['data']['cards'];
-    //List tmpList=[];
     List<WeiboLite> weiboList=[];
-    // rawList.forEach((e){
-    //   if(e['card_type']==11){
-    //     e['card_group'].forEach((ele){
-
-    //     });
-    //     tmpList.addAll(e['card_group']);
-    //   }
-    // });
-    // rawList.addAll(tmpList);
-    // rawList.forEach((element) {
-    //   if(element['card_type']==9){
-    //     var weiboLite=WeiboLite.fromJson(element['mblog']);
-    //     weiboList.add(weiboLite);
-    //   }
-    // });
-    await UrlProvider.saveUrlInfoToHive(weiboList);
     dfsMap(rawList,weiboList);
+    await UrlProvider.saveUrlInfoToHive(weiboList);
     return weiboList;
   }
 

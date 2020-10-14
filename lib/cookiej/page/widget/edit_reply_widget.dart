@@ -131,7 +131,7 @@ class _EditReplyWidgetState extends State<EditReplyWidget> {
                         //@
                         CustomButton(
                           height: 48,width: 48,
-                          child: Icon(Icons.alternate_email,color: _theme.primaryColor,),
+                          child: Icon(Icons.alternate_email,color: _theme.primaryTextTheme.bodyText2.color),
                           padding: EdgeInsets.all(0),
                           shape: Border(),
                           onTap: (){
@@ -146,7 +146,7 @@ class _EditReplyWidgetState extends State<EditReplyWidget> {
                         //话题
                         CustomButton(
                           height: 48,width: 48,
-                          child: Icon(const IconData(0x0023),color: _theme.primaryColor,),
+                          child: Icon(const IconData(0x0023), color: _theme.primaryTextTheme.bodyText2.color),
                           padding: EdgeInsets.all(0),
                           shape: Border(),
                           onTap: (){
@@ -161,7 +161,7 @@ class _EditReplyWidgetState extends State<EditReplyWidget> {
                         //表情
                         CustomButton(
                           height: 48,width: 48,
-                          child: Icon(isKeyboardShow?Icons.tag_faces:Icons.keyboard,color: _theme.primaryColor,),
+                          child: Icon(isKeyboardShow?Icons.tag_faces:Icons.keyboard,color: _theme.primaryTextTheme.bodyText2.color),
                           padding: EdgeInsets.all(0),
                           shape: Border(),
                           onTap: (){
@@ -187,7 +187,7 @@ class _EditReplyWidgetState extends State<EditReplyWidget> {
                     //发送按键
                     CustomButton(
                       height: 48,width: 48,
-                      child: Icon(Icons.send,color: _theme.primaryColor,),
+                      child: Icon(Icons.send,color: _theme.primaryTextTheme.bodyText2.color),
                       padding: EdgeInsets.all(0),
                       shape: Border(),
                       onTap: () async {
