@@ -5,10 +5,6 @@ import 'package:cookiej/app/utils/utils.dart';
 import 'package:cookiej/cookiej/net/api.dart';
 
 class UserRepository {
-  //获取Token
-
-  //存储Token
-
   //获取用户信息
   static Future<User> getUserInfo({String uid, String screenName}) async {
     var url = '/2/users/show.json';
@@ -23,6 +19,7 @@ class UserRepository {
     }
   }
 
+  /// 获取关注的人
   static Future<List<User>> getFriends({String uid, String screenName}) async {
     var url = '/2/friendships/friends.json';
     var params = <String, String>{};
@@ -36,6 +33,7 @@ class UserRepository {
     }
   }
 
+  /// 获取粉丝
   static Future<List<User>> getFollowers(
       {String uid, String screenName}) async {
     var url = '/2/friendships/followers.json';
@@ -50,6 +48,7 @@ class UserRepository {
     }
   }
 
+  /// 获取分组信息
   static Future<List<Group>> getGroups() async {
     var url = '/2/friendships/groups.json';
     var jsonRes = (await API.get(url)).data;
