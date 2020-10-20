@@ -1,5 +1,5 @@
 import 'package:connectivity/connectivity.dart';
-import 'package:cookiej/app/service/error/net_error.dart';
+import 'package:cookiej/app/service/error/app_error.dart';
 import 'package:dio/dio.dart';
 
 class API {
@@ -32,7 +32,7 @@ class API {
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       // 无网络情况下直接抛出无网络异常
-      throw (NetErrorType.NoConnectionError);
+      throw (AppErrorType.NoConnectionError);
     }
     var dio = httpClientReceive;
     try {
@@ -42,7 +42,7 @@ class API {
           cancelToken: cancelToken,
           onReceiveProgress: onReceiveProgress);
     } on DioError catch (e) {
-      throw (netErrorHandle(e));
+      throw (appErrorHandle(e));
     }
   }
 
@@ -65,32 +65,32 @@ class API {
           onSendProgress: onSendProgress,
           onReceiveProgress: onReceiveProgress);
     } on DioError catch (e) {
-      throw netErrorHandle(e);
+      throw appErrorHandle(e);
     }
   }
 }
 
 /// 统一处理Dio错误
-NetError netErrorHandle(DioError e) {
+AppError appErrorHandle(DioError e) {
   // 超时异常
   if (e.type == DioErrorType.CONNECT_TIMEOUT) {
-    throw NetError(NetErrorType.TimeoutError);
+    throw AppError(AppErrorType.TimeoutError);
   }
   // 其他异常
   else if (e.type == DioErrorType.DEFAULT) {
-    throw NetError(NetErrorType.OtherError);
+    throw AppError(AppErrorType.OtherError);
   }
   // 可细分的Response异常
   switch (e.response.statusCode) {
     case 400:
-      throw NetError(NetErrorType.OtherError);
+      throw AppError(AppErrorType.OtherError);
       break;
     // 应该是接口权限不足
     case 403:
-      throw NetError(NetErrorType.PermissionError);
+      throw AppError(AppErrorType.PermissionError);
       break;
     default:
-      throw NetError(NetErrorType.OtherError,
+      throw AppError(AppErrorType.OtherError,
           message: e.response.data.toString());
       break;
   }
