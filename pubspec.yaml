@@ -47,6 +47,8 @@ dependencies:
   audioplayers: ^0.15.1 #音频播放
   flutter_swiper: ^1.1.6 #轮播图
 
+  provider: ^4.3.2+2
+
 
   #可能会被替换的
   extended_image: 
