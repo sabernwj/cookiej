@@ -1,7 +1,8 @@
 class Access {
   String uid;
   String accessToken;
-  Access({this.uid, this.accessToken});
+  List<String> cookieStrs;
+  Access({this.uid, this.accessToken, this.cookieStrs});
   Access.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
     accessToken = json['access_token'];

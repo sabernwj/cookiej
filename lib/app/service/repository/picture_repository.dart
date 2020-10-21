@@ -1,11 +1,11 @@
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookiej/app/config/config.dart';
+import 'package:cookiej/app/service/db/hive_service.dart';
 import 'package:cookiej/app/utils/utils.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'dart:async';
 
 class PictureRepository {
   /// 均衡发给新浪服务器的图片请求
@@ -15,11 +15,7 @@ class PictureRepository {
 
   /// 记录某ID图片使用哪个服务器的使用记录，才能正确使用根据url缓存的图片
   static Map<String, String> _imgIdServerCache = new Map();
-  static Box<String> _imgIdBox;
-
-  static Future<void> init() async {
-    _imgIdBox = await Hive.openBox('img_id_box');
-  }
+  static Box<String> _imgIdBox = HiveService.imgIdBox;
 
   static String _getImgServer() {
     if (_currentServer == null || _serverUseCount > 200) {
