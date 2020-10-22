@@ -8,13 +8,13 @@ part of 'weibo_lite.dart';
 
 class WeiboLiteAdapter extends TypeAdapter<WeiboLite> {
   @override
-  final typeId = 0;
+  final int typeId = 6;
 
   @override
   WeiboLite read(BinaryReader reader) {
-    var numOfFields = reader.readByte();
-    var fields = <int, dynamic>{
-      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return WeiboLite(
       idstr: fields[5] as String,
@@ -64,4 +64,14 @@ class WeiboLiteAdapter extends TypeAdapter<WeiboLite> {
       ..writeByte(12)
       ..write(obj.picUrls);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is WeiboLiteAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

@@ -1,38 +1,42 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'weibos.dart';
+part of 'access.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class WeibosAdapter extends TypeAdapter<Weibos> {
+class AccessAdapter extends TypeAdapter<Access> {
   @override
-  final int typeId = 1;
+  final int typeId = 0;
 
   @override
-  Weibos read(BinaryReader reader) {
+  Access read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Weibos(
-      statuses: (fields[0] as List)?.cast<WeiboLite>(),
-      sinceId: fields[1] as int,
-      maxId: fields[2] as int,
-    );
+    return Access(
+      uid: fields[0] as String,
+      accessToken: fields[1] as String,
+      cookieStrs: (fields[2] as List)?.cast<String>(),
+    )..groupIdNames = (fields[3] as List)
+        ?.map((dynamic e) => (e as Map)?.cast<String, String>())
+        ?.toList();
   }
 
   @override
-  void write(BinaryWriter writer, Weibos obj) {
+  void write(BinaryWriter writer, Access obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.statuses)
+      ..write(obj.uid)
       ..writeByte(1)
-      ..write(obj.sinceId)
+      ..write(obj.accessToken)
       ..writeByte(2)
-      ..write(obj.maxId);
+      ..write(obj.cookieStrs)
+      ..writeByte(3)
+      ..write(obj.groupIdNames);
   }
 
   @override
@@ -41,7 +45,7 @@ class WeibosAdapter extends TypeAdapter<Weibos> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is WeibosAdapter &&
+      other is AccessAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

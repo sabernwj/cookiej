@@ -1,10 +1,11 @@
 import 'package:cookiej/app/config/config.dart';
+import 'package:cookiej/app/service/db/hive_service.dart';
 import 'package:hive/hive.dart';
 import 'package:cookiej/app/model/local/weibo_lite.dart';
 
 part 'weibos.g.dart';
 
-@HiveType(typeId: CookieJHiveType.Weibos)
+@HiveType(typeId: HiveBoxType.weibosBox)
 class Weibos {
   @HiveField(0)
   List<WeiboLite> statuses;
@@ -15,11 +16,11 @@ class Weibos {
   int interval;
   int uveBlank;
 
-  ///若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博）
+  /// 若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博）
   @HiveField(1)
   int sinceId;
 
-  ///若指定此参数，则返回ID小于或等于max_id的微博
+  /// 若指定此参数，则返回ID小于或等于max_id的微博
   @HiveField(2)
   int maxId;
   int hasUnread;
@@ -41,5 +42,14 @@ class Weibos {
     jsonRes['statuses'].forEach((v) {
       statuses.add(WeiboLite.fromJson(v));
     });
+  }
+
+  ///生成存储微博到hive的key
+  static String generateHiveWeibosKey(
+      WeiboTimelineType timelineType, String uid,
+      {String groupId}) {
+    var key = '$uid.${timelineType.toStringNew()}.${groupId ?? ''}';
+    print(key);
+    return key;
   }
 }

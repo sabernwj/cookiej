@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
-import 'package:cookiej/app/config/config.dart';
-
 class Utils {
   static const String urlRegexStr =
       "((ht|f)tp(s?):\\/\\/|www\\.)(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*\$~@!:/{};']*)";
@@ -70,15 +68,6 @@ class Utils {
     params.forEach((k, v) => url += "$k=$v&");
     url = url.substring(0, url.length - 1);
     return url;
-  }
-
-  ///生成存储微博到hive的key
-  static String generateHiveWeibosKey(
-      WeiboTimelineType timelineType, String uid,
-      {String groupId}) {
-    var key = '$uid.${timelineType.toStringNew()}.${groupId ?? ''}';
-    print(key);
-    return key;
   }
 
   static void defaultToast(String str) {

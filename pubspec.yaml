@@ -55,7 +55,7 @@ dependencies:
     git:
       url: https://gitee.com/ihearyou/extended_image_nwj.git
   extended_text_field: ^4.0.0
-  hive: ^1.4.3  #一个轻量级的数据库
+  hive: ^1.4.4+1  #一个轻量级的数据库
   hive_flutter: ^0.3.1
   sqflite: ^1.2.1
   shared_preferences: ^0.5.6+2  
@@ -71,8 +71,8 @@ dev_dependencies:
     sdk: flutter
   # floor_generator: ^0.11.0
   # build_runner: ^1.7.3
-  # hive_generator: ^0.7.0+2
-  build_runner: ^1.8.0
+  hive_generator: ^0.8.1
+  build_runner: ^1.10.3
   
 
 

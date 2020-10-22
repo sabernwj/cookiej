@@ -1,4 +1,4 @@
-import 'package:cookiej/app/config/config.dart';
+import 'package:cookiej/app/service/db/hive_service.dart';
 import 'package:cookiej/app/service/repository/picture_repository.dart';
 import 'package:cookiej/app/utils/utils.dart';
 
@@ -8,7 +8,7 @@ import 'package:hive/hive.dart';
 
 part 'weibo_lite.g.dart';
 
-@HiveType(typeId: CookieJHiveType.WeiboLite)
+@HiveType(typeId: HiveBoxType.weiboLiteType)
 class WeiboLite extends Content {
   @HiveField(0)
   int id;

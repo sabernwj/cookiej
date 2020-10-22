@@ -1,7 +1,19 @@
+import 'package:cookiej/app/service/db/hive_service.dart';
+import 'package:hive/hive.dart';
+
+part 'access.g.dart';
+
+@HiveType(typeId: HiveBoxType.accessBox)
 class Access {
+  @HiveField(0)
   String uid;
+  @HiveField(1)
   String accessToken;
+  @HiveField(2)
   List<String> cookieStrs;
+  @HiveField(3)
+  List<Map<String, String>> groupIdNames;
+
   Access({this.uid, this.accessToken, this.cookieStrs});
   Access.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];

@@ -8,13 +8,13 @@ part of 'user_lite.dart';
 
 class UserLiteAdapter extends TypeAdapter<UserLite> {
   @override
-  final typeId = 1;
+  final int typeId = 3;
 
   @override
   UserLite read(BinaryReader reader) {
-    var numOfFields = reader.readByte();
-    var fields = <int, dynamic>{
-      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return UserLite(
       id: fields[0] as int,
@@ -61,4 +61,14 @@ class UserLiteAdapter extends TypeAdapter<UserLite> {
       ..writeByte(11)
       ..write(obj.favouritesCount);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserLiteAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
