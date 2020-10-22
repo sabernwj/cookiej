@@ -7,8 +7,6 @@ import 'package:cookiej/app/model/local/access.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class AccessRepository {
-  static final _baseUrl = Config.baseUrl;
-
   static final _accessBox = HiveService.accessBox;
 
   /// 获取本地存储的所有Access
@@ -23,7 +21,7 @@ class AccessRepository {
 
   /// 获取用户登陆页面地址
   static String getOauth2Authorize() {
-    var url = '$_baseUrl/oauth2/authorize';
+    var url = 'oauth2/authorize';
     var params = {
       "client_id": Config.appkey_0,
       "redirect_uri": Config.redirectUri_0,
@@ -37,7 +35,7 @@ class AccessRepository {
 
   /// 获取access
   static Future<Access> getAccessFromNet(String code) async {
-    var url = '$_baseUrl/oauth2/access_token';
+    var url = 'oauth2/access_token';
     var params = {
       "client_id": Config.appkey_0,
       "client_secret": Config.appSecret_0,

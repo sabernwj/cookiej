@@ -1,9 +1,10 @@
 import 'package:connectivity/connectivity.dart';
+import 'package:cookiej/app/config/config.dart';
 import 'package:cookiej/app/service/error/app_error.dart';
 import 'package:dio/dio.dart';
 
 class API {
-  static const baseUrl = '';
+  static const baseUrl = Config.baseUrl;
 
   static Dio _dioSend;
   static Dio _dioReceive;

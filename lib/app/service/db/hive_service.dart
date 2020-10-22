@@ -3,12 +3,12 @@ import 'package:cookiej/app/model/local/local_config.dart';
 import 'package:cookiej/app/model/local/user_lite.dart';
 import 'package:cookiej/app/model/local/weibo_lite.dart';
 import 'package:cookiej/app/model/local/weibos.dart';
-import 'package:cookiej/cookiej/model/url_info.dart';
+import 'package:cookiej/app/model/url_info.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveService {
-  static Box<UrlInfo> urlInfoBox;
+  static LazyBox<UrlInfo> urlInfoBox;
   static Box<LocalConfig> localConfigBox;
   static Box<String> pictureServerBox;
   static Box<Access> accessBox;
@@ -17,7 +17,7 @@ class HiveService {
 
   static Future<void> init() async {
     await Hive.initFlutter();
-    urlInfoBox = await Hive.openBox('url_info_box');
+    urlInfoBox = await Hive.openLazyBox('url_info_box');
     pictureServerBox = await Hive.openBox('pciture_server_box');
     accessBox = await Hive.openBox('access_box');
     weibosBox = await Hive.openLazyBox('weibos_box');
