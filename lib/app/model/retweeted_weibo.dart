@@ -1,7 +1,5 @@
-import 'weibo_lite.dart';
+import './local/weibo_lite.dart';
 
-
-class RetweetedWeibo{
-
+class RetweetedWeibo {
   WeiboLite rWeibo;
 }

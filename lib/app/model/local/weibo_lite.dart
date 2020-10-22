@@ -3,7 +3,7 @@ import 'package:cookiej/app/service/repository/picture_repository.dart';
 import 'package:cookiej/app/utils/utils.dart';
 
 import 'user_lite.dart';
-import 'content.dart';
+import '../content.dart';
 import 'package:hive/hive.dart';
 
 part 'weibo_lite.g.dart';

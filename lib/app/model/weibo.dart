@@ -1,4 +1,4 @@
-import 'package:cookiej/app/model/weibo_lite.dart';
+import 'package:cookiej/app/model/local/weibo_lite.dart';
 
 import 'annotations.dart';
 import 'comment_manage_info.dart';

@@ -3,7 +3,7 @@ import 'package:cookiej/app/service/db/hive_service.dart';
 import 'package:cookiej/app/service/error/app_error.dart';
 import 'package:cookiej/app/service/net/api.dart';
 import 'package:cookiej/app/utils/utils.dart';
-import 'package:cookiej/app/model/access.dart';
+import 'package:cookiej/app/model/local/access.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class AccessRepository {

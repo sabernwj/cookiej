@@ -1,4 +1,4 @@
-import 'package:cookiej/app/model/user_lite.dart';
+import 'package:cookiej/app/model/local/user_lite.dart';
 import 'package:cookiej/app/service/repository/picture_repository.dart';
 import 'package:flutter/material.dart';
 

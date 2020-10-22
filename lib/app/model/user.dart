@@ -1,6 +1,6 @@
 import 'package:cookiej/app/service/repository/picture_repository.dart';
 
-import 'user_lite.dart';
+import './local/user_lite.dart';
 
 import 'insecurity.dart';
 

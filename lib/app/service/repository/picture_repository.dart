@@ -15,7 +15,7 @@ class PictureRepository {
 
   /// 记录某ID图片使用哪个服务器的使用记录，才能正确使用根据url缓存的图片
   static Map<String, String> _imgIdServerCache = new Map();
-  static Box<String> _imgIdBox = HiveService.imgIdBox;
+  static Box<String> _pictureServerBox = HiveService.pictureServerBox;
 
   static String _getImgServer() {
     if (_currentServer == null || _serverUseCount > 200) {
@@ -50,13 +50,13 @@ class PictureRepository {
       {String sinaImgSize = SinaImgSize.bmiddle}) {
     if (id == null) id = id.toString();
 
-    //从内存/hive/
+    //从内存/hive/随机服务器取地址
     String baseUrl =
-        _imgIdServerCache[id] ?? _imgIdBox.get(id) ?? _getImgServer();
+        _imgIdServerCache[id] ?? _pictureServerBox.get(id) ?? _getImgServer();
     _imgIdServerCache[id] = baseUrl;
     if (_imgIdServerCache.length > 50) {
       var cacheClone = Map<dynamic, String>.from(_imgIdServerCache);
-      _imgIdBox.putAll(cacheClone);
+      _pictureServerBox.putAll(cacheClone);
       _imgIdServerCache.clear();
     }
     return '$baseUrl$sinaImgSize/$id.jpg';

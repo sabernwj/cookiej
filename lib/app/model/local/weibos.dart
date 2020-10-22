@@ -1,6 +1,6 @@
 import 'package:cookiej/app/config/config.dart';
 import 'package:hive/hive.dart';
-import 'package:cookiej/app/model/weibo_lite.dart';
+import 'package:cookiej/app/model/local/weibo_lite.dart';
 
 part 'weibos.g.dart';
 

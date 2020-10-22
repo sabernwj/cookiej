@@ -1,4 +1,4 @@
-import 'user_lite.dart';
+import './local/user_lite.dart';
 import 'comment_badge.dart';
 import 'content.dart';
 import 'reply_comment.dart';
