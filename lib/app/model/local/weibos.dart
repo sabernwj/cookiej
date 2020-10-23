@@ -1,4 +1,3 @@
-import 'package:cookiej/app/config/config.dart';
 import 'package:cookiej/app/service/db/hive_service.dart';
 import 'package:hive/hive.dart';
 import 'package:cookiej/app/model/local/weibo_lite.dart';
@@ -42,14 +41,5 @@ class Weibos {
     jsonRes['statuses'].forEach((v) {
       statuses.add(WeiboLite.fromJson(v));
     });
-  }
-
-  ///生成存储微博到hive的key
-  static String generateHiveWeibosKey(
-      WeiboTimelineType timelineType, String uid,
-      {String groupId}) {
-    var key = '$uid.${timelineType.toStringNew()}.${groupId ?? ''}';
-    print(key);
-    return key;
   }
 }
