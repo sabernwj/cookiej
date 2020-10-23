@@ -20,11 +20,11 @@ class VideoPlayerControl extends StatefulWidget {
 }
 
 class VideoPlayerControlState extends State<VideoPlayerControl> {
-  VideoPlayerController  controller ;
+  VideoPlayerController controller;
   VideoRaw videoRaw;
   UrlChangeCallBack urlChangeCallBack;
   bool get videoInit => CookieJVideoControllerWidget.of(context).videoIsInit;
-  String get title=>CookieJVideoControllerWidget.of(context).title;
+  String get title => CookieJVideoControllerWidget.of(context).title;
   // 记录video播放进度
   Duration _position = Duration(seconds: 0);
   Duration _totalDuration = Duration(seconds: 0);
@@ -36,19 +36,18 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
       MediaQuery.of(context).orientation == Orientation.landscape;
 
   Future<void> setProgressState() async {
-    if(controller.value==null
-    ||controller.value.position==null
-    ||controller.value.duration==null
-    ||controller.value.isPlaying==false){
+    if (controller.value == null ||
+        controller.value.position == null ||
+        controller.value.duration == null ||
+        controller.value.isPlaying == false) {
       return;
     }
     setPosition(
-      totalDuration: controller.value.duration,
-      position:controller.value.position
-    );
-    if(controller.value.position>=controller.value.duration){
-        await controller.seekTo(Duration(seconds: 0));
-        await controller.pause();
+        totalDuration: controller.value.duration,
+        position: controller.value.position);
+    if (controller.value.position >= controller.value.duration) {
+      await controller.seekTo(Duration(seconds: 0));
+      await controller.pause();
     }
   }
 
@@ -60,17 +59,19 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
       _timer.cancel();
     }
   }
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
 
   @override
-  void didChangeDependencies(){
+  void didChangeDependencies() {
     super.didChangeDependencies();
-    controller=CookieJVideoControllerWidget.of(context).controller;
-    videoRaw=CookieJVideoControllerWidget.of(context).videoRaw;
-    urlChangeCallBack=CookieJVideoControllerWidget.of(context).urlChangeCallBack;
+    controller = CookieJVideoControllerWidget.of(context).controller;
+    videoRaw = CookieJVideoControllerWidget.of(context).videoRaw;
+    urlChangeCallBack =
+        CookieJVideoControllerWidget.of(context).urlChangeCallBack;
     controller.addListener(setProgressState);
   }
 
@@ -111,7 +112,7 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
   }
 
   // 供父组件调用刷新页面，减少父组件的build
-  void setPosition({Duration position,Duration totalDuration}) {
+  void setPosition({Duration position, Duration totalDuration}) {
     setState(() {
       _position = position;
       _totalDuration = totalDuration;
@@ -123,14 +124,7 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
       // 底部控件的容器
       width: double.infinity,
       height: 40,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          // 来点黑色到透明的渐变优雅一下
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-          colors: [Color.fromRGBO(0, 0, 0, .7), Color.fromRGBO(0, 0, 0, .1)],
-        ),
-      ),
+      decoration: BoxDecoration(color: Color.fromRGBO(0, 0, 0, .7)),
       child: Row(
         // 加载完成时才渲染,flex布局
         children: <Widget>[
@@ -156,7 +150,11 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
             // 播放时间
             margin: EdgeInsets.only(left: 10),
             child: Text(
-              DateUtil.formatDateMs(_position?.inMilliseconds,format:'mm:ss')+'/'+DateUtil.formatDateMs(_totalDuration?.inMilliseconds,format:'mm:ss'),
+              DateUtil.formatDateMs(_position?.inMilliseconds,
+                      format: 'mm:ss') +
+                  '/' +
+                  DateUtil.formatDateMs(_totalDuration?.inMilliseconds,
+                      format: 'mm:ss'),
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -183,21 +181,18 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
     return Expanded(
       child: Center(
         child: GestureDetector(
-          child:Container(
-            width: 64,
-            height: 64,
-            decoration:BoxDecoration(
-              color: Colors.black38,
-              shape:BoxShape.circle
+            child: Container(
+              width: 64,
+              height: 64,
+              decoration:
+                  BoxDecoration(color: Colors.black38, shape: BoxShape.circle),
+              child: Icon(
+                controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.white,
+                size: 48,
+              ),
             ),
-            child: Icon(
-              controller.value.isPlaying?Icons.pause:Icons.play_arrow,
-              color: Colors.white,
-              size: 48,
-            ),
-          ),
-          onTap:_playOrPause
-        ),
+            onTap: _playOrPause),
       ),
     );
   }
@@ -206,14 +201,7 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
     return Container(
       width: double.infinity,
       height: 40,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          // 来点黑色到透明的渐变优雅一下
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-          colors: [Color.fromRGBO(0, 0, 0, .7), Color.fromRGBO(0, 0, 0, .1)],
-        ),
-      ),
+      decoration: BoxDecoration(color: Color.fromRGBO(0, 0, 0, .7)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -241,31 +229,32 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
                   onPressed: () {},
                 ),
           Row(
-            mainAxisAlignment:MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              videoRaw==null?Container()
-              :Theme(
-                child:DropdownButton<String>(
-                  value: controller.dataSource,
-                  iconEnabledColor: Theme.of(context).primaryColor,
-                  items: buildDropItems(),
-                  onChanged: (value) async {
-                    // //修改清晰度
-                    // controller.dispose();
-                    // controller=VideoPlayerController.network(value);
-                    // await controller.initialize();
-                    // setState(() {
-                    //   controller.play();
-                    // });
-                    if(value==controller.dataSource) return;
-                    setState(() {
-                     urlChangeCallBack(value,controller.value.position);
-                    });
-                  }
-                ), data: Theme.of(context).copyWith(
-                  canvasColor: Colors.black
-                ),
-              )
+              videoRaw == null
+                  ? Container()
+                  : Theme(
+                      child: DropdownButton<String>(
+                          value: controller.dataSource,
+                          iconEnabledColor: Theme.of(context).primaryColor,
+                          items: buildDropItems(),
+                          onChanged: (value) async {
+                            // //修改清晰度
+                            // controller.dispose();
+                            // controller=VideoPlayerController.network(value);
+                            // await controller.initialize();
+                            // setState(() {
+                            //   controller.play();
+                            // });
+                            if (value == controller.dataSource) return;
+                            setState(() {
+                              urlChangeCallBack(
+                                  value, controller.value.position);
+                            });
+                          }),
+                      data:
+                          Theme.of(context).copyWith(canvasColor: Colors.black),
+                    )
             ],
           )
         ],
@@ -273,11 +262,18 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
     );
   }
 
-  List<DropdownMenuItem<String>> buildDropItems(){
-    List<DropdownMenuItem<String>> list=[];
-    list.add(DropdownMenuItem<String>(child: Text('标清',style:TextStyle(color:Colors.white),),value: videoRaw.data.object.stream.url));
-    if( videoRaw.data.object.stream.hdUrl!=null){
-      list.add(DropdownMenuItem<String>(child: Text('高清',style:TextStyle(color:Colors.white)),value: videoRaw.data.object.stream.hdUrl));
+  List<DropdownMenuItem<String>> buildDropItems() {
+    List<DropdownMenuItem<String>> list = [];
+    list.add(DropdownMenuItem<String>(
+        child: Text(
+          '标清',
+          style: TextStyle(color: Colors.white),
+        ),
+        value: videoRaw.data.object.stream.url));
+    if (videoRaw.data.object.stream.hdUrl != null) {
+      list.add(DropdownMenuItem<String>(
+          child: Text('高清', style: TextStyle(color: Colors.white)),
+          value: videoRaw.data.object.stream.hdUrl));
     }
     return list;
   }
@@ -287,9 +283,9 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
     // 如果是全屏，点击返回键则关闭全屏，如果不是，则系统返回键
     if (_isFullScreen) {
       _toggleFullScreen();
-    } else if(ModalRoute.of(context).isFirst) {
+    } else if (ModalRoute.of(context).isFirst) {
       SystemNavigator.pop();
-    }else{
+    } else {
       Navigator.pop(context);
     }
   }
@@ -300,7 +296,7 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
       setState(() {
         controller.value.isPlaying ? controller.pause() : controller.play();
       });
-      
+
       _startPlayControlTimer(); // 操作控件后，重置延迟隐藏控件的timer
     }
   }
@@ -355,5 +351,4 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
       _startPlayControlTimer(); // 操作完控件开始计时隐藏
     });
   }
-  
 }
