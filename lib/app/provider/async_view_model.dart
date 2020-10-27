@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AsyncViewModelState { loading, idle, complete, empty, error }
+enum AsyncViewModelState { Loading, Idle, Complete, Empty, Error }
 
 class AsyncViewModel with ChangeNotifier {
   AsyncViewModelState _state;
@@ -8,7 +8,7 @@ class AsyncViewModel with ChangeNotifier {
   AsyncViewModelState get viewState => _state;
 
   AsyncViewModel() {
-    _state = AsyncViewModelState.idle;
+    _state = AsyncViewModelState.Idle;
   }
 
   void changeState(AsyncViewModelState state) {

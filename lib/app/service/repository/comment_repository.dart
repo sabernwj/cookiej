@@ -23,8 +23,7 @@ class CommentRepository {
     try {
       var comments = Comments.fromJson(jsonRes);
       if (comments == null) throw (AppError(AppErrorType.EmptyResultError));
-      await UrlRepository.saveUrlInfoToHive(
-          UrlRepository.findUrlFromContents(comments.comments));
+      await UrlRepository.saveUrlInfoToHiveByContents(comments.comments);
       return comments;
     } catch (e) {
       throw AppError(AppErrorType.DecodeJsonError, rawErrorInfo: e);

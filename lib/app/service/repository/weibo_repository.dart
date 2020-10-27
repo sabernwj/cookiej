@@ -82,8 +82,7 @@ class WeiboRepository {
     if (returnWeibos != null && returnWeibos.statuses.isEmpty)
       throw AppError(AppErrorType.EmptyResultError);
 
-    var urlList = UrlRepository.findUrlFromContents(returnWeibos.statuses);
-    await UrlRepository.saveUrlInfoToHive(urlList);
+    await UrlRepository.saveUrlInfoToHiveByContents(returnWeibos.statuses);
     // 带有localUid则为当前用户浏览主页的微博，需缓存
     if (localUid != null)
       await _weibosBox.put(

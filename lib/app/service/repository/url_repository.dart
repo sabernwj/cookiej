@@ -21,6 +21,12 @@ class UrlRepository {
   }
 
   /// 将UrlInfo存入Hive
+  static Future<void> saveUrlInfoToHiveByContents(
+      List<Content> contents) async {
+    await saveUrlInfoToHive(findUrlFromContents(contents));
+  }
+
+  /// 将UrlInfo存入Hive
   static Future<void> saveUrlInfoToHive(List<String> shortUrlList) async {
     try {
       // 从接口获取UrlInfo

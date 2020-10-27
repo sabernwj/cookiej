@@ -40,8 +40,8 @@ class _ShowImagesViewState extends State<ShowImagesView>
     // });
     currentIndex = widget.currentIndex;
 
-    _doubleClickAnimationController =
-        AnimationController(duration: const Duration(milliseconds: 150));
+    _doubleClickAnimationController = AnimationController(
+        duration: const Duration(milliseconds: 150), vsync: this);
     super.initState();
   }
 

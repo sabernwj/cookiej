@@ -10,9 +10,9 @@ class AsyncViewWidget extends StatelessWidget {
         create: (_) => AsyncViewModel(),
         child: Consumer<AsyncViewModel>(builder: (context, vm, _) {
           switch (vm.viewState) {
-            case AsyncViewModelState.error:
+            case AsyncViewModelState.Error:
               return buildErrorWidget();
-            case AsyncViewModelState.loading:
+            case AsyncViewModelState.Loading:
               return buildLoadingWidget();
             default:
               return buildIdleWidget();
