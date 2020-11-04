@@ -12,20 +12,6 @@ class Config {
   static String appSecret_0 = '';
   static String redirectUri_0 = '';
 
-  static const loginAccessesStorageKey = 'login_accesses';
-  static const currentAccessStorageKey = 'current_access';
-  static const accessStateStorageKey = 'access_state';
-
-  static const themeNameStorageKey = 'theme_name';
-  static const isDarkModeStorageKey = 'is_dark_mode';
-  static const isDarkModeAutoStorageKey = 'is_dark_mode_auto';
-
-  static const userInfoDB = 'UserInfo';
-  static const userInfoDB_Id = 'uid';
-
-  static const pictureDB = 'PictureInfo';
-  static const pictureDB_id = 'picture_id';
-
   static const List<String> imgBaseUrlPool = [
     'http://wx1.sinaimg.cn/',
     'http://wx2.sinaimg.cn/',
@@ -37,10 +23,6 @@ class Config {
     'http://tvax3.sinaimg.cn/',
   ];
   static const String baseUrl = 'https://api.weibo.com';
-}
-
-class HiveBoxNames {
-  static const String cookie = 'cookie_box';
 }
 
 class SinaImgSize {
@@ -89,4 +71,3 @@ extension CookieInAppWebview on Cookie {
 }
 
 enum CommentsType { Hot, Time, Mentions, ByMe, ToMe }
-enum FunctionCallBack { UserPageRefresh }

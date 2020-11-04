@@ -23,13 +23,18 @@ class LocalConfigAdapter extends TypeAdapter<LocalConfig> {
       ..fontName = fields[3] as String
       ..themeName = fields[4] as String
       ..i18nName = fields[5] as String
-      ..isDarkModeAuto = fields[6] as bool;
+      ..isDarkModeAuto = fields[6] as bool
+      ..filterWords = (fields[7] as List)?.cast<String>()
+      ..isFilterWeibo = fields[8] as bool
+      ..isFilterComment = fields[9] as bool
+      ..isNoPictureMode = fields[10] as bool
+      ..useInternalBrowser = fields[11] as bool;
   }
 
   @override
   void write(BinaryWriter writer, LocalConfig obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.currentUserId)
       ..writeByte(1)
@@ -43,7 +48,17 @@ class LocalConfigAdapter extends TypeAdapter<LocalConfig> {
       ..writeByte(5)
       ..write(obj.i18nName)
       ..writeByte(6)
-      ..write(obj.isDarkModeAuto);
+      ..write(obj.isDarkModeAuto)
+      ..writeByte(7)
+      ..write(obj.filterWords)
+      ..writeByte(8)
+      ..write(obj.isFilterWeibo)
+      ..writeByte(9)
+      ..write(obj.isFilterComment)
+      ..writeByte(10)
+      ..write(obj.isNoPictureMode)
+      ..writeByte(11)
+      ..write(obj.useInternalBrowser);
   }
 
   @override

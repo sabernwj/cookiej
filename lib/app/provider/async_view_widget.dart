@@ -11,24 +11,38 @@ class AsyncViewWidget extends StatelessWidget {
         child: Consumer<AsyncViewModel>(builder: (context, vm, _) {
           switch (vm.viewState) {
             case AsyncViewModelState.Error:
-              return buildErrorWidget();
+              return buildErrorWidget(context);
             case AsyncViewModelState.Loading:
-              return buildLoadingWidget();
+              return buildLoadingWidget(context);
+            case AsyncViewModelState.Complete:
+              return buildCompleteWidget(context);
+            case AsyncViewModelState.Empty:
+              return buildEmptyWidget(context);
             default:
-              return buildIdleWidget();
+              return buildIdleWidget(context);
           }
         }),
       ),
     );
   }
 
-  Widget buildEmptyWidget() => Container();
+  Widget buildEmptyWidget(BuildContext context) => Center(
+        child: Text('Empty'),
+      );
 
-  Widget buildIdleWidget() => Container();
+  Widget buildIdleWidget(BuildContext context) => Center(
+        child: Text('Idle'),
+      );
 
-  Widget buildErrorWidget() => Container();
+  Widget buildErrorWidget(BuildContext context) => Center(
+        child: Text('Error'),
+      );
 
-  Widget buildLoadingWidget() => Container();
+  Widget buildLoadingWidget(BuildContext context) => Center(
+        child: Text('Empty'),
+      );
 
-  Widget buildCompleteWidget() => Container();
+  Widget buildCompleteWidget(BuildContext context) => Center(
+        child: Text('Complete'),
+      );
 }
