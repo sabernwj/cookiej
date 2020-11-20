@@ -12,23 +12,25 @@ class HiveService {
   static Box<LocalConfig> localConfigBox;
   static Box<String> pictureServerBox;
   static Box<Access> accessBox;
-  static LazyBox<UserLite> userBox;
+  static Box<UserLite> userBox;
   static LazyBox<Weibos> weibosBox;
 
-  static Future<void> init() async {
+  static Future<void> preInit() async {
     await Hive.initFlutter();
-    urlInfoBox = await Hive.openLazyBox('url_info_box');
-    pictureServerBox = await Hive.openBox('pciture_server_box');
-    accessBox = await Hive.openBox('access_box');
-    weibosBox = await Hive.openLazyBox('weibos_box');
-    userBox = await Hive.openLazyBox('user_box');
+    Hive.registerAdapter(LocalConfigAdapter());
     localConfigBox = await Hive.openBox('local_config_box');
+  }
 
+  static Future<void> init() async {
     Hive.registerAdapter(WeibosAdapter());
     Hive.registerAdapter(WeiboLiteAdapter());
     Hive.registerAdapter(UserLiteAdapter());
     Hive.registerAdapter(AccessAdapter());
-    Hive.registerAdapter(LocalConfigAdapter());
+    urlInfoBox = await Hive.openLazyBox('url_info_box');
+    pictureServerBox = await Hive.openBox('pciture_server_box');
+    accessBox = await Hive.openBox('access_box');
+    weibosBox = await Hive.openLazyBox('weibos_box');
+    userBox = await Hive.openBox('user_box');
   }
 }
 

@@ -7,10 +7,12 @@ class StyleRepository {
       TextStyle(fontFamilyFallback: [StyleFonts.iconFontFamily]);
 
   static ThemeData getThemeData(String themeName, {bool isDarkMode = false}) {
-    MaterialColor color = StyleColors.themeColors[themeName];
+    MaterialColor color = StyleColors.themeColors[themeName] ??
+        StyleColors.themeColors.values.first;
     //颜色的亮度，涉及夜间模式下深色主题的活动颜色设置
     double luminance = color.computeLuminance();
     color = luminance < 0.15 && isDarkMode ? Colors.teal : color;
+    Color textColor = luminance > 0.85 && !isDarkMode ? Colors.blue : color;
 
     var theme = ThemeData(
         primarySwatch: color,
@@ -51,18 +53,23 @@ class StyleRepository {
                 letterSpacing: 0))),
         // 带颜色，透明度文字,背景为彩色的文字显示颜色
         primaryTextTheme: TextTheme(
+          // 背景为彩色的文字黑白
           bodyText1: _baseTextStyle.merge(TextStyle(
               fontSize: StyleFonts.middleTextSize,
               color: luminance < 0.15 && isDarkMode
                   ? Colors.white
                   : Colors.black)),
-          bodyText2: _baseTextStyle.merge(TextStyle(
-              fontSize: StyleFonts.middleTextSize,
-              color: luminance < 0.15 && !isDarkMode ? Colors.blue : color)),
+          // 彩色正文文字
+          bodyText2: _baseTextStyle.merge(
+              TextStyle(fontSize: StyleFonts.middleTextSize, color: textColor)),
+
+          // 彩色小文字
           subtitle1: _baseTextStyle.merge(
-              TextStyle(fontSize: StyleFonts.smallTextSize, color: color)),
-          subtitle2: _baseTextStyle
-              .merge(TextStyle(fontSize: StyleFonts.minTextSize, color: color)),
+              TextStyle(fontSize: StyleFonts.smallTextSize, color: textColor)),
+
+          // 彩色最小文字
+          subtitle2: _baseTextStyle.merge(
+              TextStyle(fontSize: StyleFonts.minTextSize, color: textColor)),
         ));
     return theme;
   }

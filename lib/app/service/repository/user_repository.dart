@@ -1,10 +1,14 @@
 import 'package:cookiej/app/model/group.dart';
+import 'package:cookiej/app/model/local/user_lite.dart';
 import 'package:cookiej/app/model/user.dart';
+import 'package:cookiej/app/service/db/hive_service.dart';
 import 'package:cookiej/app/service/error/app_error.dart';
 import 'package:cookiej/app/utils/utils.dart';
 import 'package:cookiej/cookiej/net/api.dart';
 
 class UserRepository {
+  static final _userbox = HiveService.userBox;
+
   //获取用户信息
   static Future<User> getUserInfo({String uid, String screenName}) async {
     var url = '/2/users/show.json';
@@ -17,6 +21,19 @@ class UserRepository {
     } catch (e) {
       throw AppError(AppErrorType.DecodeJsonError, rawErrorInfo: e);
     }
+  }
+
+  /// 获取本地用户信息
+  static UserLite getUserLiteFromLocal(String uid) => _userbox.get(uid);
+
+  /// 存入用户信息到本地
+  static Future<void> saveUserLiteToLocal(UserLite userLite) async {
+    await _userbox.put(userLite.idstr, userLite);
+  }
+
+  /// 删除本地用户信息
+  static Future<void> deleteUserListFromLocal(String uid) async {
+    await _userbox.delete(uid);
   }
 
   /// 获取关注的人
