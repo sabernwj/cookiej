@@ -1,13 +1,19 @@
-import 'package:cookiej/app/provider/async_view_widget.dart';
 import 'package:cookiej/app/provider/global_view_model.dart';
 import 'package:cookiej/app/service/repository/style_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-class MainPage extends AsyncViewWidget<GlobalViewModel> {
+class MainPage extends StatefulWidget {
   @override
-  Widget buildIdleWidget(BuildContext context) {
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  int _currentIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
     return Consumer<GlobalViewModel>(builder: (context, vm, _) {
       return Scaffold(
           appBar: vm.isLogin
@@ -23,7 +29,7 @@ class MainPage extends AsyncViewWidget<GlobalViewModel> {
                     Container(),
                     Container()
                   ],
-                  //ndex: _currentIndex,
+                  //index: _currentIndex,
                 )
               : Center(
                   child: RaisedButton.icon(
@@ -89,14 +95,14 @@ class MainPage extends AsyncViewWidget<GlobalViewModel> {
                       ),
                     ),
                   ],
-                  currentIndex: 1,
-                  // type: BottomNavigationBarType.fixed,
-                  // iconSize: 30,
-                  // onTap: (int index) {
-                  //   setState(() {
-                  //     _currentIndex = index;
-                  //   });
-                  // },
+                  currentIndex: _currentIndex,
+                  iconSize: 30,
+                  onTap: (int index) {
+                    setState(() {
+                      if (index == _currentIndex) return;
+                      _currentIndex = index;
+                    });
+                  },
                 )),
           ));
     });

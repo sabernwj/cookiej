@@ -11,8 +11,11 @@ class Access {
   String accessToken;
   @HiveField(2)
   List<String> cookieStrs;
+
   @HiveField(3)
   List<Map<String, String>> groupIdNames;
+  @HiveField(4)
+  bool accessInvalid;
 
   Access({this.uid, this.accessToken, this.cookieStrs});
   Access.fromJson(Map<String, dynamic> json) {

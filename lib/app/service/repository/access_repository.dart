@@ -58,6 +58,8 @@ class AccessRepository {
         cookies.map((cookie) => '${cookie.name}=${cookie.value}');
     access.cookieStrs = cookieStrs;
 
+    access.accessInvalid = true;
+
     // 存入hive
     _accessBox.put(access.uid, access);
     return access;

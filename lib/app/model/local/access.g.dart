@@ -20,15 +20,17 @@ class AccessAdapter extends TypeAdapter<Access> {
       uid: fields[0] as String,
       accessToken: fields[1] as String,
       cookieStrs: (fields[2] as List)?.cast<String>(),
-    )..groupIdNames = (fields[3] as List)
-        ?.map((dynamic e) => (e as Map)?.cast<String, String>())
-        ?.toList();
+    )
+      ..groupIdNames = (fields[3] as List)
+          ?.map((dynamic e) => (e as Map)?.cast<String, String>())
+          ?.toList()
+      ..accessInvalid = fields[4] as bool;
   }
 
   @override
   void write(BinaryWriter writer, Access obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.uid)
       ..writeByte(1)
@@ -36,7 +38,9 @@ class AccessAdapter extends TypeAdapter<Access> {
       ..writeByte(2)
       ..write(obj.cookieStrs)
       ..writeByte(3)
-      ..write(obj.groupIdNames);
+      ..write(obj.groupIdNames)
+      ..writeByte(4)
+      ..write(obj.accessInvalid);
   }
 
   @override
