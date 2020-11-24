@@ -19,9 +19,14 @@ class AccessRepository {
     return _accessBox.get(uid);
   }
 
+  /// 根据uid删除Access
+  static Future<void> removeLocalAccess(String uid) async {
+    await _accessBox.delete(uid);
+  }
+
   /// 获取用户登陆页面地址
   static String getOauth2Authorize() {
-    var url = 'oauth2/authorize';
+    var url = '${API.baseUrl}/oauth2/authorize';
     var params = {
       "client_id": Config.appkey_0,
       "redirect_uri": Config.redirectUri_0,
@@ -35,7 +40,7 @@ class AccessRepository {
 
   /// 获取access
   static Future<Access> getAccessFromNet(String code) async {
-    var url = 'oauth2/access_token';
+    var url = '/oauth2/access_token';
     var params = {
       "client_id": Config.appkey_0,
       "client_secret": Config.appSecret_0,
@@ -43,7 +48,7 @@ class AccessRepository {
       "redirect_uri": Config.redirectUri_0,
       "code": code,
     };
-    var jsonRes = (await API.get(url, queryParameters: params)).data;
+    var jsonRes = (await API.post(url, queryParameters: params)).data;
     Access access;
     // 获取token
     try {
@@ -54,10 +59,11 @@ class AccessRepository {
     // 获取cookie
     var cookieManager = CookieManager.instance();
     var cookies = await cookieManager.getCookies(url: 'https://weibo.cn');
-    List<String> cookieStrs =
-        cookies.map((cookie) => '${cookie.name}=${cookie.value}');
-    access.cookieStrs = cookieStrs;
-
+    var cookieStr = '';
+    cookies
+        .map((cookie) => '${cookie.name}=${cookie.value}')
+        .forEach((str) => cookieStr += str + ';');
+    access.cookieStr = cookieStr;
     access.accessInvalid = true;
 
     // 存入hive

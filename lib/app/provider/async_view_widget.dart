@@ -11,6 +11,7 @@ class AsyncViewWidget<T extends AsyncViewModel> extends StatelessWidget {
         case AsyncViewModelState.Error:
           if (vm.viewError.errorType == AppErrorType.AuthorizationError) {
             // 此处发生token失效错误，跳转到处理用用户组的页面
+
           }
           return buildErrorWidget(context, vm);
         case AsyncViewModelState.Loading:

@@ -1,3 +1,4 @@
+import 'package:cookiej/app/service/db/assets_service.dart';
 import 'package:cookiej/app/service/db/hive_service.dart';
 import 'package:cookiej/app/views/pages/main/main_page.dart';
 import 'package:extended_image/extended_image.dart';
@@ -11,10 +12,13 @@ class Index extends StatefulWidget {
 class _IndexState extends State<Index> {
   @override
   void initState() {
-    Future.wait([Future.delayed(Duration(seconds: 1)), HiveService.init()])
-        .then((_) {
+    Future.wait([
+      Future.delayed(Duration(seconds: 1)),
+      HiveService.init(),
+      AssetsService.loadAppkeyData()
+    ]).then((_) {
       print('初始化完毕');
-      Navigator.push(
+      Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => MainPage()));
     });
     super.initState();

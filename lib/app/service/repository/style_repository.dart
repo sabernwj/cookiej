@@ -95,7 +95,7 @@ class StyleColors {
   static const Color apricot = Color(0xFFF8B878);
 
   static final Map<String, MaterialColor> themeColors = {
-    '默认白': _getMaterialColor(customWhite.value),
+    // '默认白': _getMaterialColor(customWhite.value),
     '谷歌蓝': Colors.blue,
     '薄荷绿': Colors.teal,
     '经典黑': _getMaterialColor(customBlack.value),

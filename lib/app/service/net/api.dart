@@ -1,5 +1,6 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:cookiej/app/config/config.dart';
+import 'package:cookiej/app/model/local/access.dart';
 import 'package:cookiej/app/service/error/app_error.dart';
 import 'package:dio/dio.dart';
 
@@ -8,6 +9,9 @@ class API {
 
   static Dio _dioSend;
   static Dio _dioReceive;
+
+  static Access _dioSendAccess;
+  static Access _dioReceiveAccess;
 
   static Dio get httpClientReceive {
     _dioReceive = _dioReceive ??
@@ -23,6 +27,10 @@ class API {
     return _dioSend;
   }
 
+  static void updateSendAccess(Access access) => _dioSendAccess = access;
+
+  static void updateReceiveAccess(Access access) => _dioReceiveAccess = access;
+
   static Future<Response<T>> get<T>(
     String path, {
     Map<String, dynamic> queryParameters,
@@ -36,6 +44,12 @@ class API {
       throw (AppErrorType.NoConnectionError);
     }
     var dio = httpClientReceive;
+    if (_dioReceiveAccess != null) {
+      if (options == null) options = Options();
+      if (queryParameters == null) queryParameters = Map();
+      queryParameters['access_token'] = _dioReceiveAccess.accessToken;
+      options.headers['cookie'] = _dioReceiveAccess.cookieStr;
+    }
     try {
       return await dio.get(path,
           queryParameters: queryParameters,
@@ -57,6 +71,12 @@ class API {
     ProgressCallback onReceiveProgress,
   }) async {
     var dio = httpClientSend;
+    if (_dioSendAccess != null) {
+      if (options == null) options = Options();
+      if (queryParameters == null) queryParameters = Map();
+      queryParameters['access_token'] = _dioSendAccess.accessToken;
+      options.headers['cookie'] = _dioSendAccess.cookieStr;
+    }
     try {
       return await dio.post(path,
           data: data,

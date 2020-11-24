@@ -19,7 +19,7 @@ class AccessAdapter extends TypeAdapter<Access> {
     return Access(
       uid: fields[0] as String,
       accessToken: fields[1] as String,
-      cookieStrs: (fields[2] as List)?.cast<String>(),
+      cookieStr: fields[2] as String,
     )
       ..groupIdNames = (fields[3] as List)
           ?.map((dynamic e) => (e as Map)?.cast<String, String>())
@@ -36,7 +36,7 @@ class AccessAdapter extends TypeAdapter<Access> {
       ..writeByte(1)
       ..write(obj.accessToken)
       ..writeByte(2)
-      ..write(obj.cookieStrs)
+      ..write(obj.cookieStr)
       ..writeByte(3)
       ..write(obj.groupIdNames)
       ..writeByte(4)

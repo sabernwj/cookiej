@@ -1,5 +1,7 @@
 import 'package:cookiej/app/provider/global_view_model.dart';
 import 'package:cookiej/app/service/repository/style_repository.dart';
+import 'package:cookiej/app/views/pages/login/login_page.dart';
+import 'package:cookiej/app/views/pages/main/personal/personal_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -27,9 +29,9 @@ class _MainPageState extends State<MainPage> {
                     Container(),
                     Container(),
                     Container(),
-                    Container()
+                    PersonalPage()
                   ],
-                  //index: _currentIndex,
+                  index: _currentIndex,
                 )
               : Center(
                   child: RaisedButton.icon(
@@ -42,10 +44,8 @@ class _MainPageState extends State<MainPage> {
                     style: TextStyle(fontSize: 18),
                   ),
                   onPressed: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => LoginPage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginPage()));
                   },
                 )),
           bottomNavigationBar: SizedOverflowBox(
@@ -88,7 +88,7 @@ class _MainPageState extends State<MainPage> {
                       ),
                     ),
                     BottomNavigationBarItem(
-                      label: '我的',
+                      label: '个人中心',
                       icon: Icon(
                         FontAwesomeIcons.userAlt,
                         size: 24,

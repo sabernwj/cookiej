@@ -1,33 +1,29 @@
+import 'package:cookiej/app/provider/async_view_widget.dart';
+import 'package:cookiej/app/provider/global_view_model.dart';
 import 'package:cookiej/app/service/repository/access_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:provider/provider.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends AsyncViewWidget {
   final CookieManager cookieManager = CookieManager.instance();
 
-  LoginPage({Key key}) : super(key: key) {
+  LoginPage() {
     cookieManager.deleteAllCookies();
   }
 
   @override
   Widget build(BuildContext context) {
+    var globalVM = Provider.of<GlobalViewModel>(context, listen: false);
     return Scaffold(
-      appBar: new AppBar(
-        title: new Text("用户授权"),
+      appBar: AppBar(
+        title: Text("用户授权"),
       ),
       body: InAppWebView(
-        initialUrl: 'https://passport.weibo.cn/signin/login',
+        initialUrl: 'https://passport.weibo.cn/signin/login?entry=mweibo',
         onLoadStart: (controller, url) async {},
         onLoadStop: (controller, url) async {
-          print(url);
-          if (url.contains('?code=')) {
-            await controller.stopLoading();
-            // 登录成功，下面获取access
-            var access = await AccessRepository.getAccessFromNet(
-                Uri.tryParse(url).queryParameters['code']);
-            // 获取access成功后操作
-            Navigator.pop(context);
-          }
+          debugPrint(url);
           if (url.contains('https://m.weibo.cn/')) {
             await controller.stopLoading();
             var cookies =
@@ -43,6 +39,16 @@ class LoginPage extends StatelessWidget {
             controller.loadUrl(
                 url: AccessRepository.getOauth2Authorize(),
                 headers: {'cookie': cookieStr});
+          }
+          if (url.contains('?code=')) {
+            await controller.stopLoading();
+            // 登录成功，下面获取access
+            var access = await AccessRepository.getAccessFromNet(
+                Uri.tryParse(url).queryParameters['code']);
+            // 获取access成功后操作
+            await globalVM.addLocalUser(access);
+
+            Navigator.pop(context);
           }
         },
       ),

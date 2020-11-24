@@ -7,7 +7,7 @@ class LocalConfigRepository {
 
   /// 获取本地配置
   static LocalConfig getLocalConfig() {
-    return _localConfigBox.get(_localConfigKey);
+    return _localConfigBox.get(_localConfigKey) ?? LocalConfig.defaultValue();
   }
 
   /// 更新本地配置
@@ -28,7 +28,8 @@ class LocalConfigRepository {
     if (newLocalConfig != null) {
       _localConfigBox.put(_localConfigKey, newLocalConfig);
     } else {
-      var config = _localConfigBox.get(_localConfigKey);
+      var config =
+          _localConfigBox.get(_localConfigKey) ?? LocalConfig.defaultValue();
       config.currentUserId = currentUserId ?? config.currentUserId;
       config.loginUsers = loginUsers ?? config.loginUsers;
       config.isDarkMode = isDarkMode ?? config.isDarkMode;

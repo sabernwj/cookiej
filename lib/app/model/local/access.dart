@@ -10,14 +10,14 @@ class Access {
   @HiveField(1)
   String accessToken;
   @HiveField(2)
-  List<String> cookieStrs;
+  String cookieStr;
 
   @HiveField(3)
   List<Map<String, String>> groupIdNames;
   @HiveField(4)
   bool accessInvalid;
 
-  Access({this.uid, this.accessToken, this.cookieStrs});
+  Access({this.uid, this.accessToken, this.cookieStr});
   Access.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
     accessToken = json['access_token'];
