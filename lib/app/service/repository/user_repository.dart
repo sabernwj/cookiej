@@ -4,7 +4,7 @@ import 'package:cookiej/app/model/user.dart';
 import 'package:cookiej/app/service/db/hive_service.dart';
 import 'package:cookiej/app/service/error/app_error.dart';
 import 'package:cookiej/app/utils/utils.dart';
-import 'package:cookiej/cookiej/net/api.dart';
+import 'package:cookiej/app/service/net/api.dart';
 
 class UserRepository {
   static final _userbox = HiveService.userBox;
