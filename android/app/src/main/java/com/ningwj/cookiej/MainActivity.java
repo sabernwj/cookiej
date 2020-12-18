@@ -1,33 +1,27 @@
 package com.ningwj.cookiej;
 
-import android.os.Bundle;
-import io.flutter.app.FlutterActivity;
-import io.flutter.plugins.GeneratedPluginRegistrant;
-
-import android.view.KeyEvent;
-import io.flutter.plugin.common.MethodCall;
+import androidx.annotation.NonNull;
+import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodChannel;
-
+import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterActivity {
 
   //通讯名称,回到手机桌面
   private  final String CHANNEL = "android/back/desktop";
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    GeneratedPluginRegistrant.registerWith(this);
-    new MethodChannel(getFlutterView(), CHANNEL).setMethodCallHandler(
-        new MethodChannel.MethodCallHandler() {
-            @Override
-            public void onMethodCall(MethodCall methodCall, MethodChannel.Result result) {
-                if (methodCall.method.equals("backDesktop")) {
-                    result.success(true);
-                    moveTaskToBack(false);
-                } 
-            }
-        }
-    );
-  }
+    @Override
+    public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
+        GeneratedPluginRegistrant.registerWith(flutterEngine);
+        new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
+                .setMethodCallHandler(
+                    (methodCall, result) -> {
+                      if (methodCall.method.equals("backDesktop")) {
+                          result.success(true);
+                          moveTaskToBack(false);
+                      } 
+               }
+        );
+    }
 }

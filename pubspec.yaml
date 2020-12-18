@@ -33,32 +33,31 @@ dependencies:
   extended_nested_scroll_view: ^0.4.0 #扩展的NestedScrollView配合pull_to_refersh 使用
   font_awesome_flutter: ^8.10.0 #图标包
   flutter_redux: ^0.6.0
-  redux: ^4.0.0 
+  redux: ^4.0.0
   path_provider: ^1.6.5 #使用文件夹路径之类的
   flutter_keyboard_visibility: ^3.2.1 #检测软键盘状态的插件
   multi_image_picker: ^4.7.13 #图片选择插件
   video_player: ^0.10.9+1 #FlutterDev提供的视频播放插件
   auto_orientation: ^1.0.6 #控制横竖屏
-  screen: ^0.0.5  #屏幕亮度
+  screen: ^0.0.5 #屏幕亮度
   gallery_saver: ^2.0.1 #读写本地相册
   event_bus: ^1.1.1 #事件总线
   connectivity: ^0.4.8+6 #检测网络状态wifi/数据/无网络
   flutter_staggered_animations: ^0.1.2 #listview,gridview等加载动画
   audioplayers: ^0.15.1 #音频播放
   flutter_swiper: ^1.1.6 #轮播图
-
+  flutter_hooks: ^0.15.0
   provider: ^4.3.2+2
 
-
   #可能会被替换的
-  extended_image: 
+  extended_image:
     git:
       url: https://gitee.com/ihearyou/extended_image_nwj.git
   extended_text_field: ^5.0.0
-  hive: ^1.4.4+1  #一个轻量级的数据库
+  hive: ^1.4.4+1 #一个轻量级的数据库
   hive_flutter: ^0.3.1
   sqflite: ^1.2.1
-  shared_preferences: ^0.5.6+2  
+  shared_preferences: ^0.5.6+2
   fluttertoast: ^4.0.0 #弹出消息工具
   flustars: ^0.2.6+1 #包含了一些通用工具类
   waterfall_flow: ^2.0.2 #展示瀑布流的widget
@@ -73,8 +72,6 @@ dev_dependencies:
   # build_runner: ^1.7.3
   hive_generator: ^0.8.1
   build_runner: ^1.10.3
-  
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -95,10 +92,10 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - assets/images/icon.png
-   - assets/images/white.jpg
-   - assets/audios/refresh.mp3
-   - assets/data/appkey.json
+    - assets/images/icon.png
+    - assets/images/white.jpg
+    - assets/audios/refresh.mp3
+    - assets/data/appkey.json
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

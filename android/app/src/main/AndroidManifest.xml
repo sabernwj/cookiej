@@ -16,7 +16,6 @@
          FlutterApplication and put your custom class here. -->
     <application
         
-        android:name="io.flutter.app.FlutterApplication"
         android:label="饼干酱"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
@@ -35,6 +34,9 @@
             <meta-data
                 android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
                 android:value="true" />
+            <meta-data
+                android:name="flutterEmbedding"
+                android:value="2" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
