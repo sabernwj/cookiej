@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class HooksListView extends HookWidget {
+class HooksListView extends HookWidget with ListStateMixin {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
   @override
   Widget build(BuildContext context) {
-    final listState = useListState();
-    var list = listState.value.currentList;
-
     useEffect(() {
-      return listState.value.startLoadData;
+      startLoad();
+      return () {};
     }, []);
 
     return SmartRefresher(
@@ -32,7 +30,7 @@ class HooksListView extends HookWidget {
           loadingText: '加载中',
           noDataText: '已无更多数据'),
       controller: _refreshController,
-      child: list.value.isEmpty
+      child: currentList.value.isEmpty
           ? Center(
               child: Text('这里是空的噢'),
             )
@@ -40,11 +38,11 @@ class HooksListView extends HookWidget {
               itemBuilder: (BuildContext context, int index) {
                 return Container();
               },
-              itemCount: list.value.length,
+              itemCount: currentList.value.length,
               physics: const AlwaysScrollableScrollPhysics(),
             ),
-      onRefresh: () {},
-      onLoading: () {},
+      onRefresh: refresh,
+      onLoading: loadMore,
     );
   }
 }
@@ -83,6 +81,28 @@ ValueNotifier<ListState> useListState<Item, Info>(
   }
 
   return useState(ListState<Item>(currentList, startLoad, refresh, loadMore));
+}
+
+class ListStateMixin<Item, Info> {
+  final currentList = useState<List<Item>>([]);
+
+  void startLoad() {
+    currentList.value.clear();
+    var list = getData(GetDataType.StartLoad);
+    currentList.value.addAll(list);
+  }
+
+  void refresh() {
+    var list = getData(GetDataType.Refersh);
+    currentList.value.insertAll(0, list);
+  }
+
+  void loadMore() {
+    var list = getData(GetDataType.LoadMore);
+    currentList.value.addAll(list);
+  }
+
+  Function(GetDataType type, {Info info}) getData;
 }
 
 enum GetDataType { StartLoad, Refersh, LoadMore }
