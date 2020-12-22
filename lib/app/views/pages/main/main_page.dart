@@ -2,6 +2,7 @@ import 'package:cookiej/app/provider/global_view_model.dart';
 import 'package:cookiej/app/service/repository/style_repository.dart';
 import 'package:cookiej/app/views/pages/login/login_page.dart';
 import 'package:cookiej/app/views/pages/main/personal/personal_page.dart';
+import 'package:cookiej/app/views/pages/main/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +27,7 @@ class _MainPageState extends State<MainPage> {
           body: vm.isLogin
               ? IndexedStack(
                   children: <Widget>[
-                    Container(),
+                    HomePage(),
                     Container(),
                     Container(),
                     PersonalPage()
