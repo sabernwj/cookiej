@@ -48,6 +48,7 @@ dependencies:
   flutter_swiper: ^1.1.6 #轮播图
   flutter_hooks: ^0.15.0
   provider: ^4.3.2+2
+  get:
 
   #可能会被替换的
   extended_image:

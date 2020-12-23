@@ -17,44 +17,48 @@ class WeiboWidgetVM extends AsyncViewModel {
   final WeiboLite _model;
   WeiboWidgetVM(this._model);
 
-  /// 原数据模型
-  WeiboLite get model => _model;
-
   /// 用户昵称
-  String get userName => model.user.screenName;
+  String get userName => _model.user.screenName;
 
   /// 用户ID
-  String get userId => model.user.idstr;
+  String get userId => _model.user.idstr;
 
   /// 创建时间
   String get createTimeStr =>
-      model.createdAtStr ?? Utils.getDistanceFromNow(model.createdAt);
+      _model.createdAtStr ?? Utils.getDistanceFromNow(_model.createdAt);
 
   /// 来源
-  String get source => model.source;
+  String get source => _model.source;
 
   /// 原始微博文本
-  String get rawText => model.longText?.longTextContent ?? model.text;
+  String get rawText => _model.longText?.longTextContent ?? _model.text;
 
   /// 图片列表
-  List<ImageProvider> get imageList => model.picUrls
+  List<ImageProvider> get imageList => _model.picUrls
       .map((url) => PictureRepository.getPictureFromUrl(url,
           sinaImgSize: SinaImgSize.bmiddle))
       .toList();
 
   /// 评论数
-  int get commentsCount => model.commentsCount;
+  int get commentsCount => _model.commentsCount;
 
   /// 点赞数
-  int get attitudesCount => model.attitudesCount;
+  int get attitudesCount => _model.attitudesCount;
 
   /// 转发数
-  int get repostsCount => model.repostsCount;
+  int get repostsCount => _model.repostsCount;
 
   /// 是否存在原微博
-  bool get hasReTweetedWeibo => model.retweetedWeibo != null;
+  bool get hasReTweetedWeibo => _model.retweetedWeibo != null;
 
   /// 该条微博的原微博
   WeiboWidgetVM get retweetedWeiboWidgetVM =>
       hasReTweetedWeibo ? WeiboWidgetVM(_model.retweetedWeibo) : null;
+
+  /// 是否点赞此微博
+  bool get favorited => _model.favorited;
+
+  void favoriteWeibo() {}
+
+  void commentWeibo() {}
 }
