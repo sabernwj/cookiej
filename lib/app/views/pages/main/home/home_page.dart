@@ -53,6 +53,9 @@ class HomePage extends HookWidget {
             ]),
           ),
           preferredSize: Size.fromHeight(46)),
+      body: TabBarView(
+        children: [],
+      ),
     );
   }
 }

@@ -102,7 +102,7 @@ class ListStateMixin<Item, Info> {
     currentList.value.addAll(list);
   }
 
-  Function(GetDataType type, {Info info}) getData;
+  List<Item> Function(GetDataType type, {Info info}) getData;
 }
 
 enum GetDataType { StartLoad, Refersh, LoadMore }
