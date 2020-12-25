@@ -67,7 +67,7 @@ class AccessRepository {
     access.accessInvalid = true;
 
     // 存入hive
-    _accessBox.put(access.uid, access);
+    await _accessBox.put(access.uid, access);
     return access;
   }
 }

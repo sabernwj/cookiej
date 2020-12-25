@@ -1,38 +1,44 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'weibos.dart';
+part of 'data_object.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class WeibosAdapter extends TypeAdapter<Weibos> {
+class DataObjectAdapter extends TypeAdapter<DataObject> {
   @override
-  final int typeId = 4;
+  final int typeId = 8;
 
   @override
-  Weibos read(BinaryReader reader) {
+  DataObject read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Weibos(
-      statuses: (fields[0] as List)?.cast<WeiboLite>(),
-      sinceId: fields[1] as int,
-      maxId: fields[2] as int,
+    return DataObject(
+      objectType: fields[0] as String,
+      targetUrl: fields[1] as String,
+      id: fields[2] as String,
+      displayName: fields[3] as String,
+      url: fields[4] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Weibos obj) {
+  void write(BinaryWriter writer, DataObject obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.statuses)
+      ..write(obj.objectType)
       ..writeByte(1)
-      ..write(obj.sinceId)
+      ..write(obj.targetUrl)
       ..writeByte(2)
-      ..write(obj.maxId);
+      ..write(obj.id)
+      ..writeByte(3)
+      ..write(obj.displayName)
+      ..writeByte(4)
+      ..write(obj.url);
   }
 
   @override
@@ -41,7 +47,7 @@ class WeibosAdapter extends TypeAdapter<Weibos> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is WeibosAdapter &&
+      other is DataObjectAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

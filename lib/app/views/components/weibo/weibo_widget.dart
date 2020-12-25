@@ -148,6 +148,9 @@ class WeiboWidgetVM extends GetxController {
   final WeiboLite _model;
   WeiboWidgetVM(this._model);
 
+  /// ID
+  int get id => _model.id;
+
   /// 用户
   UserLite get user => _model.user;
 

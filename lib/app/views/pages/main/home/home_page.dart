@@ -1,15 +1,16 @@
 import 'dart:ui';
+import 'package:cookiej/app/views/components/base/hooks_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class HomePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final _tabItems = useState(<String>['全部关注', '好友圈']);
-    final _tabController =
-        useTabController(initialLength: _tabItems.value.length);
+    final tabItems = useState(<String>['全部关注', '好友圈']);
+    final tabController =
+        useTabController(initialLength: tabItems.value.length);
 
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: PreferredSize(
           child: Container(
@@ -21,10 +22,10 @@ class HomePage extends HookWidget {
               children: <Widget>[
                 Expanded(
                     child: TabBar(
-                  controller: _tabController,
+                  controller: tabController,
                   labelPadding:
                       EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  tabs: _tabItems.value.map((str) => Text(str)).toList(),
+                  tabs: tabItems.value.map((str) => Text(str)).toList(),
                   isScrollable: true,
                   indicatorColor: Theme.of(context).selectedRowColor,
                   onTap: (index) {
@@ -38,13 +39,13 @@ class HomePage extends HookWidget {
                     height: 36,
                     width: 36,
                     child: Icon(Icons.search,
-                        color: _theme.primaryTextTheme.bodyText1.color),
+                        color: theme.primaryTextTheme.bodyText1.color),
                   ),
                   onTap: () {},
                 )
               ],
             ),
-            decoration: BoxDecoration(color: _theme.primaryColor, boxShadow: [
+            decoration: BoxDecoration(color: theme.primaryColor, boxShadow: [
               BoxShadow(
                   color: Colors.black,
                   offset: Offset(0, -3),
@@ -54,7 +55,8 @@ class HomePage extends HookWidget {
           ),
           preferredSize: Size.fromHeight(46)),
       body: TabBarView(
-        children: [],
+        controller: tabController,
+        children: [WeiboListWidget(), HooksListView()],
       ),
     );
   }

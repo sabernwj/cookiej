@@ -32,8 +32,10 @@ class WeiboRepository {
       int maxId = 0,
       String groupId,
       Map<String, String> extraParams}) async {
-    if (type == WeibosType.Group && groupId == null)
-      throw AppError(AppErrorType.OtherError);
+    if (type == WeibosType.Group) {
+      assert(groupId != null);
+    }
+
     var url = _weibosUrlMap[type];
     var params = {
       "since_id": sinceId.toString(),

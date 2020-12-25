@@ -1,4 +1,4 @@
-import 'package:cookiej/app/model/data_objetc.dart';
+import 'package:cookiej/app/model/data_object.dart';
 
 class Collection extends DataObject {
   List<String> picIds;

@@ -1,4 +1,4 @@
-import 'data_objetc.dart';
+import 'data_object.dart';
 import 'author.dart';
 import 'biz.dart';
 import 'compressed_file_meta.dart';
@@ -13,7 +13,7 @@ import 'raw_file_meta.dart';
 import 'screen_hosts.dart';
 import 'video_extensions.dart';
 
-class Video extends DataObject{
+class Video extends DataObject {
   int fid;
   String storageType;
   String videoCover;
@@ -122,7 +122,9 @@ class Video extends DataObject{
     screenshots = json['screenshots'] != null
         ? new Screenshots.fromJson(json['screenshots'])
         : null;
-    duration = (json['duration'] is int)?(json['duration'] as int).toDouble():json['duration'];
+    duration = (json['duration'] is int)
+        ? (json['duration'] as int).toDouble()
+        : json['duration'];
     rawFileMeta = json['raw_file_meta'] != null
         ? new RawFileMeta.fromJson(json['raw_file_meta'])
         : null;
@@ -131,8 +133,9 @@ class Video extends DataObject{
     biz = json['biz'] != null ? new Biz.fromJson(json['biz']) : null;
     fileMonitorType = json['file_monitor_type'];
     updatedAt = json['updated_at'];
-    stream =
-        json['stream'] != null ? new VideoStream.fromJson(json['stream']) : null;
+    stream = json['stream'] != null
+        ? new VideoStream.fromJson(json['stream'])
+        : null;
     client = json['client'];
     links = json['links'] != null ? new Links.fromJson(json['links']) : null;
     definition = json['definition'];
@@ -144,8 +147,9 @@ class Video extends DataObject{
     embedCode = json['embed_code'];
     image = json['image'] != null ? new UImage.fromJson(json['image']) : null;
     objectType = json['object_type'];
-    author =
-        (json['author'] != null && json['author'] is Map) ? new Author.fromJson(json['author']) : null;
+    author = (json['author'] != null && json['author'] is Map)
+        ? new Author.fromJson(json['author'])
+        : null;
     bizType = json['biz_type'];
     infringementStatus = json['infringement_status'];
     displayName = json['display_name'];

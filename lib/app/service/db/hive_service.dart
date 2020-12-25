@@ -1,3 +1,5 @@
+import 'package:cookiej/app/model/data_object.dart';
+import 'package:cookiej/app/model/annotations.dart';
 import 'package:cookiej/app/model/local/access.dart';
 import 'package:cookiej/app/model/local/local_config.dart';
 import 'package:cookiej/app/model/local/user_lite.dart';
@@ -18,17 +20,20 @@ class HiveService {
   static Future<void> preInit() async {
     await Hive.initFlutter();
     Hive.registerAdapter(LocalConfigAdapter());
+    Hive.registerAdapter(AccessAdapter());
     localConfigBox = await Hive.openBox('local_config_box');
+    accessBox = await Hive.openBox('access_box');
   }
 
   static Future<void> init() async {
     Hive.registerAdapter(WeibosAdapter());
     Hive.registerAdapter(WeiboLiteAdapter());
     Hive.registerAdapter(UserLiteAdapter());
-    Hive.registerAdapter(AccessAdapter());
+    Hive.registerAdapter(UrlInfoAdapter());
+    Hive.registerAdapter(AnnotationsAdapter());
+    Hive.registerAdapter(DataObjectAdapter());
     urlInfoBox = await Hive.openLazyBox('url_info_box');
     pictureServerBox = await Hive.openBox('pciture_server_box');
-    accessBox = await Hive.openBox('access_box');
     weibosBox = await Hive.openLazyBox('weibos_box');
     userBox = await Hive.openBox('user_box');
   }
@@ -55,4 +60,8 @@ class HiveBoxType {
 
   /// (暂无对应box)存储WeiboLite类型数据
   static const int weiboLiteType = 6;
+
+  //
+  static const int urlAnnotations = 7;
+  static const int urlAnnotationsDataObject = 8;
 }

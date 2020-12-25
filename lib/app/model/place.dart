@@ -1,9 +1,9 @@
 import 'address.dart';
-import 'data_objetc.dart';
+import 'data_object.dart';
 import 'mobile.dart';
 import 'uimage.dart';
 
-class Place extends DataObject{
+class Place extends DataObject {
   String summary;
   UImage image;
   Address address;
@@ -12,14 +12,16 @@ class Place extends DataObject{
   String position;
   String keyword;
 
-  Place.fromJson(Map<String, dynamic> json) : super.fromJson(json){
-    checkinNum=json['checkin_num'];
-    position=json['position'];
-    keyword=json['keyword'];
+  Place.fromJson(Map<String, dynamic> json) : super.fromJson(json) {
+    checkinNum = json['checkin_num'];
+    position = json['position'];
+    keyword = json['keyword'];
     summary = json['summary'];
     image = json['image'] != null ? new UImage.fromJson(json['image']) : null;
-    address = json['address'] != null ? new Address.fromJson(json['address']) : null;
-    mobile = json['mobile'] != null ? new Mobile.fromJson(json['mobile']) : null;
+    address =
+        json['address'] != null ? new Address.fromJson(json['address']) : null;
+    mobile =
+        json['mobile'] != null ? new Mobile.fromJson(json['mobile']) : null;
   }
 
   Map<String, dynamic> toJson() {

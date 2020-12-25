@@ -11,8 +11,16 @@ import 'package:flutter/material.dart';
 class GlobalViewModel extends ChangeNotifier {
   LocalConfig get _config => LocalConfigRepository.getLocalConfig();
 
+  GlobalViewModel() {
+    if (isLogin) {
+      API.updateReceiveAccess(
+          AccessRepository.getAccessFromLocal(_config.currentUserId));
+    }
+  }
+
   /// 是否登录
-  bool get isLogin => _config.loginUsers.isNotEmpty;
+  bool get isLogin =>
+      _config.loginUsers.isNotEmpty || _config.currentUserId.isNotEmpty;
 
   /// 当前主题
   ThemeData get currentTheme => StyleRepository.getThemeData(_config.themeName);

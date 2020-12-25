@@ -7,13 +7,17 @@ class UserAvatar extends StatelessWidget {
   final String screenName;
   final ImageProvider img;
   final UserAvatarShape shape;
+  final double width;
+  final double height;
 
   const UserAvatar(
       {Key key,
       this.img,
       this.screenName,
       this.user,
-      this.shape = UserAvatarShape.Circle})
+      this.shape = UserAvatarShape.Circle,
+      this.width = 48,
+      this.height = 48})
       : assert(user != null || (screenName != null && img != null)),
         super(key: key);
 
@@ -27,6 +31,8 @@ class UserAvatar extends StatelessWidget {
 
     return GestureDetector(
       child: Container(
+        width: 48,
+        height: 48,
         decoration: BoxDecoration(
             image: DecorationImage(
               image: img ?? PictureRepository.getPictureFromId(user?.iconId),

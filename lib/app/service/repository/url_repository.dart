@@ -33,11 +33,12 @@ class UrlRepository {
       var url = '/2/short_url/info.json';
       shortUrlList.forEach((shortUrl) {
         shortUrl = shortUrl.replaceAll('#', '');
+        shortUrl = Uri.encodeComponent(shortUrl);
         url = Utils.formatUrlParams(url, {'url_short': shortUrl});
       });
       var infos = (await API.get(url)).data['urls'] as List<dynamic>;
       // 解析Json
-      var map = Map<dynamic, UrlInfo>();
+      var map = Map<String, UrlInfo>();
       infos.forEach((urlInfoJson) =>
           map[urlInfoJson['url_short']] = UrlInfo.fromJson(urlInfoJson));
       if (shortUrlList.length > 1) _urlInfoRAMCache = {}..addAll(map);

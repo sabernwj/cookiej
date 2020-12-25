@@ -1,11 +1,22 @@
+import 'package:cookiej/app/service/db/hive_service.dart';
+import 'package:hive/hive.dart';
+
 import 'biz.dart';
 
+part 'data_object.g.dart';
+
+@HiveType(typeId: HiveBoxType.urlAnnotationsDataObject)
 class DataObject {
   Biz biz;
+  @HiveField(0)
   String objectType;
+  @HiveField(1)
   String targetUrl;
+  @HiveField(2)
   String id;
+  @HiveField(3)
   String displayName;
+  @HiveField(4)
   String url;
 
   DataObject(

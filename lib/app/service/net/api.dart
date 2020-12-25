@@ -16,14 +16,14 @@ class API {
   static Dio get httpClientReceive {
     _dioReceive = _dioReceive ??
         Dio(BaseOptions(
-            connectTimeout: 6000, receiveTimeout: 6000, baseUrl: baseUrl));
+            connectTimeout: 10000, receiveTimeout: 10000, baseUrl: baseUrl));
     return _dioReceive;
   }
 
   static Dio get httpClientSend {
     _dioSend = _dioSend ??
         Dio(BaseOptions(
-            connectTimeout: 6000, receiveTimeout: 6000, baseUrl: baseUrl));
+            connectTimeout: 10000, receiveTimeout: 10000, baseUrl: baseUrl));
     return _dioSend;
   }
 

@@ -1,15 +1,25 @@
-
+import 'package:cookiej/app/service/db/hive_service.dart';
+import 'package:hive/hive.dart';
 
 import 'annotations.dart';
+part 'url_info.g.dart';
 
+@HiveType(typeId: HiveBoxType.urlInfoBox)
 class UrlInfo {
+  @HiveField(0)
   bool result;
+  @HiveField(1)
   String urlShort;
+  @HiveField(2)
   String urlLong;
   int transcode;
+  @HiveField(3)
   String description;
+  @HiveField(4)
   List<Annotations> annotations;
+  @HiveField(5)
   int type;
+  @HiveField(6)
   String title;
   int lastModified;
 
@@ -33,7 +43,7 @@ class UrlInfo {
     if (json['annotations'] != null) {
       annotations = new List<Annotations>();
       json['annotations'].forEach((v) {
-        if(v is! Map<String,dynamic>){
+        if (v is! Map<String, dynamic>) {
           print(v.runtimeType);
         }
         annotations.add(new Annotations.fromJson(v));

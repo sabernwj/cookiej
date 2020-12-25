@@ -1,50 +1,50 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'local_state.dart';
+part of 'url_info.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class LocalStateAdapter extends TypeAdapter<LocalState> {
+class UrlInfoAdapter extends TypeAdapter<UrlInfo> {
   @override
-  final int typeId = 6;
+  final int typeId = 5;
 
   @override
-  LocalState read(BinaryReader reader) {
+  UrlInfo read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return LocalState(
-      fields[0] as String,
-      isDarkMode: fields[1] as bool,
-      themeName: fields[3] as String,
-      isDarkAuto: fields[2] as bool,
-      userInfo: fields[4] as UserLite,
-      weiboTypes: (fields[5] as List)?.cast<String>(),
-      weiboTypesIndex: fields[6] as int,
+    return UrlInfo(
+      result: fields[0] as bool,
+      urlShort: fields[1] as String,
+      urlLong: fields[2] as String,
+      description: fields[3] as String,
+      annotations: (fields[4] as List)?.cast<Annotations>(),
+      type: fields[5] as int,
+      title: fields[6] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, LocalState obj) {
+  void write(BinaryWriter writer, UrlInfo obj) {
     writer
       ..writeByte(7)
       ..writeByte(0)
-      ..write(obj.uid)
+      ..write(obj.result)
       ..writeByte(1)
-      ..write(obj.isDarkMode)
+      ..write(obj.urlShort)
       ..writeByte(2)
-      ..write(obj.isDarkAuto)
+      ..write(obj.urlLong)
       ..writeByte(3)
-      ..write(obj.themeName)
+      ..write(obj.description)
       ..writeByte(4)
-      ..write(obj.userInfo)
+      ..write(obj.annotations)
       ..writeByte(5)
-      ..write(obj.weiboTypes)
+      ..write(obj.type)
       ..writeByte(6)
-      ..write(obj.weiboTypesIndex);
+      ..write(obj.title);
   }
 
   @override
@@ -53,7 +53,7 @@ class LocalStateAdapter extends TypeAdapter<LocalState> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is LocalStateAdapter &&
+      other is UrlInfoAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
