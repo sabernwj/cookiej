@@ -81,8 +81,7 @@ class WeiboRepository {
         throw (AppError(AppErrorType.DecodeJsonError, rawErrorInfo: e));
     }
 
-    if (returnWeibos != null && returnWeibos.statuses.isEmpty)
-      throw AppError(AppErrorType.EmptyResultError);
+    if (returnWeibos == null) throw AppError(AppErrorType.EmptyResultError);
 
     await UrlRepository.saveUrlInfoToHiveByContents(returnWeibos.statuses);
     // 带有localUid则为当前用户浏览主页的微博，需缓存

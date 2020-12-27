@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'package:cookiej/app/views/components/base/hooks_list_view.dart';
+import 'package:cookiej/app/views/pages/main/home/weibo/weibo_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends HookWidget {
   @override
@@ -56,7 +58,13 @@ class HomePage extends HookWidget {
           preferredSize: Size.fromHeight(46)),
       body: TabBarView(
         controller: tabController,
-        children: [WeiboListWidget(), HooksListView()],
+        children: [
+          WeiboListView(WeiboListVM()),
+          ChangeNotifierProvider(
+            create: (_) => WeiboListAsyncViewModel(),
+            child: WeiboListAsyncWidget(),
+          )
+        ],
       ),
     );
   }

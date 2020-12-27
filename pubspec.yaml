@@ -29,7 +29,7 @@ dependencies:
   flutter_inappwebview: ^4.0.0+4
   intl: ^0.15.7 #该软件包提供国际化和本地化功能
   cached_network_image: ^2.2.0+1 #带缓存的图片组件
-  pull_to_refresh: ^1.5.8 #上拉加载下拉刷新
+  pull_to_refresh: ^1.6.3 #上拉加载下拉刷新
   extended_nested_scroll_view: ^0.4.0 #扩展的NestedScrollView配合pull_to_refersh 使用
   font_awesome_flutter: ^8.10.0 #图标包
   flutter_redux: ^0.6.0

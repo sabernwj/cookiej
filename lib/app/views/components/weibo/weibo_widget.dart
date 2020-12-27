@@ -11,7 +11,8 @@ import 'package:get/get.dart';
 
 class WeiboWidget extends StatelessWidget {
   final WeiboWidgetVM viewModel;
-  WeiboWidget(this.viewModel);
+
+  const WeiboWidget(this.viewModel, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,21 +22,21 @@ class WeiboWidget extends StatelessWidget {
         builder: (vm) {
           return Container(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 //标题栏
                 Row(
                   children: <Widget>[
                     //头像
                     UserAvatar(
-                      user: vm.user,
-                    ),
+                        user: vm.user, shape: UserAvatarShape.RoundedRectAngle),
                     Container(
                       child: Column(
                         children: <Widget>[
                           UserName(vm.user.screenName,
                               style: theme.primaryTextTheme.bodyText2),
                           Text(vm.createTimeStr,
-                              style: theme.primaryTextTheme.overline),
+                              style: theme.textTheme.caption),
                         ],
                         crossAxisAlignment: CrossAxisAlignment.start,
                       ),

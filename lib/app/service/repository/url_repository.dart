@@ -30,6 +30,7 @@ class UrlRepository {
   static Future<void> saveUrlInfoToHive(List<String> shortUrlList) async {
     try {
       // 从接口获取UrlInfo
+      if (shortUrlList == null || shortUrlList.isEmpty) return;
       var url = '/2/short_url/info.json';
       shortUrlList.forEach((shortUrl) {
         shortUrl = shortUrl.replaceAll('#', '');
