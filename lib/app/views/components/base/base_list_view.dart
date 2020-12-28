@@ -3,19 +3,19 @@ import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class BaseListView<ItemVM> extends StatelessWidget {
-  final BaseListVM<ItemVM> vm;
+  final BaseListVM<ItemVM> listVM;
 
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  BaseListView(this.vm, {Key key}) : super(key: key);
+  BaseListView(this.listVM, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: vm,
+      init: listVM,
       initState: (_) {
-        vm.startLoad();
+        listVM.startLoad();
       },
       builder: (vm) {
         return SmartRefresher(

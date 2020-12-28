@@ -19,6 +19,7 @@ class WeiboWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return GetBuilder<WeiboWidgetVM>(
         init: viewModel,
+        global: false,
         builder: (vm) {
           return Container(
             child: Column(

@@ -5,12 +5,12 @@ import 'package:cookiej/app/views/components/weibo/weibo_widget.dart';
 import 'package:flutter/cupertino.dart';
 
 class WeiboListView extends BaseListView<WeiboWidgetVM> {
-  WeiboListView(BaseListVM<WeiboWidgetVM> vm) : super(vm);
+  WeiboListView(BaseListVM<WeiboWidgetVM> listVM) : super(listVM);
 
   @override
   itemBuilderFunction(context, index) {
-    return WeiboWidget(vm.dataList[index],
-        key: Key(vm.dataList[index].id.toString()));
+    return WeiboWidget(listVM.dataList[index],
+        key: Key(listVM.dataList[index].id.toString()));
   }
 }
 
