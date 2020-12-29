@@ -17,6 +17,7 @@ class BaseListView<ItemVM> extends StatelessWidget {
       initState: (_) {
         listVM.startLoad();
       },
+      global: false,
       builder: (vm) {
         return SmartRefresher(
           enablePullDown: true,
@@ -39,8 +40,9 @@ class BaseListView<ItemVM> extends StatelessWidget {
               ? Center(
                   child: Text('这里是空的噢'),
                 )
-              : ListView.builder(
+              : ListView.separated(
                   itemBuilder: itemBuilderFunction,
+                  separatorBuilder: separatorBuilderFunction,
                   itemCount: vm.dataList.length,
                   physics: const AlwaysScrollableScrollPhysics(),
                 ),
@@ -57,9 +59,10 @@ class BaseListView<ItemVM> extends StatelessWidget {
     );
   }
 
-  Widget itemBuilderFunction(BuildContext context, int index) {
-    return Container();
-  }
+  Widget itemBuilderFunction(BuildContext context, int index) => Container();
+
+  Widget separatorBuilderFunction(BuildContext context, int index) =>
+      Container();
 }
 
 abstract class BaseListVM<ItemVM> extends GetxController {

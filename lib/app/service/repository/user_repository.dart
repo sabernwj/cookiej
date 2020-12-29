@@ -70,7 +70,9 @@ class UserRepository {
     var url = '/2/friendships/groups.json';
     var jsonRes = (await API.get(url)).data;
     try {
-      return jsonRes['lists'].map((group) => Group.fromJson(group));
+      return (jsonRes['lists'] as List)
+          .map((group) => Group.fromJson(group))
+          .toList();
     } catch (e) {
       throw AppError(AppErrorType.DecodeJsonError, rawErrorInfo: e);
     }
