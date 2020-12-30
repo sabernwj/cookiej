@@ -96,3 +96,4 @@ abstract class BaseListVM<ItemVM> extends GetxController {
 }
 
 enum GetDataType { StartLoad, Refersh, LoadMore }
+enum ResultType { Complete, Failed, NoData }

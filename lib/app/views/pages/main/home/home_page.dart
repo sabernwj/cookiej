@@ -3,23 +3,47 @@ import 'package:cookiej/app/service/repository/user_repository.dart';
 import 'package:cookiej/app/service/repository/weibo_repository.dart';
 import 'package:cookiej/app/views/pages/main/home/weibo/weibo_list_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
-class HomePage extends HookWidget with HomePageMixin {
+class HomePageMixin {
+  Future<Map<String, WeiboListVM>> getGroupsListVM() async {
+    var groups = await UserRepository.getGroups();
+    Map<String, WeiboListVM> map = {};
+    groups.forEach((group) {
+      map[group.name] =
+          WeiboListVM(WeibosType.Group, groupId: group.id.toString());
+    });
+    return map;
+  }
+}
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage>
+    with TickerProviderStateMixin, HomePageMixin {
+  Map<String, WeiboListVM> _tabsMap = {
+    '全部关注': WeiboListVM(WeibosType.Home),
+    '好友圈': WeiboListVM(WeibosType.Bilateral)
+  };
+  TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: _tabsMap.length, vsync: this);
+    getGroupsListVM().then((groupMap) {
+      setState(() {
+        _tabsMap.addAll(groupMap);
+        _tabController = TabController(length: _tabsMap.length, vsync: this);
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final tabsMap = useState(<String, WeiboListVM>{
-      '全部关注': WeiboListVM(WeibosType.Home),
-      '好友圈': WeiboListVM(WeibosType.Bilateral)
-    });
-    final tabController = useTabController(initialLength: tabsMap.value.length);
     final theme = Theme.of(context);
-
-    // ignore: missing_return
-    useEffect(() {
-      updateTabsMap(tabsMap.value);
-    }, []);
-
     return Scaffold(
       appBar: PreferredSize(
           child: Container(
@@ -31,10 +55,10 @@ class HomePage extends HookWidget with HomePageMixin {
               children: <Widget>[
                 Expanded(
                     child: TabBar(
-                  controller: tabController,
+                  controller: _tabController,
                   labelPadding:
                       EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  tabs: tabsMap.value.keys.map((str) => Text(str)).toList(),
+                  tabs: _tabsMap.keys.map((str) => Text(str)).toList(),
                   isScrollable: true,
                   indicatorColor: Theme.of(context).selectedRowColor,
                   onTap: (index) {
@@ -64,29 +88,10 @@ class HomePage extends HookWidget with HomePageMixin {
           ),
           preferredSize: Size.fromHeight(46)),
       body: TabBarView(
-        controller: tabController,
-        children: tabsMap.value.values
-            .map((listVM) => WeiboListView(listVM))
-            .toList(),
+        controller: _tabController,
+        children:
+            _tabsMap.values.map((listVM) => WeiboListView(listVM)).toList(),
       ),
     );
-  }
-}
-
-class HomePageMixin {
-  void updateTabsMap(Map<String, WeiboListVM> tabsMap) async {
-    getGroupsListVM().then((map) {
-      tabsMap.addAll(map);
-    });
-  }
-
-  Future<Map<String, WeiboListVM>> getGroupsListVM() async {
-    var groups = await UserRepository.getGroups();
-    Map<String, WeiboListVM> map = {};
-    groups.forEach((group) {
-      map[group.name] =
-          WeiboListVM(WeibosType.Group, groupId: group.id.toString());
-    });
-    return map;
   }
 }

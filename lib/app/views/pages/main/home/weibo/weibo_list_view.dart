@@ -17,6 +17,7 @@ class WeiboListView extends BaseListView<WeiboWidgetVM> {
 class WeiboListVM extends BaseListVM<WeiboWidgetVM> {
   final WeibosType weibosType;
   final String groupId;
+  Weibos lastResponseWeibos;
 
   WeiboListVM(this.weibosType, {this.groupId});
 
@@ -25,6 +26,11 @@ class WeiboListVM extends BaseListVM<WeiboWidgetVM> {
     assert(getType != null);
     if (weibosType == WeibosType.Group) {
       assert(groupId != null);
+    }
+
+    if (lastResponseWeibos != null) {
+      // 上一次获取微博数据的maxId为0，表示后面不再有数据
+      if (lastResponseWeibos.maxId == 0) return [];
     }
     Weibos weibos;
     switch (getType) {
@@ -40,6 +46,7 @@ class WeiboListVM extends BaseListVM<WeiboWidgetVM> {
         weibos = await WeiboRepository.getWeibosNet(weibosType,
             sinceId: dataList[0].id, groupId: groupId);
     }
+    lastResponseWeibos = weibos;
     var list = weibos.statuses.map((weibo) => WeiboWidgetVM(weibo)).toList();
     return list;
   }
