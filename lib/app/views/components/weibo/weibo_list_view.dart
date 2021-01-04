@@ -30,7 +30,7 @@ class WeiboListVM extends BaseListVM<WeiboWidgetVM> {
 
     if (lastResponseWeibos != null) {
       // 上一次获取微博数据的maxId为0，表示后面不再有数据
-      if (lastResponseWeibos.maxId == 0) return [];
+      if (lastResponseWeibos.maxId == 0) return Future.delayed(Duration(seconds: 1),()=>[]);
     }
     Weibos weibos;
     switch (getType) {

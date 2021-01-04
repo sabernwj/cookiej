@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
 
 class Config {
   static const appkey = '';
@@ -70,5 +71,6 @@ extension CookieInAppWebview on Cookie {
         path: map['path']);
   }
 }
+
 
 enum CommentsType { Hot, Time, Mentions, ByMe, ToMe }
