@@ -14,11 +14,12 @@ class UserName extends StatelessWidget {
           screenName ?? '',
           style: style ?? Theme.of(context).primaryTextTheme.bodyText2,
         ),
-        onTap: (() =>
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              var name = screenName;
-              name = name.replaceAll('@', '');
-              return UserPage(screenName: name);
-            }))));
+        onTap: (() {
+          // Navigator.push(context, MaterialPageRoute(builder: (context) {
+          //   var name = screenName;
+          //   name = name.replaceAll('@', '');
+          //   return UserPage(screenName: name);
+          // }));
+        }));
   }
 }

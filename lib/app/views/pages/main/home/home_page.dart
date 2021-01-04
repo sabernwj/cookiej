@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:cookiej/app/service/repository/user_repository.dart';
 import 'package:cookiej/app/service/repository/weibo_repository.dart';
-import 'package:cookiej/app/views/pages/main/home/weibo/weibo_list_view.dart';
+import 'package:cookiej/app/views/components/weibo/weibo_list_view.dart';
 import 'package:flutter/material.dart';
 
 class HomePageMixin {
