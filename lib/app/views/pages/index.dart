@@ -1,5 +1,6 @@
 import 'package:cookiej/app/service/db/assets_service.dart';
 import 'package:cookiej/app/service/db/hive_service.dart';
+import 'package:cookiej/app/service/repository/emotion_repository.dart';
 import 'package:cookiej/app/views/pages/main/main_page.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,8 @@ class _IndexState extends State<Index> {
     Future.wait([
       Future.delayed(Duration(seconds: 1)),
       HiveService.init(),
-      AssetsService.loadAppkeyData()
+      AssetsService.loadAppkeyData(),
+      EmotionRepository.initLocalEmotionBox()
     ]).then((_) {
       print('初始化完毕');
       // Navigator.pushReplacement(

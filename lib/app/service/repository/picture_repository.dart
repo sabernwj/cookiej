@@ -64,7 +64,7 @@ class PictureRepository {
 
   static List<String> getImgUrlsFromIds(List<String> ids,
           {String sinaImgSize = SinaImgSize.bmiddle}) =>
-      ids.map((id) => getImgUrlFromId(id));
+      ids.map((id) => getImgUrlFromId(id)).toList();
 
   /// 从url中提取id
   static String getImgIdFromUrl(String url) =>

@@ -1,8 +1,10 @@
 import 'package:cookiej/app/config/config.dart';
+import 'package:cookiej/app/model/local/display_content.dart';
 import 'package:cookiej/app/model/local/user_lite.dart';
 import 'package:cookiej/app/model/local/weibo_lite.dart';
 import 'package:cookiej/app/service/repository/picture_repository.dart';
 import 'package:cookiej/app/utils/utils.dart';
+import 'package:cookiej/app/views/components/base/rich_text_content.dart';
 import 'package:cookiej/app/views/components/user/user_avatar.dart';
 import 'package:cookiej/app/views/components/user/user_name.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,9 @@ class WeiboWidget extends StatelessWidget {
     return GetBuilder<WeiboWidgetVM>(
         init: viewModel,
         global: false,
+        initState: (_) {
+          viewModel.loadDisplayContent();
+        },
         builder: (vm) {
           return Container(
             child: Column(
@@ -48,13 +53,15 @@ class WeiboWidget extends StatelessWidget {
                 ),
                 //微博正文
                 //ContentWidget(weibo),
-                Text(vm.rawText),
+                RichTextContentWidget(displayContentList: vm.displayContent),
                 //是否有转发的微博
                 if (vm.hasReTweetedWeibo)
                   GestureDetector(
                     child: Container(
                       //child: ContentWidget(vm.retweetedWeiboWidgetVM),
-                      child: Text(vm.retweetedWeiboWidgetVM.rawText),
+                      child: RichTextContentWidget(
+                          displayContentList:
+                              vm.retweetedWeiboWidgetVM.displayContent),
                       alignment: Alignment.topLeft,
                       color: theme.unselectedWidgetColor,
                       //color: Color(0xFFF5F5F5)
@@ -148,7 +155,10 @@ class WeiboWidget extends StatelessWidget {
 
 class WeiboWidgetVM extends GetxController {
   final WeiboLite _model;
-  WeiboWidgetVM(this._model);
+  WeiboWidgetVM(this._model)
+      : retweetedWeiboWidgetVM = _model.retweetedWeibo != null
+            ? WeiboWidgetVM(_model.retweetedWeibo)
+            : null;
 
   /// ID
   int get id => _model.id;
@@ -182,14 +192,25 @@ class WeiboWidgetVM extends GetxController {
   int get repostsCount => _model.repostsCount;
 
   /// 是否存在原微博
-  bool get hasReTweetedWeibo => _model.retweetedWeibo != null;
+  bool get hasReTweetedWeibo => retweetedWeiboWidgetVM != null;
 
   /// 该条微博的原微博
-  WeiboWidgetVM get retweetedWeiboWidgetVM =>
-      hasReTweetedWeibo ? WeiboWidgetVM(_model.retweetedWeibo) : null;
+  WeiboWidgetVM retweetedWeiboWidgetVM;
 
   /// 是否点赞此微博
   bool get favorited => _model.favorited;
+
+  List<DisplayContent> displayContent = [];
+
+  /// 加载微博富文本内容
+  void loadDisplayContent() async {
+    displayContent = await DisplayContent.analysisStr(rawText);
+    if (hasReTweetedWeibo) {
+      retweetedWeiboWidgetVM.displayContent =
+          await DisplayContent.analysisStr(retweetedWeiboWidgetVM.rawText);
+    }
+    update();
+  }
 
   void favoriteWeibo() {}
 

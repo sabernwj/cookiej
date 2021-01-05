@@ -19,12 +19,10 @@ class DisplayContent {
       new RegExp("$urlRegexStr|$topicRegexStr|$userRegexStr|$emotionRegexStr");
 
   ///分析text成分，是否包含图片视频，链接内容等等
-  static Future<List<DisplayContent>> analysisContent(Content content) async {
+  static Future<List<DisplayContent>> analysisStr(String str) async {
     //这里也可以用栈遍历的方式来判断，比如以@开头并且以空格结束，我们就认为它是一个@的特殊文本
     //文本分析
-    var _text = content.longText != null
-        ? content.longText.longTextContent
-        : content.text;
+    var _text = str;
     final matchs = totalRegex.allMatches(_text).toList();
     var textsList = _text.split(totalRegex);
     var _displayContentList = <DisplayContent>[];

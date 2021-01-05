@@ -2,14 +2,15 @@ import 'package:cookiej/app/model/emotion.dart';
 import 'package:cookiej/app/service/db/hive_service.dart';
 import 'package:cookiej/app/service/error/app_error.dart';
 import 'package:cookiej/app/service/net/api.dart';
+import 'dart:convert';
 
 class EmotionRepository {
   static get emotionBox => HiveService.emotionBox;
 
-  static Emotion getEmotion(String name) => emotionBox.get(name);
+  static Emotion getEmotion(String name) => emotionBox.get(utf8);
 
   /// 增量更新emotionBox
-  static Future<void> updateLocalEmotionBox() async {
+  static Future<void> initLocalEmotionBox() async {
     var newMap = await getEmotionMapFromNet()
       ..removeWhere((key, value) => emotionBox.keys.contains(key));
     await emotionBox.putAll(newMap);
