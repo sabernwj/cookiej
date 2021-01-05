@@ -1,5 +1,6 @@
 import 'package:cookiej/app/model/data_object.dart';
 import 'package:cookiej/app/model/annotations.dart';
+import 'package:cookiej/app/model/emotion.dart';
 import 'package:cookiej/app/model/local/access.dart';
 import 'package:cookiej/app/model/local/local_config.dart';
 import 'package:cookiej/app/model/local/user_lite.dart';
@@ -15,6 +16,7 @@ class HiveService {
   static Box<String> pictureServerBox;
   static Box<Access> accessBox;
   static Box<UserLite> userBox;
+  static Box<Emotion> emotionBox;
   static LazyBox<Weibos> weibosBox;
 
   static Future<void> preInit() async {
@@ -32,10 +34,12 @@ class HiveService {
     Hive.registerAdapter(UrlInfoAdapter());
     Hive.registerAdapter(AnnotationsAdapter());
     Hive.registerAdapter(DataObjectAdapter());
+    Hive.registerAdapter(EmotionAdapter());
     urlInfoBox = await Hive.openLazyBox('url_info_box');
     pictureServerBox = await Hive.openBox('pciture_server_box');
     weibosBox = await Hive.openLazyBox('weibos_box');
     userBox = await Hive.openBox('user_box');
+    emotionBox = await Hive.openBox('emotion_box');
   }
 }
 
@@ -61,7 +65,10 @@ class HiveBoxType {
   /// (暂无对应box)存储WeiboLite类型数据
   static const int weiboLiteType = 6;
 
-  //
+  /// url model中使用到的类型
   static const int urlAnnotations = 7;
   static const int urlAnnotationsDataObject = 8;
+
+  /// emotion 表情
+  static const int emotionBox = 9;
 }

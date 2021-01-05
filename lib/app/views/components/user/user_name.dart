@@ -1,4 +1,3 @@
-import 'package:cookiej/cookiej/page/public/user_page.dart';
 import 'package:flutter/material.dart';
 
 class UserName extends StatelessWidget {

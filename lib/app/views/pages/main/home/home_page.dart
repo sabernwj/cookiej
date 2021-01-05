@@ -27,15 +27,11 @@ class _HomePageState extends State<HomePage>
     '全部关注': WeiboListVM(WeibosType.Home),
     '好友圈': WeiboListVM(WeibosType.Bilateral)
   };
-  TabController _tabController;
-
   @override
   void initState() {
-    _tabController = TabController(length: _tabsMap.length, vsync: this);
     getGroupsListVM().then((groupMap) {
       setState(() {
         _tabsMap.addAll(groupMap);
-        _tabController = TabController(length: _tabsMap.length, vsync: this);
       });
     });
     super.initState();
@@ -43,7 +39,8 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    final theme=Theme.of(context);
+    final tabController = TabController(length: _tabsMap.length, vsync: this);
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: PreferredSize(
           child: Container(
@@ -55,7 +52,7 @@ class _HomePageState extends State<HomePage>
               children: <Widget>[
                 Expanded(
                     child: TabBar(
-                  controller: _tabController,
+                  controller: tabController,
                   labelPadding:
                       EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   tabs: _tabsMap.keys.map((str) => Text(str)).toList(),
@@ -88,7 +85,7 @@ class _HomePageState extends State<HomePage>
           ),
           preferredSize: Size.fromHeight(46)),
       body: TabBarView(
-        controller: _tabController,
+        controller: tabController,
         children:
             _tabsMap.values.map((listVM) => WeiboListView(listVM)).toList(),
       ),

@@ -3,6 +3,7 @@ import 'package:cookiej/app/service/db/hive_service.dart';
 import 'package:cookiej/app/views/pages/main/main_page.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Index extends StatefulWidget {
   @override
@@ -18,8 +19,9 @@ class _IndexState extends State<Index> {
       AssetsService.loadAppkeyData()
     ]).then((_) {
       print('初始化完毕');
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => MainPage()));
+      // Navigator.pushReplacement(
+      //     context, MaterialPageRoute(builder: (context) => MainPage()));
+      Get.off(MainPage());
     });
     super.initState();
   }

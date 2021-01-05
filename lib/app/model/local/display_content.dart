@@ -1,4 +1,6 @@
 import 'package:cookiej/app/model/url_info.dart';
+import 'package:cookiej/app/service/error/app_error.dart';
+import 'package:cookiej/app/service/repository/emotion_repository.dart';
 import 'package:cookiej/app/service/repository/url_repository.dart';
 import 'package:cookiej/app/utils/utils.dart';
 import 'package:cookiej/app/model/content.dart';
@@ -36,12 +38,14 @@ class DisplayContent {
       if (i < matchs.length) {
         var _singleText = matchs[i].group(0);
         //Emotion表情
-        // if(_singleText.contains(RegExp(emotionRegexStr))){
-        //   EmotionProvider.getEmotion(_singleText).success
-        //     ?_displayContentList.add(DisplayContent(ContentType.Emotion, _singleText))
-        //     :_displayContentList.add(DisplayContent(ContentType.Text,_singleText));
-        //   continue;
-        // }
+        if (_singleText.contains(RegExp(emotionRegexStr))) {
+          EmotionRepository.getEmotion(_singleText) != null
+              ? _displayContentList
+                  .add(DisplayContent(ContentType.Emotion, _singleText))
+              : _displayContentList
+                  .add(DisplayContent(ContentType.Text, _singleText));
+          continue;
+        }
         //@用户昵称
         if (_singleText.contains(RegExp(userRegexStr))) {
           _displayContentList
@@ -94,9 +98,11 @@ class DisplayContent {
                 }
               }
             } catch (e) {
-              print(
-                  '解析url发生异常($_singleText),${contentType.toString()}类型,错误 ${e.toString()}');
               contentType = ContentType.Link;
+              throw AppError(AppErrorType.DecodeJsonError,
+                  rawErrorInfo: e,
+                  message:
+                      '解析url发生异常($_singleText),${contentType.toString()}类型,错误 ${e.toString()}');
             }
 
             _displayContentList

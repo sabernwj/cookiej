@@ -35,15 +35,6 @@ class _AppState extends State<App> {
             future: _initService,
             builder: (context, snaphot) {
               if (snaphot.connectionState == ConnectionState.done) {
-                // return ChangeNotifierProvider(
-                //   create: (_) => GlobalViewModel(),
-                //   child: Selector<GlobalViewModel, ThemeData>(
-                //       selector: (_, vm) => vm.currentTheme,
-                //       builder: (context, theme, _) {
-                //         return MaterialApp(
-                //             title: '饼干微博', home: Index(), theme: theme);
-                //       }),
-                // );
                 return GetBuilder(
                     init: AppViewModel(),
                     builder: (AppViewModel vm) {

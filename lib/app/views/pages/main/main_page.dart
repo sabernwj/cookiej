@@ -45,8 +45,7 @@ class _MainPageState extends State<MainPage> {
                   style: TextStyle(fontSize: 18),
                 ),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginPage()));
+                  Get.to(LoginPage());
                 },
               )),
         bottomNavigationBar: SizedOverflowBox(
