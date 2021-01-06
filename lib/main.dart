@@ -5,10 +5,13 @@ import 'package:cookiej/cookiej/cookiej_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() {
+import 'app/service/db/hive_service.dart';
+
+void main(){
   //debugProfileBuildsEnabled=true;
-  runZoned(() {
+  runZoned(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    await HiveService.preInit();
     runApp(App());
     SystemUiOverlayStyle systemUiOverlayStyle =
         SystemUiOverlayStyle(statusBarColor: Colors.transparent);
