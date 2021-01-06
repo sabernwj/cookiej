@@ -3,7 +3,6 @@ import 'package:cookiej/app/service/error/app_error.dart';
 import 'package:cookiej/app/service/repository/emotion_repository.dart';
 import 'package:cookiej/app/service/repository/url_repository.dart';
 import 'package:cookiej/app/utils/utils.dart';
-import 'package:cookiej/app/model/content.dart';
 
 class DisplayContent {
   final ContentType type;

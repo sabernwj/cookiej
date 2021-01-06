@@ -4,6 +4,7 @@ import 'package:cookiej/app/model/local/user_lite.dart';
 import 'package:cookiej/app/service/db/hive_service.dart';
 import 'package:cookiej/app/service/net/api.dart';
 import 'package:cookiej/app/service/repository/access_repository.dart';
+import 'package:cookiej/app/service/repository/emotion_repository.dart';
 import 'package:cookiej/app/service/repository/local_config_repository.dart';
 import 'package:cookiej/app/service/repository/style_repository.dart';
 import 'package:cookiej/app/service/repository/user_repository.dart';
@@ -65,10 +66,13 @@ class _AppState extends State<App> {
 class AppViewModel extends GetxController {
   LocalConfig get _config => LocalConfigRepository.getLocalConfig();
 
-  AppViewModel() {
+  @override
+  onInit() async {
+    super.onInit();
     if (isLogin) {
       API.updateReceiveAccess(
           AccessRepository.getAccessFromLocal(_config.currentUserId));
+      await EmotionRepository.initLocalEmotionBox();
     }
   }
 
@@ -104,7 +108,7 @@ class AppViewModel extends GetxController {
     await LocalConfigRepository.setLocalConfig(loginUsers: _config.loginUsers);
     if (uid == _config.currentUserId) {
       if (_config.loginUsers.isNotEmpty)
-        _switchCurrentUser(_config.loginUsers[0]);
+        await _switchCurrentUser(_config.loginUsers[0]);
     }
     update();
   }

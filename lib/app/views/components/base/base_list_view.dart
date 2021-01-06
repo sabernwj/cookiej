@@ -5,18 +5,23 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class BaseListView<ItemVM> extends StatelessWidget {
   final BaseListVM<ItemVM> listVM;
 
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
-
   BaseListView(this.listVM, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
+    RefreshController _refreshController =
+        RefreshController(initialRefresh: false);
+    ScrollController _scrollController;
+    return GetBuilder<BaseListVM>(
       init: listVM,
-      initState: (_) {
-        listVM.startLoad();
+      initState: (state) {
+        _scrollController =
+            ScrollController(initialScrollOffset: listVM.scrollPosition)
+              ..addListener(() {
+                listVM.scrollPosition = _scrollController.offset;
+              });
       },
+      didChangeDependencies: (state) {},
       global: false,
       builder: (vm) {
         return SmartRefresher(
@@ -44,6 +49,7 @@ class BaseListView<ItemVM> extends StatelessWidget {
                   itemBuilder: itemBuilderFunction,
                   separatorBuilder: separatorBuilderFunction,
                   itemCount: vm.dataList.length,
+                  controller: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
                 ),
           onRefresh: () async {
@@ -67,6 +73,13 @@ class BaseListView<ItemVM> extends StatelessWidget {
 
 abstract class BaseListVM<ItemVM> extends GetxController {
   final List<ItemVM> dataList = [];
+  double scrollPosition = 0;
+
+  @override
+  void onInit() {
+    super.onInit();
+    startLoad();
+  }
 
   Future<void> startLoad() async {
     dataList.clear();

@@ -18,11 +18,8 @@ class _IndexState extends State<Index> {
       Future.delayed(Duration(seconds: 1)),
       HiveService.init(),
       AssetsService.loadAppkeyData(),
-      EmotionRepository.initLocalEmotionBox()
     ]).then((_) {
       print('初始化完毕');
-      // Navigator.pushReplacement(
-      //     context, MaterialPageRoute(builder: (context) => MainPage()));
       Get.off(MainPage());
     });
     super.initState();

@@ -1,9 +1,8 @@
-import 'package:cookiej/app/config/config.dart';
 import 'package:cookiej/app/model/local/display_content.dart';
 import 'package:cookiej/app/model/local/user_lite.dart';
 import 'package:cookiej/app/model/local/weibo_lite.dart';
-import 'package:cookiej/app/service/repository/picture_repository.dart';
 import 'package:cookiej/app/utils/utils.dart';
+import 'package:cookiej/app/views/components/base/image_set_widget.dart';
 import 'package:cookiej/app/views/components/base/rich_text_content.dart';
 import 'package:cookiej/app/views/components/user/user_avatar.dart';
 import 'package:cookiej/app/views/components/user/user_name.dart';
@@ -54,14 +53,26 @@ class WeiboWidget extends StatelessWidget {
                 //微博正文
                 //ContentWidget(weibo),
                 RichTextContentWidget(displayContentList: vm.displayContent),
+                if (viewModel.imageList.isNotEmpty)
+                  ImageSetWidget(imgUrls: viewModel.imageList),
                 //是否有转发的微博
                 if (vm.hasReTweetedWeibo)
                   GestureDetector(
                     child: Container(
                       //child: ContentWidget(vm.retweetedWeiboWidgetVM),
-                      child: RichTextContentWidget(
-                          displayContentList:
-                              vm.retweetedWeiboWidgetVM.displayContent),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichTextContentWidget(
+                              displayContentList:
+                                  vm.retweetedWeiboWidgetVM.displayContent),
+                          if (viewModel
+                              .retweetedWeiboWidgetVM.imageList.isNotEmpty)
+                            ImageSetWidget(
+                                imgUrls:
+                                    viewModel.retweetedWeiboWidgetVM.imageList),
+                        ],
+                      ),
                       alignment: Alignment.topLeft,
                       color: theme.unselectedWidgetColor,
                       //color: Color(0xFFF5F5F5)
@@ -177,10 +188,7 @@ class WeiboWidgetVM extends GetxController {
   String get rawText => _model.longText?.longTextContent ?? _model.text;
 
   /// 图片列表
-  List<ImageProvider> get imageList => _model.picUrls
-      .map((url) => PictureRepository.getPictureFromUrl(url,
-          sinaImgSize: SinaImgSize.bmiddle))
-      .toList();
+  List<String> get imageList => _model.picUrls ?? [];
 
   /// 评论数
   int get commentsCount => _model.commentsCount;

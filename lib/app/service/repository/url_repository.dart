@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cookiej/app/model/content.dart';
 import 'package:cookiej/app/model/url_info.dart';
 import 'package:cookiej/app/service/db/hive_service.dart';
@@ -7,13 +9,18 @@ import 'package:cookiej/app/utils/utils.dart';
 
 class UrlRepository {
   static final _urlInfoBox = HiveService.urlInfoBox;
-  static Map<String, UrlInfo> _urlInfoRAMCache = new Map();
+  static Map<String, Map> _urlInfoRAMCache = new Map();
 
   /// 获取本地缓存的urlInfo
   static Future<UrlInfo> getUrlInfo(String url) async {
+    var json = _urlInfoRAMCache[url] ?? (await _urlInfoBox.get(url));
+    if (json == null) return null;
     try {
-      UrlInfo urlInfo = _urlInfoRAMCache[url] ?? (await _urlInfoBox.get(url));
-      if (urlInfo == null) throw AppError(AppErrorType.EmptyResultError);
+      UrlInfo urlInfo = UrlInfo.fromJson(json);
+      return urlInfo;
+    } on TypeError {
+      // 2021年了，还在用土办法解决问题
+      UrlInfo urlInfo = UrlInfo.fromJson(jsonDecode(jsonEncode(json)));
       return urlInfo;
     } catch (e) {
       throw AppError(AppErrorType.OtherError, rawErrorInfo: e);
@@ -39,13 +46,13 @@ class UrlRepository {
       });
       var infos = (await API.get(url)).data['urls'] as List<dynamic>;
       // 解析Json
-      var map = Map<String, UrlInfo>();
-      infos.forEach((urlInfoJson) =>
-          map[urlInfoJson['url_short']] = UrlInfo.fromJson(urlInfoJson));
+      var map = Map<String, Map>();
+      infos.forEach(
+          (urlInfoJson) => map[urlInfoJson['url_short']] = urlInfoJson as Map);
       if (shortUrlList.length > 1) _urlInfoRAMCache = {}..addAll(map);
       // 存入hive
       await _urlInfoBox.putAll(map);
-      print('存入urlinfojson进hive完成');
+      //print('存入urlinfojson${map.length}条进hive完成');
     } catch (e) {
       throw AppError(AppErrorType.OtherError, rawErrorInfo: e);
     }

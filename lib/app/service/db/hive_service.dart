@@ -11,12 +11,12 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveService {
-  static LazyBox<UrlInfo> urlInfoBox;
+  static LazyBox<Map> urlInfoBox;
   static Box<LocalConfig> localConfigBox;
   static Box<String> pictureServerBox;
   static Box<Access> accessBox;
   static Box<UserLite> userBox;
-  static Box<Emotion> emotionBox;
+  static Box<Map<String, Emotion>> emotionBox;
   static LazyBox<Weibos> weibosBox;
 
   static Future<void> preInit() async {

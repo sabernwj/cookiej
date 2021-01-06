@@ -3,16 +3,12 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookiej/app/config/config.dart';
 import 'package:cookiej/app/model/collection.dart';
-import 'package:cookiej/app/model/content.dart';
 import 'package:cookiej/app/model/emotion.dart';
 import 'package:cookiej/app/model/local/display_content.dart';
-import 'package:cookiej/app/model/local/weibo_lite.dart';
 import 'package:cookiej/app/model/video.dart';
 import 'package:cookiej/app/service/repository/emotion_repository.dart';
 import 'package:cookiej/app/service/repository/picture_repository.dart';
 import 'package:cookiej/app/views/components/base/image_set_widget.dart';
-import 'package:cookiej/app/views/components/base/show_image_view.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
