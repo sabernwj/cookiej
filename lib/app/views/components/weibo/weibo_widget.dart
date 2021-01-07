@@ -21,9 +21,6 @@ class WeiboWidget extends StatelessWidget {
     return GetBuilder<WeiboWidgetVM>(
         init: viewModel,
         global: false,
-        initState: (_) {
-          viewModel.loadDisplayContent();
-        },
         builder: (vm) {
           return Container(
             child: Column(
@@ -170,6 +167,12 @@ class WeiboWidgetVM extends GetxController {
       : retweetedWeiboWidgetVM = _model.retweetedWeibo != null
             ? WeiboWidgetVM(_model.retweetedWeibo)
             : null;
+
+  @override
+  onInit() {
+    super.onInit();
+    loadDisplayContent();
+  }
 
   /// ID
   int get id => _model.id;
