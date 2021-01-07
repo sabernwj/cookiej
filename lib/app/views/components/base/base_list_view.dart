@@ -21,7 +21,6 @@ class BaseListView<ItemVM> extends StatelessWidget {
                 listVM.scrollPosition = _scrollController.offset;
               });
       },
-      didChangeDependencies: (state) {},
       global: false,
       builder: (vm) {
         return SmartRefresher(

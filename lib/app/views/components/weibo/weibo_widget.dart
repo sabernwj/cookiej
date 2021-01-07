@@ -1,9 +1,12 @@
+import 'package:cookiej/app/model/comment.dart';
 import 'package:cookiej/app/model/local/display_content.dart';
 import 'package:cookiej/app/model/local/user_lite.dart';
 import 'package:cookiej/app/model/local/weibo_lite.dart';
+import 'package:cookiej/app/service/repository/comment_repository.dart';
 import 'package:cookiej/app/utils/utils.dart';
 import 'package:cookiej/app/views/components/base/image_set_widget.dart';
 import 'package:cookiej/app/views/components/base/rich_text_content.dart';
+import 'package:cookiej/app/views/components/comment/edit_reply_widget.dart';
 import 'package:cookiej/app/views/components/user/user_avatar.dart';
 import 'package:cookiej/app/views/components/user/user_name.dart';
 import 'package:flutter/material.dart';
@@ -101,35 +104,12 @@ class WeiboWidget extends StatelessWidget {
                     FlatButton.icon(
                         onPressed: () {
                           // //评论
-                          // Future<bool> sendCommentFunction(String sendText) async {
-                          //   if (sendText == null || sendText.isEmpty) {
-                          //     return false;
-                          //   } else {
-                          //     try {
-                          //       var comment = Comment.fromJson(
-                          //           (await CommentApi.createComment(
-                          //               weibo.id, sendText)));
-                          //       if (comment != null) {
-                          //         setState(() {
-                          //           weibo.commentsCount++;
-                          //           eventBus.fire(
-                          //               CommentListviewAddEvent(weibo.id, comment));
-                          //           Utils.defaultToast('评论成功');
-                          //         });
-                          //       }
-                          //     } catch (e) {
-                          //       print(e);
-                          //     }
-                          //     return true;
-                          //   }
-                          // }
-
-                          // showModalBottomSheet(
-                          //     context: context,
-                          //     builder: (context) => EditReplyWidget(
-                          //           hintText: '评论微博...',
-                          //           sendCall: sendCommentFunction,
-                          //         ));
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (context) => EditReplyWidget(
+                                    hintText: '评论微博...',
+                                    sendCall: vm.sendCommentFunction,
+                                  ));
                         },
                         icon: Icon(
                           FontAwesomeIcons.comments,
@@ -225,5 +205,21 @@ class WeiboWidgetVM extends GetxController {
 
   void favoriteWeibo() {}
 
-  void commentWeibo() {}
+  Future<bool> sendCommentFunction(String sendText) async {
+    if (sendText == null || sendText.isEmpty) {
+      return false;
+    } else {
+      try {
+        var comment = await CommentRepository.createComment(
+                id, sendText);
+        if (comment != null) {
+            _model.commentsCount++;
+            Utils.defaultToast('评论成功');
+        }
+      } catch (e) {
+        Utils.defaultToast('评论失败');
+      }
+      return true;
+    }
+  }
 }

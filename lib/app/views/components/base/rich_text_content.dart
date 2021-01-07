@@ -62,9 +62,9 @@ class RichTextContentWidget extends StatelessWidget {
           break;
         case ContentType.Emotion:
           listInlineSpan.add(WidgetSpan(
-              child: _buildEmotion(
-                  EmotionRepository.getEmotion(displayContent.text),
-                  _normalTextStyle.fontSize)));
+            child: EmotionRepository.getEmotionWidget(
+                displayContent.text, _normalTextStyle.fontSize),
+          ));
           break;
         case ContentType.User:
           listInlineSpan.add(TextSpan(
@@ -130,16 +130,5 @@ class RichTextContentWidget extends StatelessWidget {
     ));
     returnWidgets.addAll(secondDisplayWidget);
     return returnWidgets;
-  }
-
-  Widget _buildEmotion(Emotion emotion, double size) {
-    return Container(
-      child: CachedNetworkImage(
-        imageUrl: emotion.url,
-        width: size + 2,
-        height: size + 2,
-      ),
-      margin: EdgeInsets.symmetric(horizontal: 2),
-    );
   }
 }

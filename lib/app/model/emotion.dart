@@ -20,6 +20,9 @@ class Emotion {
   @HiveField(4)
   bool common;
 
+  @HiveField(5)
+  bool isValid=true;
+
   Emotion({this.phrase, this.url, this.category, this.hot, this.common});
 
   Emotion.fromMap(map) {
