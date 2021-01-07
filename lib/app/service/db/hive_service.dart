@@ -23,7 +23,9 @@ class HiveService {
     await Hive.initFlutter();
     Hive.registerAdapter(LocalConfigAdapter());
     Hive.registerAdapter(AccessAdapter());
+    Hive.registerAdapter(EmotionAdapter());
     localConfigBox = await Hive.openBox('local_config_box');
+    emotionBox = await Hive.openBox('emotion_box');
     accessBox = await Hive.openBox('access_box');
   }
 
@@ -34,12 +36,11 @@ class HiveService {
     Hive.registerAdapter(UrlInfoAdapter());
     Hive.registerAdapter(AnnotationsAdapter());
     Hive.registerAdapter(DataObjectAdapter());
-    Hive.registerAdapter(EmotionAdapter());
     urlInfoBox = await Hive.openLazyBox('url_info_box');
     pictureServerBox = await Hive.openBox('pciture_server_box');
     weibosBox = await Hive.openLazyBox('weibos_box');
     userBox = await Hive.openBox('user_box');
-    emotionBox = await Hive.openBox('emotion_box');
+
   }
 }
 

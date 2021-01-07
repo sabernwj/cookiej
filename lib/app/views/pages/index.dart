@@ -1,6 +1,5 @@
 import 'package:cookiej/app/service/db/assets_service.dart';
 import 'package:cookiej/app/service/db/hive_service.dart';
-import 'package:cookiej/app/service/repository/emotion_repository.dart';
 import 'package:cookiej/app/views/pages/main/main_page.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,10 @@ class _IndexState extends State<Index> {
       AssetsService.loadAppkeyData(),
     ]).then((_) {
       print('初始化完毕');
-      Get.off(MainPage());
+
+      // 这里不使用Get路由跳转的原因是，在LoginPage中返回MainPage时，MainPage不会被重建，里面的build方法不会被调用
+      //Get.off(MainPage());
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainPage()));
     });
     super.initState();
   }

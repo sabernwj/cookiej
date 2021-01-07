@@ -13,40 +13,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class App extends StatefulWidget {
-  @override
-  _AppState createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  Future<void> _initService;
-
-  @override
-  void initState() {
-    _initService = () async {
-      await HiveService.preInit();
-    }();
-    super.initState();
-  }
-
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        child: FutureBuilder(
-            future: _initService,
-            builder: (context, snaphot) {
-              if (snaphot.connectionState == ConnectionState.done) {
-                return GetBuilder(
-                    init: AppViewModel(),
-                    builder: (AppViewModel vm) {
-                      return GetMaterialApp(
-                        title: '饼干微博',
-                        home: Index(),
-                        theme: vm.currentTheme,
-                      );
-                    });
-              }
-              return Container();
+        child: GetBuilder(
+            init: AppViewModel(),
+            builder: (AppViewModel vm) {
+              return GetMaterialApp(
+                title: '饼干微博',
+                home: Index(),
+                theme: vm.currentTheme,
+              );
             }),
         onWillPop: () async {
           final platform = MethodChannel('android/back/desktop');
@@ -99,6 +77,8 @@ class AppViewModel extends GetxController {
     await LocalConfigRepository.setLocalConfig(loginUsers: _config.loginUsers);
     // 将活跃用户改为该用户
     await _switchCurrentUser(access.uid);
+    // 初始化表情
+    await EmotionRepository.initLocalEmotionBox();
     update();
   }
 
