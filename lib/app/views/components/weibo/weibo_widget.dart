@@ -1,4 +1,3 @@
-import 'package:cookiej/app/model/comment.dart';
 import 'package:cookiej/app/model/local/display_content.dart';
 import 'package:cookiej/app/model/local/user_lite.dart';
 import 'package:cookiej/app/model/local/weibo_lite.dart';

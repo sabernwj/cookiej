@@ -1,9 +1,7 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cookiej/app/config/config.dart';
 import 'package:cookiej/app/model/collection.dart';
-import 'package:cookiej/app/model/emotion.dart';
 import 'package:cookiej/app/model/local/display_content.dart';
 import 'package:cookiej/app/model/video.dart';
 import 'package:cookiej/app/service/repository/emotion_repository.dart';

@@ -14,25 +14,37 @@ class EmotionRepository {
   static Emotion getEmotion(String name) => emotionMap[name];
 
   static Widget getEmotionWidget(String name, double size) {
-    var emotion=getEmotion(name);
+    var emotion = getEmotion(name);
     return Container(
-      child: Image(
-        image: Cache,
+      child: CachedNetworkImage(
+        imageUrl: emotion.url,
         width: size + 2,
         height: size + 2,
+        errorWidget: (context, str, error) {
+          //标记该emotion失效
+          emotion.isValid = false;
+          return Container(
+            child: Text(emotion.phrase),
+          );
+        },
       ),
       margin: EdgeInsets.symmetric(horizontal: 2),
     );
   }
 
-  /// 增量更新emotionBox
+  /// 初始化
   static Future<void> initLocalEmotionBox() async {
+    /// 增量更新emotionBox
     var newMap = await getEmotionMapFromNet()
-      ..removeWhere((key, value) => _emotionBox.keys.contains(key));
-    newMap.values.forEach((emotion) {
-      var imageProvider=CachedNetworkImageProvider(emotion.url);
-    });
-    await _emotionBox.putAll({_localEmotionBoxKey: newMap});
+      ..removeWhere((key, _) => _emotionBox.keys.contains(key));
+    await updateEmotionBox(newMap);
+  }
+
+  static Future<void> updateEmotionBox(Map<String, Emotion> newMap) async {
+    if (newMap == null || newMap.length < 0) return;
+    var oldMap = emotionMap ?? {};
+    oldMap.addAll(newMap);
+    await _emotionBox.putAll({_localEmotionBoxKey: oldMap});
   }
 
   static Future<Map<String, Emotion>> getEmotionMapFromNet() async {
@@ -51,13 +63,13 @@ class EmotionRepository {
     }
   }
 
-
-  ///获取当前内存中的emotion分组信息
-  static Map<String,List<Emotion>> getEmotionGroup(){
-    if(emotionMap.length==0) return null;
-    var returnMap=new Map<String,List<Emotion>>();
-    emotionMap.values.forEach((emotion){
-      if(!returnMap.containsKey(emotion.category)) returnMap[emotion.category]=List<Emotion>();
+  /// 获取当前内存中的emotion分组信息
+  static Map<String, List<Emotion>> get getEmotionGroup {
+    if (emotionMap.length == 0) return null;
+    var returnMap = new Map<String, List<Emotion>>();
+    emotionMap.values.forEach((emotion) {
+      if (!returnMap.containsKey(emotion.category))
+        returnMap[emotion.category] = List<Emotion>();
       returnMap[emotion.category].add(emotion);
     });
     return returnMap;
